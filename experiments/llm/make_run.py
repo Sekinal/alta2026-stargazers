@@ -143,7 +143,7 @@ def build(run: str, kind: str, model: str, sarc: str, sent: str, layer: int, C: 
                        "layer": layer, "C": C},
             **(extra_meta or {})}
     if kind == "zs":
-        meta.setdefault("canary", "n/a zero-shot")
+        meta["canary"] = {"passed": True, "status": "n/a zero-shot: no training labels used"}
     if save:
         save_preds(run, oof_df, test_df, meta, test_csv=test_path or None,
                    folds_used=None if kind == "zs" else pool.select("uid", "fold"))

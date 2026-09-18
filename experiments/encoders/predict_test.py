@@ -10,6 +10,11 @@ processed and saved separately.
 
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # also runnable as a plain script
+
 import argparse
 import json
 import sys
@@ -18,7 +23,7 @@ import numpy as np
 import polars as pl
 import torch
 
-from alta.common import N_FOLDS, PREDS, load_test, save_preds
+from alta.common import N_FOLDS, PREDS, load_pool, load_test, save_preds
 from experiments.encoders.common import MODELS, load_fold, predict
 
 
@@ -38,7 +43,8 @@ def predict_run(run: str, test: pl.DataFrame, test_csv: str) -> None:
     meta = {k: v for k, v in meta.items() if k not in ("run", "fold_hash", "git") and not k.startswith("test")}
     meta["test_rows"] = test.height
     tdf = test.select("uid").with_columns(pl.Series("p_sent", ps), pl.Series("p_sarc", pc))
-    print(save_preds(run, oof, tdf, meta=meta, test_csv=test_csv))
+    print(save_preds(run, oof, tdf, meta=meta, test_csv=test_csv,
+                     folds_used=load_pool().select("uid", "fold")))  # train.py uses the pool folds
 
 
 def main() -> int:

@@ -123,3 +123,22 @@ def predict(model: MultiTask, tok, df: pl.DataFrame, max_len: int, prefix: bool 
         ps[idx] = torch.sigmoid(a.float()).cpu().numpy()
         pc[idx] = torch.sigmoid(b.float()).cpu().numpy()
     return ps, pc
+
+
+def robustness_preds(model: MultiTask, tok, run: str, fold: int, max_len: int, prefix: bool = True) -> int:
+    """Perturbation suite (experiments/robustness): predict every perturbed copy of fold `fold` with
+    THIS fold-k model (it never saw those rows) and save it. drop_prefix = same text, prefix off.
+    Returns the number of kinds scored (0 if the holdout dir for this fold does not exist)."""
+    from alta.common import load_test
+    from experiments.robustness.perturb import save_rob_preds
+
+    d = ROOT / "experiments" / "robustness" / f"holdout_f{fold}_s2026"
+    if not (d / "manifest.json").exists():
+        return 0
+    kinds = json.loads((d / "manifest.json").read_text())["kinds"]
+    for kind in kinds:
+        df = load_test(d / f"{kind}.csv")
+        ps, pc = predict(model, tok, df, max_len, prefix and kind != "drop_prefix")
+        save_rob_preds(run, kind, df.select("uid").with_columns(pl.Series("p_sent", ps), pl.Series("p_sarc", pc)),
+                       d, protocol="fold_model", meta={"model_fold": fold})
+    return len(kinds)

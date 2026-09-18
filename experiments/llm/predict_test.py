@@ -42,6 +42,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--run", required=True)
     ap.add_argument("--test", required=True)
+    ap.add_argument("--force", action="store_true", help="re-score fold adapters even if cached")
     a = ap.parse_args()
     meta = json.loads((PREDS / f"{a.run}.json").read_text())
     r = meta["recipe"]
@@ -56,11 +57,16 @@ def main():
         keep = {k: v for k, v in meta.items() if k not in ("run", "fold_hash", "git")}
         build(a.run, r["kind"], r["model"], r["sarc"], r["sent"], r["layer"], r["C"], a.test, keep)
     elif r["kind"] == "ft":
-        for k in range(N_FOLDS):
-            sh([str(HERE / "ft.py"), "--run", a.run, "--model", r["model"], "--fold", str(k),
-                "--predict-only", "--test", a.test,
-                "--max-text-tokens", str(meta["train_args"]["max_text_tokens"])])
-        sh([str(HERE / "ft_collect.py"), "--run", a.run, "--test", a.test])
+        from ft_collect import fold_dir
+        for m in r["members"]:
+            for k in range(N_FOLDS):
+                if (fold_dir(m, k) / f"fold{k}_test.parquet").exists() and not a.force:
+                    continue
+                run_k = fold_dir(m, k).name
+                sh([str(HERE / "ft.py"), "--run", run_k, "--model", "qwen3.5-4b", "--fold", str(k),
+                    "--predict-only", "--test", a.test, "--max-text-tokens", "192"])
+        sh([str(HERE / "ft_collect.py"), "--run", a.run, "--members", *r["members"], "--test", a.test,
+            "--desc", meta.get("description", "")])
     else:
         raise ValueError(r["kind"])
     print(f"saved test predictions into preds/{a.run}.parquet")

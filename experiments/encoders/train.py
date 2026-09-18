@@ -12,9 +12,15 @@ When all 5 fold files exist, --collect writes preds/<run>.parquet via alta.commo
 
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # also runnable as a plain script
+
 import argparse
 import json
 import math
+import os
 import random
 import time
 
@@ -25,9 +31,9 @@ import torch
 from sklearn.metrics import roc_auc_score
 from transformers import AutoTokenizer, get_linear_schedule_with_warmup
 
-from alta.common import N_FOLDS, load_pool, save_preds, score
+from alta.common import CANARY_ENV, N_FOLDS, load_pool, save_preds, score
 from experiments.encoders.common import (CACHE, MODELS, build, collate, encode, model_inputs,
-                                         predict, save_fold)
+                                         predict, robustness_preds, save_fold)
 
 
 def seed_all(seed: int) -> None:
@@ -48,6 +54,12 @@ def diagnostics(df: pl.DataFrame, ps, pc) -> str:
     sc = score(d)
     out += [f"{k}={v:.3f}" for k, v in sc.items()]
     return " ".join(out)
+
+
+def out_name(run: str) -> str:
+    """Cache dir name; a permutation-canary run never shares fold files with the real run."""
+    c = os.environ.get(CANARY_ENV)
+    return run if c is None else f"{run}__canary{c}"
 
 
 def run_fold(a, pool: pl.DataFrame, k: int) -> None:
@@ -113,30 +125,42 @@ def run_fold(a, pool: pl.DataFrame, k: int) -> None:
         print(msg, flush=True)
 
     ps, pc = predict(model, tok, te, a.max_len, not a.no_prefix)
-    out_dir = CACHE / a.run
+    out_dir = CACHE / out_name(a.run)
     out_dir.mkdir(parents=True, exist_ok=True)
     te.select("uid").with_columns(pl.Series("p_sent", ps), pl.Series("p_sarc", pc)) \
         .write_parquet(out_dir / f"fold{k}.parquet")
     cfg = {k2: v2 for k2, v2 in vars(a).items() if k2 not in ("folds", "collect")}
     (out_dir / "config.json").write_text(json.dumps(cfg, indent=2))
     print(f"fold {k} done in {time.time() - t0:.0f}s | " + diagnostics(te, ps, pc), flush=True)
-    if a.save:
+    if not a.no_robust and os.environ.get(CANARY_ENV) is None:
+        n = robustness_preds(model, tok, a.run, k, a.max_len, not a.no_prefix)
+        if n:
+            print(f"fold {k}: perturbation suite, {n} kinds scored with the fold-{k} model", flush=True)
+    if a.save and os.environ.get(CANARY_ENV) is None:
         save_fold(model, tok, MODELS / a.run / f"fold{k}", cfg)
     del model, opt
     torch.cuda.empty_cache()
 
 
-def collect(run: str) -> None:
-    d = CACHE / run
-    parts = [d / f"fold{k}.parquet" for k in range(N_FOLDS)]
+def collect(run: str, folds: list[int]) -> None:
+    """All 5 folds -> full OOF run with folds_used; fewer -> partial (screening) run."""
+    d = CACHE / out_name(run)
+    parts = [d / f"fold{k}.parquet" for k in folds]
     missing = [p.name for p in parts if not p.exists()]
     assert not missing, f"missing {missing}"
-    oof = pl.concat([pl.read_parquet(p) for p in parts])
+    # fold = the fold each row was actually held out in (the file it was predicted in)
+    oof = pl.concat([pl.read_parquet(p).with_columns(pl.lit(k, pl.Int8).alias("fold"))
+                     for k, p in zip(folds, parts)])
     cfg = json.loads((d / "config.json").read_text())
     meta = {"model": cfg["model"], "hyperparameters": cfg, "epochs": cfg["epochs"], "seed": cfg["seed"],
             "description": cfg.get("desc", ""),
             "checkpoints": str(MODELS / run) if (MODELS / run).exists() else None}
-    print(save_preds(run, oof, meta=meta))
+    if os.environ.get(CANARY_ENV) is not None:
+        meta["canary_config"] = f"{CANARY_ENV}={os.environ[CANARY_ENV]}, same code path, " \
+            f"epochs={cfg['epochs']}, lr={cfg['lr']}, bs={cfg['bs']}, seed={cfg['seed']}"
+    full = sorted(folds) == list(range(N_FOLDS))
+    meta["holdout_folds"] = sorted(folds)
+    print(save_preds(run, oof, meta=meta, folds_used=oof.select("uid", "fold") if full else None))
 
 
 def main() -> None:
@@ -162,12 +186,13 @@ def main() -> None:
     ap.add_argument("--grad_ckpt", action="store_true")
     ap.add_argument("--optim", default="adamw8bit", choices=["adamw8bit", "adamw"])
     ap.add_argument("--pilot", action="store_true")
+    ap.add_argument("--no_robust", action="store_true", help="skip the perturbation suite on fold k")
     ap.add_argument("--save", action="store_true")
     ap.add_argument("--collect", action="store_true")
     ap.add_argument("--desc", default="")
     a = ap.parse_args()
     if a.collect:
-        collect(a.run)
+        collect(a.run, list(map(int, a.folds.split(","))))
         return
     pool = load_pool()
     for k in map(int, a.folds.split(",")):

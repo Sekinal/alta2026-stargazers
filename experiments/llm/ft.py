@@ -90,6 +90,62 @@ def predict(inner, head, tok, df, task, max_text_tokens, max_batch_tokens=3000):
     return out  # margin (logit of the positive class)
 
 
+def load_presft(a) -> pl.DataFrame:
+    d = pl.read_parquet(a.presft)
+    return d.head(a.presft_limit) if a.presft_limit else d
+
+
+def make_batches(examples, epochs, tasks, bs, rng):
+    """Same-task batches of similar length (chunks of 50*bs sorted by length), shuffled."""
+    batches = []
+    n_ep = math.ceil(epochs)
+    for ep in range(n_ep):
+        ex = list(examples)
+        rng.shuffle(ex)
+        if ep == n_ep - 1 and epochs % 1:
+            ex = ex[:int(len(ex) * (epochs % 1))]
+        for task in tasks:
+            et = [e for e in ex if e[1] == task]
+            for c in range(0, len(et), 50 * bs):
+                chunk = sorted(et[c:c + 50 * bs], key=lambda e: len(e[0]))
+                batches += [chunk[i:i + bs] for i in range(0, len(chunk), bs)]
+    rng.shuffle(batches)
+    return batches
+
+
+def train_stage(model, inner, head, tok, batches, params, lr, a) -> dict:
+    """One optimisation stage: fresh optimizer, 6% warm-up then linear decay, fixed length."""
+    steps = math.ceil(len(batches) / a.accum)
+    if a.riemannian:
+        from peft.optimizers import create_riemannian_optimizer
+        opt = create_riemannian_optimizer(model, torch.optim.AdamW, lr=lr, weight_decay=a.wd)
+    else:
+        opt = torch.optim.AdamW(params, lr=lr, weight_decay=a.wd)
+    warm = max(1, int(0.06 * steps))
+    sched = torch.optim.lr_scheduler.LambdaLR(
+        opt, lambda s: min(1.0, (s + 1) / warm) * max(0.0, (steps - s) / max(1, steps - warm)))
+    t1, run_loss = time.time(), []
+    for bi, batch in enumerate(batches):
+        ids_, att = pad_batch([e[0] for e in batch], tok.pad_token_id)
+        y = torch.tensor([e[2] for e in batch], dtype=torch.float32, device=0)
+        h = inner(input_ids=ids_, attention_mask=att, use_cache=False).last_hidden_state[:, -1]
+        margin = head(h, batch[0][1])
+        loss = torch.nn.functional.binary_cross_entropy_with_logits(margin, y) / a.accum
+        loss.backward()
+        run_loss.append(loss.item() * a.accum)
+        if (bi + 1) % a.accum == 0 or bi == len(batches) - 1:
+            torch.nn.utils.clip_grad_norm_(params, 1.0)
+            opt.step(); sched.step(); opt.zero_grad(set_to_none=True)
+        if (bi + 1) % 100 == 0:
+            el = time.time() - t1
+            print(f"  batch {bi + 1}/{len(batches)} loss {np.mean(run_loss[-100:]):.4f} "
+                  f"{(bi + 1) * a.bs / el:.2f} ex/s, eta {el / (bi + 1) * (len(batches) - bi - 1) / 60:.1f} min, "
+                  f"peak {torch.cuda.max_memory_allocated() / 2**30:.2f} GiB", flush=True)
+    del opt
+    return {"minutes": (time.time() - t1) / 60, "steps": steps,
+            "loss_curve": [float(np.mean(run_loss[i:i + 100])) for i in range(0, len(run_loss), 100)]}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--run", required=True)
@@ -112,11 +168,17 @@ def main():
     ap.add_argument("--rslora", action="store_true")
     ap.add_argument("--init", default="gaussian", choices=["gaussian", "eva", "pissa_niter_16"])
     ap.add_argument("--eva-rho", type=float, default=2.0)
+    ap.add_argument("--eva-tau", type=float, default=0.99)
+    ap.add_argument("--eva-batches", type=int, default=32, help="EVA init batches of 8 (training folds)")
     ap.add_argument("--dora", action="store_true")
     ap.add_argument("--riemannian", action="store_true")
     ap.add_argument("--targets", default="all-linear")
     ap.add_argument("--dropout", type=float, default=0.05)
     ap.add_argument("--wd", type=float, default=0.0)
+    ap.add_argument("--presft", default="", help="parquet (text, variety, source, sarcasm): sarcasm "
+                    "pre-SFT stage on external data before the task stage, same adapter")
+    ap.add_argument("--presft-lr", type=float, default=0)
+    ap.add_argument("--presft-limit", type=int, default=0)
     ap.add_argument("--save-run", action="store_true",
                     help="save the held-out fold as a partial run preds/<run>.parquet (screening)")
     a = ap.parse_args()
@@ -159,7 +221,7 @@ def main():
         cfg = LoraConfig(r=a.r, lora_alpha=alpha, lora_dropout=a.dropout, bias="none",
                          target_modules=targets, use_rslora=a.rslora, use_dora=a.dora,
                          init_lora_weights=True if a.init == "gaussian" else a.init,
-                         eva_config=EvaConfig(rho=a.eva_rho, use_label_mask=False)
+                         eva_config=EvaConfig(rho=a.eva_rho, tau=a.eva_tau, use_label_mask=False)
                          if a.init == "eva" else None)
         model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
         model.enable_input_require_grads()
@@ -170,18 +232,51 @@ def main():
         if a.init == "eva":
             # activation SVDs from the TRAINING folds only (never the held-out fold / test)
             ev = []
-            for task in tasks:
-                d = training_rows(train, task, a.sent_rows)
-                ev += encode(tok, build_prompts(tok, d, PROMPTS[task], a.max_text_tokens))
+            if a.presft:  # pre-SFT stage comes first: estimate activations on the external data
+                ev += encode(tok, build_prompts(tok, load_presft(a), PROMPTS["sarc"], a.max_text_tokens))
+            else:
+                for task in tasks:
+                    d = training_rows(train, task, a.sent_rows)
+                    ev += encode(tok, build_prompts(tok, d, PROMPTS[task], a.max_text_tokens))
             ev = [ev[i] for i in rng.permutation(len(ev))]
 
             eva_loader = []
-            for i in range(0, len(ev), 8):
+            for i in range(0, min(len(ev), 8 * a.eva_batches), 8):
                 ids_, att = pad_batch(ev[i:i + 8], tok.pad_token_id)
                 eva_loader.append({"input_ids": ids_, "attention_mask": att})
 
+            # PEFT's EVA cycles over the loader until every layer's top components are stable
+            # (cos >= tau); for 248 layers at ~30 s/batch that never finishes in budget. Cap it:
+            # after one pass over the eva_batches distinct batches, mark all hooks converged so the
+            # rank allocation uses the components estimated so far.
+            import peft.tuners.lora.eva as eva_mod
+            n_seen = {"n": 0}
+            orig_call = eva_mod.SVDHook.__call__
+
+            conv_at_cap = {}
+
+            def capped_call(self, m, inp, out):
+                if n_seen["n"] > len(eva_loader):
+                    # disclose how far the real convergence criterion had got at the cap
+                    conv_at_cap.setdefault(self.name, float(self.converged.float().mean()))
+                    self.converged = torch.ones_like(self.converged)
+                    return
+                orig_call(self, m, inp, out)
+
+            def counting_forward(m, inputs):
+                n_seen["n"] += 1
+                return eva_mod.forward_fn_dict(m, inputs)
+
+            eva_mod.SVDHook.__call__ = capped_call
             with torch.no_grad():
-                initialize_lora_eva_weights(model, eva_loader, show_progress_bar=False)
+                initialize_lora_eva_weights(model, eva_loader, forward_fn=counting_forward,
+                                            show_progress_bar=True)
+            eva_mod.SVDHook.__call__ = orig_call
+            stats["eva_iters"] = n_seen["n"]
+            cv = np.array(list(conv_at_cap.values()) or [1.0])
+            stats["eva_converged_at_cap"] = {"layers_still_running": len(cv),
+                                             "mean_frac_components_converged": float(cv.mean()),
+                                             "frac_layers_fully_converged": float((cv >= 1).mean())}
             del eva_loader
             ranks = model.peft_config["default"].rank_pattern or {}
             rv = np.array(list(ranks.values()) or [a.r])
@@ -205,54 +300,28 @@ def main():
         rng.shuffle(examples)
         if a.limit_train:
             examples = examples[:a.limit_train]
-        # batches: same task, similar length (chunk of 50*bs sorted by length), shuffled
-        batches = []
-        n_ep = math.ceil(a.epochs)
-        for ep in range(n_ep):
-            ex = list(examples)
-            rng.shuffle(ex)
-            if ep == n_ep - 1 and a.epochs % 1:
-                ex = ex[:int(len(ex) * (a.epochs % 1))]
-            for task in tasks:
-                et = [e for e in ex if e[1] == task]
-                for c in range(0, len(et), 50 * a.bs):
-                    chunk = sorted(et[c:c + 50 * a.bs], key=lambda e: len(e[0]))
-                    batches += [chunk[i:i + a.bs] for i in range(0, len(chunk), a.bs)]
-        rng.shuffle(batches)
-        steps = math.ceil(len(batches) / a.accum)
-        print(f"fold {a.fold}: {len(examples)} examples, {len(batches)} batches, {steps} steps; "
+        batches = make_batches(examples, a.epochs, tasks, a.bs, rng)
+        pre_batches = None
+        if a.presft:
+            d = load_presft(a)
+            pre_ex = [(s_, "sarc", int(lab)) for s_, lab in zip(
+                encode(tok, build_prompts(tok, d, PROMPTS["sarc"], a.max_text_tokens)), d["sarcasm"].to_numpy())]
+            pre_batches = make_batches(pre_ex, 1.0, ["sarc"], a.bs, rng)
+            stats["presft_examples"] = len(pre_ex)
+        print(f"fold {a.fold}: {len(examples)} examples, {len(batches)} batches; "
               f"load {time.time() - t0:.0f}s", flush=True)
 
         params = [p for p in model.parameters() if p.requires_grad]
-        if a.riemannian:
-            from peft.optimizers import create_riemannian_optimizer
-            opt = create_riemannian_optimizer(model, torch.optim.AdamW, lr=a.lr, weight_decay=a.wd)
-        else:
-            opt = torch.optim.AdamW(params, lr=a.lr, weight_decay=a.wd)
-        warm = max(1, int(0.06 * steps))
-        sched = torch.optim.lr_scheduler.LambdaLR(
-            opt, lambda s: min(1.0, (s + 1) / warm) * max(0.0, (steps - s) / max(1, steps - warm)))
         model.train()
-        t1, run_loss = time.time(), []
-        for bi, batch in enumerate(batches):
-            ids_, att = pad_batch([e[0] for e in batch], tok.pad_token_id)
-            y = torch.tensor([e[2] for e in batch], dtype=torch.float32, device=0)
-            h = inner(input_ids=ids_, attention_mask=att, use_cache=False).last_hidden_state[:, -1]
-            margin = head(h, batch[0][1])
-            loss = torch.nn.functional.binary_cross_entropy_with_logits(margin, y) / a.accum
-            loss.backward()
-            run_loss.append(loss.item() * a.accum)
-            if (bi + 1) % a.accum == 0 or bi == len(batches) - 1:
-                torch.nn.utils.clip_grad_norm_(params, 1.0)
-                opt.step(); sched.step(); opt.zero_grad(set_to_none=True)
-            if (bi + 1) % 100 == 0:
-                el = time.time() - t1
-                print(f"  batch {bi + 1}/{len(batches)} loss {np.mean(run_loss[-100:]):.4f} "
-                      f"{(bi + 1) * a.bs / el:.2f} ex/s, eta {el / (bi + 1) * (len(batches) - bi - 1) / 60:.1f} min, "
-                      f"peak {torch.cuda.max_memory_allocated() / 2**30:.2f} GiB", flush=True)
+        t1 = time.time()
+        if pre_batches:
+            print(f"pre-SFT: {len(pre_batches)} batches", flush=True)
+            stats["presft"] = train_stage(model, inner, head, tok, pre_batches, params,
+                                          a.presft_lr or a.lr, a)
+        stats["task"] = train_stage(model, inner, head, tok, batches, params, a.lr, a)
         stats.update(train_min=(time.time() - t1) / 60, n_examples=len(examples),
                      peak_gib=torch.cuda.max_memory_allocated() / 2**30,
-                     loss_curve=[float(np.mean(run_loss[i:i + 100])) for i in range(0, len(run_loss), 100)])
+                     loss_curve=stats["task"]["loss_curve"])
         print(f"train time {stats['train_min']:.1f} min", flush=True)
         model.save_pretrained(adir)
         (adir / "train_args.json").write_text(json.dumps(vars(a), indent=2))

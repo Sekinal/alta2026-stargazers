@@ -1,0 +1,57 @@
+{
+  "args": {
+    "run": "llm_tmp_presft_smoke",
+    "model": "qwen3.5-4b",
+    "fold": 0,
+    "tasks": "sarc,sent",
+    "sent_rows": "reddit",
+    "epochs": 1.0,
+    "lr": 0.0001,
+    "r": 64,
+    "bs": 4,
+    "accum": 2,
+    "max_text_tokens": 192,
+    "seed": 0,
+    "limit_train": 64,
+    "test": "",
+    "predict_only": false,
+    "alpha": 0,
+    "rslora": true,
+    "init": "gaussian",
+    "eva_rho": 2.0,
+    "eva_tau": 0.99,
+    "eva_batches": 32,
+    "dora": false,
+    "riemannian": false,
+    "targets": "all-linear",
+    "dropout": 0.05,
+    "wd": 0.0,
+    "presft": "experiments/llm/cache/presft_v1.parquet",
+    "presft_lr": 0,
+    "presft_limit": 64,
+    "save_run": false
+  },
+  "alpha": 16.0,
+  "init_s": 1.573939561843872,
+  "presft_examples": 64,
+  "presft": {
+    "minutes": 0.3057666261990865,
+    "steps": 8,
+    "loss_curve": [
+      2.185308354906738
+    ]
+  },
+  "task": {
+    "minutes": 0.25393999020258584,
+    "steps": 9,
+    "loss_curve": [
+      1.186321595135857
+    ]
+  },
+  "train_min": 0.5599840998649597,
+  "n_examples": 64,
+  "peak_gib": 10.91909646987915,
+  "loss_curve": [
+    1.186321595135857
+  ]
+}

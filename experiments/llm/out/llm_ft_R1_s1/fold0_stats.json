@@ -1,0 +1,62 @@
+{
+  "args": {
+    "run": "llm_ft_R1_s1",
+    "model": "qwen3.5-4b",
+    "fold": 0,
+    "tasks": "sarc,sent",
+    "sent_rows": "reddit",
+    "epochs": 1.0,
+    "lr": 0.0001,
+    "r": 64,
+    "bs": 8,
+    "accum": 2,
+    "max_text_tokens": 192,
+    "seed": 1,
+    "limit_train": 0,
+    "test": "",
+    "predict_only": false,
+    "alpha": 0,
+    "rslora": true,
+    "init": "gaussian",
+    "eva_rho": 2.0,
+    "eva_batches": 32,
+    "dora": false,
+    "riemannian": false,
+    "targets": "all-linear",
+    "dropout": 0.05,
+    "wd": 0.01,
+    "presft": "",
+    "presft_lr": 0,
+    "presft_limit": 0,
+    "save_run": true
+  },
+  "alpha": 16.0,
+  "init_s": 1.4934663772583008,
+  "task": {
+    "minutes": 20.202996218204497,
+    "steps": 369,
+    "loss_curve": [
+      0.8264759246259927,
+      0.512945824470371,
+      0.3897643809020519,
+      0.39605145195499064,
+      0.34461367246345614,
+      0.32949663798324763,
+      0.2811133281327784,
+      0.23717231600469835
+    ]
+  },
+  "train_min": 20.2030947526296,
+  "n_examples": 5885,
+  "peak_gib": 12.48939561843872,
+  "loss_curve": [
+    0.8264759246259927,
+    0.512945824470371,
+    0.3897643809020519,
+    0.39605145195499064,
+    0.34461367246345614,
+    0.32949663798324763,
+    0.2811133281327784,
+    0.23717231600469835
+  ]
+}
