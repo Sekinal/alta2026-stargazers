@@ -5,6 +5,7 @@
   uv run python -m alta.validate report RUN [--policies a,b] [--B 2000] [--plots] [--no-write]
   uv run python -m alta.validate compare RUN_A RUN_B [--policy segment+ukg]
   uv run python -m alta.validate board
+  uv run python -m alta.validate screen RUN [RUN ...] [--fold 0]   (fast single-holdout ranking)
   uv run python -m alta.validate blend NAME RUN [RUN ...] [--method mean|logit]
   uv run python -m alta.validate stack NAME RUN [RUN ...]
   uv run python -m alta.validate submit RUN --policy P (--dev | --test data/test.csv)
@@ -34,6 +35,8 @@ def main(argv=None) -> int:
     s.add_argument("--policy", default=policies.DEFAULT_POLICY)
     s.add_argument("--B", type=int, default=report.B_DEFAULT)
     sub.add_parser("board")
+    s = sub.add_parser("screen"); s.add_argument("runs", nargs="+"); s.add_argument("--fold", type=int, default=0)
+    s.add_argument("--policy", default=policies.DEFAULT_POLICY); s.add_argument("--B", type=int, default=report.B_DEFAULT)
     for name in ("blend", "stack"):
         s = sub.add_parser(name); s.add_argument("name"); s.add_argument("runs", nargs="+")
         s.add_argument("--force", action="store_true", help="overwrite an existing run of that name")
@@ -61,6 +64,8 @@ def main(argv=None) -> int:
         report.report(a.run, a.policies.split(","), B=a.B, write=not a.no_write, plots=a.plots)
     elif a.cmd == "compare":
         report.compare(a.run_a, a.run_b, a.policy, a.B)
+    elif a.cmd == "screen":
+        report.screen(a.runs, a.policy, a.fold, a.B)
     elif a.cmd == "board":
         print(report.board())
     elif a.cmd == "blend":

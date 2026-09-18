@@ -200,3 +200,61 @@ def _plots(run: str, rows: list[dict], reps: dict) -> None:
                 x="macro-F1 / score", y="density")
          + theme_minimal2() + ggsize(900, 450))
     ggsave(p, f"{run}_bootstrap.png", path=str(out), scale=1.5)
+
+
+# ------------------------------------------------------------------ fast single-split screening
+SCREEN_FOLD = 0
+
+
+def load_holdout(run: str, pool: pl.DataFrame, fold: int = SCREEN_FOLD):
+    """Predictions of a run on the holdout fold only (partial runs allowed), with inner folds
+    for cross-fitting the decision policy WITHIN the holdout (never on training rows)."""
+    from alta.common import _validate_probs
+    from alta.validation.data import _frame_to_eval, read_run
+    preds, meta = read_run(run)
+    oof = preds.filter(pl.col("split") == "oof").select("uid", "p_sent", "p_sarc")
+    _validate_probs(oof, f"{run} oof")
+    hold = pool.filter(pl.col("fold") == fold)
+    df = hold.join(oof, on="uid", how="left", maintain_order="left")
+    if df["p_sent"].null_count() or df["p_sarc"].null_count():
+        raise ValueError(f"run '{run}' lacks predictions for {df['p_sent'].null_count()} holdout rows")
+    # inner folds: round-robin within variety x source x labels, in uid order (deterministic)
+    df = df.sort("uid").with_columns(
+        (pl.int_range(pl.len()).over("variety", "source", "sentiment", "sarcasm") % 5).cast(pl.Int8).alias("fold"))
+    return _frame_to_eval(df, labelled=True, meta={**meta, "run": run})
+
+
+def screen(runs: list[str], spec: str = policies.DEFAULT_POLICY, fold: int = SCREEN_FOLD,
+           B: int = B_DEFAULT) -> str:
+    """Rank runs on one holdout fold (trained on the other folds). 5x cheaper than full CV,
+    noisier: ~1265 rows, ~50 UK sarcastic. Use for screening; confirm finalists with seeds."""
+    pool = load_pool()
+    ds, rows = {}, []
+    for r in runs:
+        try:
+            d = load_holdout(r, pool, fold)
+        except (ValueError, FileNotFoundError) as e:
+            print(f"skip {r}: {e}")
+            continue
+        pred, _ = policies.crossfit(spec, d)
+        ds[r] = (d, pred)
+        rows.append({"run": r, **components(d, pred)})
+    if not rows:
+        return "no runs with complete holdout predictions"
+    rows.sort(key=lambda x: -x["score"])
+    best = rows[0]["run"]
+    db, pb = ds[best]
+    for row in rows:
+        if row["run"] == best:
+            row["p_best_better"] = None
+            continue
+        d, p = ds[row["run"]]
+        if not (d.uid == db.uid).all():
+            raise RuntimeError("holdout rows misaligned")
+        row["p_best_better"] = paired(db, pb, p, B=B, n_test=len(db))["score"]["p_a_better"]
+    text = "\n".join([f"# Screen on holdout fold {fold} ({len(db)} rows), policy `{spec}` cross-fitted within the holdout",
+                      "", _fmt(rows), "",
+                      "p_best_better = P(top run beats this run) on holdout-sized replicates. < 0.8 = tie. "
+                      "Single-seed neural runs: confirm with >= 3 seeds before believing a gap."])
+    print(text)
+    return text
