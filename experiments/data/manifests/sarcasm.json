@@ -1,0 +1,411 @@
+{
+ "isarcasmeval_en": {
+  "dataset": "isarcasmeval_en",
+  "rows": 4846,
+  "positives": 1062,
+  "license": "MIT",
+  "url": "https://github.com/iabufarha/iSarcasmEval",
+  "dedupe_pool_drops": 0,
+  "dedupe_pool_drops_pos": 0,
+  "dedupe_parent_hits": 0,
+  "within_dup_or_conflict_drops": 21,
+  "sources": [
+   [
+    "twitter",
+    4846
+   ]
+  ],
+  "variety": [
+   [
+    "unknown",
+    4846
+   ]
+  ],
+  "label_quality": [
+   "gold"
+  ],
+  "has_parent": 0,
+  "has_sentiment": 0,
+  "notes": "Author-labelled intended sarcasm (Abu Farha et al. 2022), train + task A test; ~25% positive."
+ },
+ "isarcasmeval_en_rephrase": {
+  "dataset": "isarcasmeval_en_rephrase",
+  "rows": 862,
+  "positives": 0,
+  "license": "MIT",
+  "url": "https://github.com/iabufarha/iSarcasmEval",
+  "dedupe_pool_drops": 3,
+  "dedupe_pool_drops_pos": 0,
+  "dedupe_parent_hits": 0,
+  "within_dup_or_conflict_drops": 2,
+  "sources": [
+   [
+    "twitter",
+    862
+   ]
+  ],
+  "variety": [
+   [
+    "unknown",
+    862
+   ]
+  ],
+  "label_quality": [
+   "gold"
+  ],
+  "has_parent": 0,
+  "has_sentiment": 0,
+  "notes": "Author-written non-sarcastic rephrasings of the sarcastic iSarcasmEval tweets (all label 0). Pair with isarcasmeval_en positives for contrastive/minimal-pair training."
+ },
+ "semeval2018_irony": {
+  "dataset": "semeval2018_irony",
+  "rows": 4618,
+  "positives": 2222,
+  "license": "CC BY-NC-SA 4.0",
+  "url": "https://github.com/Cyvhee/SemEval2018-Task3",
+  "dedupe_pool_drops": 0,
+  "dedupe_pool_drops_pos": 0,
+  "dedupe_parent_hits": 0,
+  "within_dup_or_conflict_drops": 0,
+  "sources": [
+   [
+    "twitter",
+    4618
+   ]
+  ],
+  "variety": [
+   [
+    "en-US",
+    4618
+   ]
+  ],
+  "label_quality": [
+   "gold"
+  ],
+  "has_parent": 0,
+  "has_sentiment": 0,
+  "notes": "Van Hee et al. 2018; hashtag-collected then manually annotated (irony incl. sarcasm). Organisers ask for academic use only."
+ },
+ "news_headlines": {
+  "dataset": "news_headlines",
+  "rows": 28503,
+  "positives": 13552,
+  "license": "CC BY 4.0 (per author's Kaggle release)",
+  "url": "https://github.com/rishabhmisra/News-Headlines-Dataset-For-Sarcasm-Detection",
+  "dedupe_pool_drops": 0,
+  "dedupe_pool_drops_pos": 0,
+  "dedupe_parent_hits": 0,
+  "within_dup_or_conflict_drops": 116,
+  "sources": [
+   [
+    "news",
+    28503
+   ]
+  ],
+  "variety": [
+   [
+    "en-US",
+    28503
+   ]
+  ],
+  "label_quality": [
+   "weak"
+  ],
+  "has_parent": 0,
+  "has_sentiment": 0,
+  "notes": "Label = outlet (The Onion satire vs HuffPost); headline register, far from reddit. Low priority."
+ },
+ "figlang2020_reddit": {
+  "dataset": "figlang2020_reddit",
+  "rows": 6195,
+  "positives": 3097,
+  "license": "no explicit licence; released for research (Ghosh et al. 2020)",
+  "url": "https://github.com/EducationalTestingService/sarcasm",
+  "dedupe_pool_drops": 5,
+  "dedupe_pool_drops_pos": 3,
+  "dedupe_parent_hits": 5,
+  "within_dup_or_conflict_drops": 0,
+  "sources": [
+   [
+    "reddit",
+    6195
+   ]
+  ],
+  "variety": [
+   [
+    "unknown",
+    6195
+   ]
+  ],
+  "label_quality": [
+   "self-labelled"
+  ],
+  "has_parent": 6195,
+  "has_sentiment": 0,
+  "notes": "Reddit part is re-sampled from SARC (/s, balanced) -> overlaps sarc_*; parent_text = last context turn."
+ },
+ "figlang2020_twitter": {
+  "dataset": "figlang2020_twitter",
+  "rows": 6459,
+  "positives": 3311,
+  "license": "no explicit licence; released for research (Ghosh et al. 2020)",
+  "url": "https://github.com/EducationalTestingService/sarcasm",
+  "dedupe_pool_drops": 0,
+  "dedupe_pool_drops_pos": 0,
+  "dedupe_parent_hits": 0,
+  "within_dup_or_conflict_drops": 341,
+  "sources": [
+   [
+    "twitter",
+    6459
+   ]
+  ],
+  "variety": [
+   [
+    "unknown",
+    6459
+   ]
+  ],
+  "label_quality": [
+   "self-labelled"
+  ],
+  "has_parent": 6459,
+  "has_sentiment": 0,
+  "notes": "Twitter part labelled by #sarcasm/#sarcastic hashtags (removed); parent_text = last context turn."
+ },
+ "mustard": {
+  "dataset": "mustard",
+  "rows": 670,
+  "positives": 339,
+  "license": "MIT",
+  "url": "https://github.com/soujanyaporia/MUStARD",
+  "dedupe_pool_drops": 10,
+  "dedupe_pool_drops_pos": 4,
+  "dedupe_parent_hits": 5,
+  "within_dup_or_conflict_drops": 10,
+  "sources": [
+   [
+    "other",
+    670
+   ]
+  ],
+  "variety": [
+   [
+    "en-US",
+    670
+   ]
+  ],
+  "label_quality": [
+   "gold"
+  ],
+  "has_parent": 670,
+  "has_sentiment": 0,
+  "notes": "TV-show utterances (Friends, Big Bang Theory, Golden Girls, Sarcasmaholics); text-only use."
+ },
+ "reddit_irony_wallace2014": {
+  "dataset": "reddit_irony_wallace2014",
+  "rows": 1934,
+  "positives": 537,
+  "license": "no explicit licence (public research release)",
+  "url": "https://github.com/bwallace/ACL-2014-irony",
+  "dedupe_pool_drops": 2,
+  "dedupe_pool_drops_pos": 0,
+  "dedupe_parent_hits": 0,
+  "within_dup_or_conflict_drops": 13,
+  "sources": [
+   [
+    "reddit",
+    1934
+   ]
+  ],
+  "variety": [
+   [
+    "en-US",
+    1934
+   ]
+  ],
+  "label_quality": [
+   "gold"
+  ],
+  "has_parent": 0,
+  "has_sentiment": 0,
+  "notes": "r/politics, r/conservative, r/progressive, r/atheism, r/christianity, r/news, r/technology."
+ },
+ "epic_irony": {
+  "dataset": "epic_irony",
+  "rows": 2745,
+  "positives": 646,
+  "license": "CC BY-NC-SA 4.0",
+  "url": "https://huggingface.co/datasets/Multilingual-Perspectivist-NLU/EPIC",
+  "dedupe_pool_drops": 7,
+  "dedupe_pool_drops_pos": 1,
+  "dedupe_parent_hits": 2,
+  "within_dup_or_conflict_drops": 15,
+  "sources": [
+   [
+    "twitter",
+    1385
+   ],
+   [
+    "reddit",
+    1360
+   ]
+  ],
+  "variety": [
+   [
+    "other",
+    1097
+   ],
+   [
+    "en-AU",
+    555
+   ],
+   [
+    "en-UK",
+    550
+   ],
+   [
+    "en-US",
+    543
+   ]
+  ],
+  "label_quality": [
+   "gold"
+  ],
+  "has_parent": 2745,
+  "has_sentiment": 0,
+  "notes": "Majority vote over ~5 annotators per text (ties dropped); variety_guess from the corpus' Language_variety (text origin: AU/UK/US/IE/IN reddit+twitter). Irony, not strictly sarcasm."
+ },
+ "sarc_main": {
+  "dataset": "sarc_main",
+  "rows": 7478156,
+  "positives": 210965,
+  "license": "research use; no explicit licence (Princeton release; CC BY 2.0 per the CreativeLang HF mirror)",
+  "url": "https://nlp.cs.princeton.edu/old/SARC/2.0/main/",
+  "dedupe_pool_drops": 1697,
+  "dedupe_pool_drops_pos": 108,
+  "dedupe_parent_hits": 868,
+  "within_dup_or_conflict_drops": 957574,
+  "sources": [
+   [
+    "reddit",
+    7478156
+   ]
+  ],
+  "variety": [
+   [
+    "unknown",
+    7353060
+   ],
+   [
+    "other",
+    79312
+   ],
+   [
+    "en-UK",
+    26947
+   ],
+   [
+    "en-AU",
+    18837
+   ]
+  ],
+  "label_quality": [
+   "self-labelled"
+  ],
+  "has_parent": 7478156,
+  "has_sentiment": 0,
+  "notes": "SARC 2.0 main, train+test unbalanced sequence files (2009-2017, ~0.5-1% /s). /s already stripped by the authors. parent_text = the comment/post title replied to. Subsample negatives as needed."
+ },
+ "sarc_ukau": {
+  "dataset": "sarc_ukau",
+  "rows": 47910,
+  "positives": 4424,
+  "license": "research use; no explicit licence (Princeton release; CC BY 2.0 per the CreativeLang HF mirror)",
+  "url": "https://nlp.cs.princeton.edu/old/SARC/2.0/main/",
+  "dedupe_pool_drops": 52,
+  "dedupe_pool_drops_pos": 3,
+  "dedupe_parent_hits": 4,
+  "within_dup_or_conflict_drops": 883,
+  "sources": [
+   [
+    "reddit",
+    47910
+   ]
+  ],
+  "variety": [
+   [
+    "en-UK",
+    28339
+   ],
+   [
+    "en-AU",
+    19571
+   ]
+  ],
+  "label_quality": [
+   "self-labelled"
+  ],
+  "has_parent": 47910,
+  "has_sentiment": 0,
+  "notes": "Subset of sarc_main from UK/AU subreddits (subreddit-based variety_guess)."
+ },
+ "reddit_s_uk": {
+  "dataset": "reddit_s_uk",
+  "rows": 160793,
+  "positives": 38971,
+  "license": "Reddit user content; research use (Reddit API/archive terms apply)",
+  "url": "https://arctic-shift.photon-reddit.com ; https://huggingface.co/datasets/alujjdnd/Reddit-US-UK",
+  "dedupe_pool_drops": 112,
+  "dedupe_pool_drops_pos": 16,
+  "dedupe_parent_hits": 62,
+  "within_dup_or_conflict_drops": 492,
+  "sources": [
+   [
+    "reddit",
+    160793
+   ]
+  ],
+  "variety": [
+   [
+    "en-UK",
+    160793
+   ]
+  ],
+  "label_quality": [
+   "weak"
+  ],
+  "has_parent": 155277,
+  "has_sentiment": 0,
+  "notes": "Positives = author /s tag (stripped); negatives = untagged comments, same subreddit x year, 3:1. Weak labels both ways. parent_text for both classes where available. Covers the BESSTIE collection subreddits/years: re-run dedupe.py --test on the test CSV."
+ },
+ "reddit_s_au": {
+  "dataset": "reddit_s_au",
+  "rows": 116589,
+  "positives": 27789,
+  "license": "Reddit user content; research use (Reddit API/archive terms apply)",
+  "url": "https://arctic-shift.photon-reddit.com ; https://huggingface.co/datasets/alujjdnd/Reddit-US-UK",
+  "dedupe_pool_drops": 76,
+  "dedupe_pool_drops_pos": 11,
+  "dedupe_parent_hits": 47,
+  "within_dup_or_conflict_drops": 246,
+  "sources": [
+   [
+    "reddit",
+    116589
+   ]
+  ],
+  "variety": [
+   [
+    "en-AU",
+    116589
+   ]
+  ],
+  "label_quality": [
+   "weak"
+  ],
+  "has_parent": 112635,
+  "has_sentiment": 0,
+  "notes": "Positives = author /s tag (stripped); negatives = untagged comments, same subreddit x year, 3:1. Weak labels both ways. parent_text for both classes where available. Covers the BESSTIE collection subreddits/years: re-run dedupe.py --test on the test CSV."
+ }
+}

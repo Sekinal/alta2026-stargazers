@@ -1,0 +1,391 @@
+{
+ "files": {
+  "reddit_au": {
+   "dedupe_runs": [
+    {
+     "refs": [
+      "pool"
+     ],
+     "n_ref": 6270,
+     "dropped": 161,
+     "equal": 135,
+     "contains_ref": 134,
+     "contained_in_ref": 142,
+     "time": "2026-09-18 08:05"
+    },
+    {
+     "refs": [
+      "pool"
+     ],
+     "n_ref": 6269,
+     "dropped": 3,
+     "equal": 3,
+     "contains_ref": 3,
+     "contained_in_ref": 3,
+     "time": "2026-09-18 08:09"
+    },
+    {
+     "refs": [
+      "pool"
+     ],
+     "n_ref": 6269,
+     "dropped": 0,
+     "equal": 0,
+     "contains_ref": 0,
+     "contained_in_ref": 0,
+     "time": "2026-09-18 08:12"
+    }
+   ],
+   "path": "data/external/indomain/reddit_au.parquet",
+   "rows": 1465744,
+   "approx_tokens": 80011843,
+   "dedupe_dropped_total": 164,
+   "time_range_utc": [
+    "2022-01-01",
+    "2025-12-31"
+   ],
+   "by_dataset": {
+    "arctic_shift": {
+     "rows": 1465744,
+     "approx_tokens": 80011843,
+     "license": "Reddit content via Arctic Shift; Reddit User Agreement, research use only"
+    }
+   }
+  },
+  "reddit_uk": {
+   "dedupe_runs": [
+    {
+     "refs": [
+      "pool"
+     ],
+     "n_ref": 6270,
+     "dropped": 27,
+     "equal": 25,
+     "contains_ref": 17,
+     "contained_in_ref": 19,
+     "time": "2026-09-18 08:05"
+    },
+    {
+     "refs": [
+      "pool"
+     ],
+     "n_ref": 6269,
+     "dropped": 0,
+     "equal": 0,
+     "contains_ref": 0,
+     "contained_in_ref": 0,
+     "time": "2026-09-18 08:09"
+    },
+    {
+     "refs": [
+      "pool"
+     ],
+     "n_ref": 6269,
+     "dropped": 0,
+     "equal": 0,
+     "contains_ref": 0,
+     "contained_in_ref": 0,
+     "time": "2026-09-18 08:12"
+    }
+   ],
+   "path": "data/external/indomain/reddit_uk.parquet",
+   "rows": 1477942,
+   "approx_tokens": 77405890,
+   "dedupe_dropped_total": 27,
+   "time_range_utc": [
+    "2022-01-01",
+    "2025-12-29"
+   ],
+   "by_dataset": {
+    "arctic_shift": {
+     "rows": 1477942,
+     "approx_tokens": 77405890,
+     "license": "Reddit content via Arctic Shift; Reddit User Agreement, research use only"
+    }
+   }
+  },
+  "reviews_au": {
+   "dedupe_runs": [
+    {
+     "refs": [
+      "pool"
+     ],
+     "n_ref": 6270,
+     "dropped": 0,
+     "equal": 0,
+     "contains_ref": 0,
+     "contained_in_ref": 0,
+     "time": "2026-09-18 08:06"
+    },
+    {
+     "refs": [
+      "pool"
+     ],
+     "n_ref": 6269,
+     "dropped": 0,
+     "equal": 0,
+     "contains_ref": 0,
+     "contained_in_ref": 0,
+     "time": "2026-09-18 08:09"
+    },
+    {
+     "refs": [
+      "pool"
+     ],
+     "n_ref": 6269,
+     "dropped": 0,
+     "equal": 0,
+     "contains_ref": 0,
+     "contained_in_ref": 0,
+     "time": "2026-09-18 08:12"
+    }
+   ],
+   "path": "data/external/indomain/reviews_au.parquet",
+   "rows": 486132,
+   "approx_tokens": 29091571,
+   "dedupe_dropped_total": 0,
+   "time_range_utc": [
+    "2006-08-14",
+    "2026-06-27"
+   ],
+   "by_dataset": {
+    "booking": {
+     "rows": 113303,
+     "approx_tokens": 6110231,
+     "license": "CC BY-SA 4.0 (Booking.com README: non-commercial)"
+    },
+    "googlelocal": {
+     "rows": 132715,
+     "approx_tokens": 8973806,
+     "license": "UCSD Google Local 2018; research/non-commercial use (McAuley lab terms)"
+    },
+    "airbnb": {
+     "rows": 240114,
+     "approx_tokens": 14007533,
+     "license": "CC BY 4.0 (Inside Airbnb)"
+    }
+   }
+  },
+  "reviews_uk": {
+   "dedupe_runs": [
+    {
+     "refs": [
+      "pool"
+     ],
+     "n_ref": 6270,
+     "dropped": 7,
+     "equal": 0,
+     "contains_ref": 3,
+     "contained_in_ref": 4,
+     "time": "2026-09-18 08:06"
+    },
+    {
+     "refs": [
+      "pool"
+     ],
+     "n_ref": 6269,
+     "dropped": 0,
+     "equal": 0,
+     "contains_ref": 0,
+     "contained_in_ref": 0,
+     "time": "2026-09-18 08:09"
+    },
+    {
+     "refs": [
+      "pool"
+     ],
+     "n_ref": 6269,
+     "dropped": 0,
+     "equal": 0,
+     "contains_ref": 0,
+     "contained_in_ref": 0,
+     "time": "2026-09-18 08:12"
+    }
+   ],
+   "path": "data/external/indomain/reviews_uk.parquet",
+   "rows": 741781,
+   "approx_tokens": 49043276,
+   "dedupe_dropped_total": 7,
+   "time_range_utc": [
+    "1990-12-31",
+    "2024-01-01"
+   ],
+   "by_dataset": {
+    "googlelocal": {
+     "rows": 344652,
+     "approx_tokens": 22010947,
+     "license": "UCSD Google Local 2018; research/non-commercial use (McAuley lab terms)"
+    },
+    "booking": {
+     "rows": 350662,
+     "approx_tokens": 21734403,
+     "license": "CC BY-SA 4.0 (Booking.com README: non-commercial)"
+    },
+    "nhs_gp": {
+     "rows": 46467,
+     "approx_tokens": 5297925,
+     "license": "Open Government Licence v3.0 (NHS.uk reviews via HF janduplessis886)"
+    }
+   }
+  }
+ },
+ "sources": {
+  "arctic_shift": {
+   "url": "https://arctic-shift.photon-reddit.com/api (comments/search, posts/search)",
+   "license": "Reddit User Agreement / Data API terms; research use, not redistributed",
+   "time_range": "2022-01-01..2025-12-31",
+   "variety": "en-AU, en-UK (by subreddit)"
+  },
+  "googlelocal": {
+   "url": "https://mcauleylab.ucsd.edu/public_datasets/data/googlelocal/",
+   "license": "UCSD McAuley lab, research/non-commercial use",
+   "time_range": "~2007..2014",
+   "variety": "place address ends in United Kingdom/UK/Australia"
+  },
+  "booking": {
+   "url": "https://huggingface.co/datasets/Booking-com/accommodation-reviews",
+   "license": "CC BY-SA 4.0 (README: non-commercial)",
+   "time_range": "2023",
+   "variety": "accommodation_country"
+  },
+  "nhs_gp": {
+   "url": "https://huggingface.co/datasets/janduplessis886/england-nhs-gp-reviews",
+   "license": "Open Government Licence v3.0 (NHS.uk)",
+   "time_range": "2022..2024",
+   "variety": "en-UK"
+  },
+  "airbnb": {
+   "url": "https://insideairbnb.com/get-the-data/ (Sydney, Melbourne reviews.csv.gz, 2026-06-16)",
+   "license": "CC BY 4.0",
+   "time_range": "2022-01-01..2026-06 (sampled 250k)",
+   "variety": "en-AU"
+  }
+ },
+ "build_stats": {
+  "reddit_stats": {
+   "reddit_au": {
+    "in": 1667132,
+    "after_min_words": 1495378,
+    "after_lang": 1485999,
+    "after_exact_dedupe": 1465909,
+    "tokens": 80024263,
+    "time_range": [
+     1640995201,
+     1767222418
+    ],
+    "per_community": {
+     "australia": 189500,
+     "AustralianPolitics": 152871,
+     "AusFinance": 152584,
+     "melbourne": 146329,
+     "sydney": 123611,
+     "perth": 101849,
+     "AskAnAustralian": 101460,
+     "Adelaide": 100962,
+     "brisbane": 99998,
+     "canberra": 50400,
+     "AusPropertyChat": 45572,
+     "AusLegal": 38010,
+     "hobart": 36300,
+     "tasmania": 30290,
+     "GoldCoast": 29493,
+     "straya": 26059,
+     "aussie": 23047,
+     "AustraliaTravel": 17574
+    }
+   },
+   "reddit_uk": {
+    "in": 1688876,
+    "after_min_words": 1517749,
+    "after_lang": 1507737,
+    "after_exact_dedupe": 1477969,
+    "tokens": 77406534,
+    "time_range": [
+     1640995202,
+     1767048660
+    ],
+    "per_community": {
+     "ukpolitics": 204943,
+     "unitedkingdom": 176174,
+     "AskUK": 152362,
+     "CasualUK": 143750,
+     "london": 118642,
+     "UKPersonalFinance": 102746,
+     "britishproblems": 73180,
+     "manchester": 72844,
+     "LabourUK": 52859,
+     "Leeds": 50691,
+     "Edinburgh": 50523,
+     "bristol": 50143,
+     "Scotland": 49833,
+     "glasgow": 49227,
+     "brum": 48846,
+     "uktravel": 29820,
+     "AskBrits": 29501,
+     "GreatBritishMemes": 21885
+    }
+   },
+   "raw_rows": 3593971,
+   "after_deleted_bot_filter": 3356008
+  },
+  "reviews_stats": {
+   "stats": {
+    "nhs/en-UK": {
+     "in": 61955,
+     "after_min_words": 61954,
+     "after_lang": 61954,
+     "after_exact_dedupe": 46467,
+     "tokens": 5297925
+    },
+    "booking/en-UK": {
+     "in": 353838,
+     "after_min_words": 350973,
+     "after_lang": 350862,
+     "after_exact_dedupe": 350665,
+     "tokens": 21734551
+    },
+    "booking/en-AU": {
+     "in": 115020,
+     "after_min_words": 113425,
+     "after_lang": 113373,
+     "after_exact_dedupe": 113303,
+     "tokens": 6110231
+    },
+    "googlelocal/en-UK": {
+     "in": 384912,
+     "after_min_words": 353164,
+     "after_lang": 347044,
+     "after_exact_dedupe": 344656,
+     "tokens": 22011159
+    },
+    "googlelocal/en-AU": {
+     "in": 144155,
+     "after_min_words": 134302,
+     "after_lang": 133358,
+     "after_exact_dedupe": 132715,
+     "tokens": 8973806
+    },
+    "airbnb/en-AU": {
+     "in": 250000,
+     "after_min_words": 250000,
+     "after_lang": 240152,
+     "after_exact_dedupe": 240114,
+     "tokens": 14007533
+    }
+   },
+   "urls": {
+    "googlelocal": "https://mcauleylab.ucsd.edu/public_datasets/data/googlelocal/reviews.clean.json.gz",
+    "booking": "https://huggingface.co/datasets/Booking-com/accommodation-reviews",
+    "nhs": "https://huggingface.co/datasets/janduplessis886/england-nhs-gp-reviews",
+    "airbnb": "https://insideairbnb.com/get-the-data/"
+   },
+   "licenses": {
+    "googlelocal": "UCSD Google Local 2018; research/non-commercial use (McAuley lab terms)",
+    "booking": "CC BY-SA 4.0 (Booking.com README: non-commercial)",
+    "nhs": "Open Government Licence v3.0 (NHS.uk reviews via HF janduplessis886)",
+    "airbnb": "CC BY 4.0 (Inside Airbnb)"
+   }
+  }
+ },
+ "updated": "2026-09-18 08:12 UTC"
+}

@@ -1,0 +1,494 @@
+{
+ "_failed": {},
+ "_mix_v1": {
+  "by_source": {
+   "other": 25000,
+   "reddit": 31395,
+   "review": 90000,
+   "twitter": 62334
+  },
+  "composition": {
+   "amazon_polarity": {
+    "pos": 10000,
+    "rows": 20000
+   },
+   "dynasent": {
+    "pos": 20000,
+    "rows": 40000
+   },
+   "go_emotions__full": {
+    "pos": 20185,
+    "rows": 31395
+   },
+   "rotten_tomatoes": {
+    "pos": 5000,
+    "rows": 10000
+   },
+   "sentiment140": {
+    "pos": 15000,
+    "rows": 30000
+   },
+   "sst2": {
+    "pos": 12500,
+    "rows": 25000
+   },
+   "tweet_eval_sentiment__full": {
+    "pos": 20978,
+    "rows": 32334
+   },
+   "yelp_polarity": {
+    "pos": 10000,
+    "rows": 20000
+   }
+  },
+  "excluded": {
+   "google_local_2018_au_uk": "hold_until_test_dedupe (overlaps BESSTIE Google source)",
+   "imdb": "long movie reviews, low relevance",
+   "qut_ausvotes2025": "stance labels are not this task's sentiment (probe AUC 0.56)"
+  },
+  "file": "data/external/sentiment/mix_v1.parquet",
+  "pos_rate": 0.5445,
+  "rows": 208729
+ },
+ "_skipped": {
+  "Amazon Reviews 2023 (McAuley-Lab)": "US storefront only, redundant with amazon_polarity",
+  "BESSTIE and anything by its authors (e.g. surrey-nlp/alignment-australian-final, -british-final)": "competition rule: may contain the test labels",
+  "HF 'reddit sentiment' sets (Nech-C/*, hnam25/*, arrmlet/political-social-reddit-us-sentiment-v1, ...)": "tiny, model-labelled or US/off-domain",
+  "Kaggle datasets (e.g. tweet_sentiment_extraction, Reddit_Data)": "Kaggle competition/ToS terms or TextBlob-derived labels",
+  "SemEval-2017 Task 4 / cardiffnlp tweet_sentiment_multilingual (english)": "same data as tweet_eval sentiment",
+  "Trustpilot corpus (Hovy et al. 2015, UK reviews)": "no public download found in time",
+  "UCSD Google Local 2021": "US-only; the 2018 worldwide release is used instead",
+  "argilla/tripadvisor-hotel-reviews (CC-BY-NC-4.0)": "text is lowercased and stopword-stripped, unlike natural text",
+  "silvia-casola/BREXIT": "hate-speech/offensiveness labels, not sentiment; 1.1k tweets"
+ },
+ "amazon_polarity": {
+  "capped_summary": {
+   "median_chars": 384,
+   "pos_rate": 0.5,
+   "rows": 150000,
+   "top_domains": {
+    "amazon": 150000
+   },
+   "variety": {
+    "en-US": 150000
+   }
+  },
+  "counts": {
+   "after_clean": 1000000,
+   "after_internal_dedupe": 999898,
+   "binary_full": 999898,
+   "capped": 150000,
+   "dropped_pool_dedupe": 0,
+   "neutral": 0,
+   "raw": 1000000
+  },
+  "files": [
+   "data/external/sentiment/amazon_polarity.parquet",
+   "data/external/sentiment/amazon_polarity__full.parquet"
+  ],
+  "full_pos_rate": 0.5,
+  "label_quality": "author star rating (1-2 neg, 4-5 pos; 3 excluded upstream)",
+  "license": "Apache-2.0 (HF card)",
+  "neutral_handling": "3-star already excluded upstream; text = title + '. ' + body",
+  "neutral_orig_labels": {},
+  "source": "review",
+  "url": "https://huggingface.co/datasets/fancyzhx/amazon_polarity (Zhang et al. 2015); random 500k/label pre-sample of 4M"
+ },
+ "dynasent": {
+  "capped_summary": {
+   "median_chars": 68,
+   "pos_rate": 0.5,
+   "rows": 43536,
+   "top_domains": {
+    "yelp_sentences_r1": 33137,
+    "yelp_sentences_r2": 10399
+   },
+   "variety": {
+    "en-US": 43536
+   }
+  },
+  "counts": {
+   "after_clean": 122703,
+   "after_internal_dedupe": 121399,
+   "binary_full": 52213,
+   "capped": 43536,
+   "dropped_pool_dedupe": 8,
+   "neutral": 69178,
+   "raw": 122735
+  },
+  "files": [
+   "data/external/sentiment/dynasent.parquet",
+   "data/external/sentiment/dynasent__full.parquet",
+   "data/external/sentiment/dynasent__neutral.parquet"
+  ],
+  "full_pos_rate": 0.5831,
+  "label_quality": "human, 5 raters; gold = majority (>=3/5)",
+  "license": "CC-BY-4.0",
+  "neutral_handling": "neutral, mixed and no-majority -> __neutral",
+  "neutral_orig_labels": {
+   "None": 12144,
+   "mixed": 7330,
+   "neutral": 49704
+  },
+  "source": "review",
+  "url": "https://github.com/cgpotts/dynasent (v1.1, rounds 1+2, all splits)"
+ },
+ "go_emotions": {
+  "capped_summary": {
+   "median_chars": 67,
+   "pos_rate": 0.5,
+   "rows": 22420,
+   "top_domains": {
+    "2meirl4meirl": 86,
+    "animalsbeingbros": 87,
+    "confessions": 99,
+    "cringe": 95,
+    "depression": 89,
+    "divorce": 90,
+    "gaybros": 88,
+    "loveafterlockup": 96,
+    "socialanxiety": 107,
+    "vanderpumprules": 97
+   },
+   "variety": {
+    "en-AU": 239,
+    "en-UK": 385,
+    "unknown": 21796
+   }
+  },
+  "counts": {
+   "after_clean": 54263,
+   "after_internal_dedupe": 53376,
+   "binary_full": 31395,
+   "capped": 22420,
+   "dropped_pool_dedupe": 15,
+   "neutral": 21966,
+   "raw": 54263
+  },
+  "files": [
+   "data/external/sentiment/go_emotions.parquet",
+   "data/external/sentiment/go_emotions__full.parquet",
+   "data/external/sentiment/go_emotions__neutral.parquet"
+  ],
+  "full_pos_rate": 0.6429,
+  "label_quality": "human; emotion labels kept when >=2 of 3-5 raters agree; pos/neg via Ekman-style grouping",
+  "license": "Apache-2.0",
+  "neutral_handling": "positive emotions only -> 1; negative emotions only -> 0; neutral-only, ambiguous-only (surprise/realization/curiosity/confusion) and mixed pos+neg -> __neutral (orig_label keeps the emotion set)",
+  "neutral_orig_labels": {
+   "confusion": 1046,
+   "confusion|curiosity": 205,
+   "confusion|neutral": 98,
+   "curiosity": 1714,
+   "curiosity|neutral": 144,
+   "neutral": 15814,
+   "realization": 748,
+   "surprise": 885
+  },
+  "recommended_use": "core Reddit sentiment source; pool-reddit model AUC 0.77 on the binary labels. Neutral bucket scores like average pool reddit (26% predicted positive; questions 17%), so if used, soft-label it at the segment prior (~0.3), not as positive. Text has [NAME] placeholders",
+  "source": "reddit",
+  "url": "https://huggingface.co/datasets/google-research-datasets/go_emotions"
+ },
+ "google_local_2018_au_uk": {
+  "capped_summary": {
+   "median_chars": 207,
+   "pos_rate": 0.4994,
+   "rows": 141193,
+   "top_domains": {
+    "Asian Restaurant": 3648,
+    "Bar": 6900,
+    "Cafe": 5010,
+    "Gastropub": 2725,
+    "Hotel": 5913,
+    "Indian Restaurant": 2765,
+    "Pub": 4850,
+    "Restaurant": 7660,
+    "Takeout Restaurant": 3107,
+    "unknown": 10242
+   },
+   "variety": {
+    "en-AU": 40197,
+    "en-UK": 100996
+   }
+  },
+  "counts": {
+   "after_clean": 498373,
+   "after_internal_dedupe": 484990,
+   "binary_full": 433129,
+   "capped": 141193,
+   "dropped_pool_dedupe": 5,
+   "neutral": 51856,
+   "raw": 523793
+  },
+  "files": [
+   "data/external/sentiment/google_local_2018_au_uk.parquet",
+   "data/external/sentiment/google_local_2018_au_uk__full.parquet",
+   "data/external/sentiment/google_local_2018_au_uk__neutral.parquet"
+  ],
+  "full_pos_rate": 0.8368,
+  "hold_reason": "5 exact matches with the pool show BESSTIE's Google reviews overlap this source, so hidden test reviews are probably in it with star ratings (a proxy for test labels). Excluded from the labelled mix; re-run dedupe_sentiment.py --against the test file before any use",
+  "hold_until_test_dedupe": true,
+  "label_quality": "author star rating (1-2 neg, 4-5 pos); variety_guess = place country, not reviewer",
+  "license": "UCSD McAuley lab public dataset (research use, cite He, Kang & McAuley 2017)",
+  "neutral_handling": "3 stars -> __neutral; English-only filter (stopword heuristic)",
+  "neutral_orig_labels": {
+   "3 stars": 51856
+  },
+  "recommended_use": "AU/UK review robustness; 3-star rows score 69% positive under a pool-reddit model, so the task would likely call most mixed reviews positive",
+  "source": "review",
+  "url": "https://mcauleylab.ucsd.edu/public_datasets/data/googlelocal/ (reviews/places.clean.json.gz, Google Local 2018 worldwide; AU/UK places by address country + GPS box)"
+ },
+ "imdb": {
+  "capped_summary": {
+   "median_chars": 956,
+   "pos_rate": 0.5,
+   "rows": 49388,
+   "top_domains": {
+    "imdb": 49388
+   },
+   "variety": {
+    "unknown": 49388
+   }
+  },
+  "counts": {
+   "after_clean": 50000,
+   "after_internal_dedupe": 49575,
+   "binary_full": 49575,
+   "capped": 49388,
+   "dropped_pool_dedupe": 0,
+   "neutral": 0,
+   "raw": 50000
+  },
+  "files": [
+   "data/external/sentiment/imdb.parquet",
+   "data/external/sentiment/imdb__full.parquet"
+  ],
+  "full_pos_rate": 0.5019,
+  "label_quality": "author rating (<=4 neg, >=7 pos)",
+  "license": "other (Maas et al. 2011; research use, cite)",
+  "neutral_handling": "5-6/10 excluded upstream",
+  "neutral_orig_labels": {},
+  "source": "review",
+  "url": "https://huggingface.co/datasets/stanfordnlp/imdb"
+ },
+ "qut_ausvotes2025": {
+  "capped_summary": {
+   "median_chars": 213,
+   "pos_rate": 0.5,
+   "rows": 32197,
+   "top_domains": {
+    "newstalk/guardian": 2420,
+    "newstalk/msn": 1390,
+    "newstalk/nine": 5106,
+    "newstalk/sky": 9430,
+    "r/auspol": 927,
+    "r/australia": 2792,
+    "r/australian": 1558,
+    "r/australianpolitics": 4822,
+    "r/brisbane": 937,
+    "r/queensland": 487
+   },
+   "variety": {
+    "en-AU": 32197
+   }
+  },
+  "counts": {
+   "after_clean": 193732,
+   "after_internal_dedupe": 192681,
+   "binary_full": 96819,
+   "capped": 32197,
+   "dropped_pool_dedupe": 4,
+   "neutral": 95858,
+   "raw": 193749
+  },
+  "files": [
+   "data/external/sentiment/qut_ausvotes2025.parquet",
+   "data/external/sentiment/qut_ausvotes2025__full.parquet",
+   "data/external/sentiment/qut_ausvotes2025__neutral.parquet"
+  ],
+  "full_pos_rate": 0.1663,
+  "label_quality": "LLM-labelled party stance (support/oppose), used as a sentiment proxy",
+  "license": "CC-BY-NC-4.0 (QUT Digital Observatory)",
+  "neutral_handling": "support OPPOSE -> 0, SUPPORT -> 1 (stance toward a party, not overall tone); NONE/null/other -> __neutral",
+  "neutral_orig_labels": {
+   "NONE:ALL": 8271,
+   "NONE:ALP": 3241,
+   "NONE:GREENS": 2441,
+   "NONE:LNP": 4359,
+   "NONE:NONE": 74979,
+   "NONE:OTHER": 1553,
+   "None:NONE": 113,
+   "None:None": 901
+  },
+  "recommended_use": "text only (domain-adaptive MLM / pseudo-labelling). Stance labels are a poor proxy for the task's sentiment: a pool-reddit TF-IDF model gets AUC 0.56 on them and scores even SUPPORT comments as negative (7.8% predicted positive)",
+  "source": "reddit",
+  "url": "https://researchdatafinder.qut.edu.au/display/n22735 (2025 Australian Federal Election NewsTalk/Reddit dataset; Reddit = 20 AU political/city subreddits, NewsTalk = AU news-site comments)"
+ },
+ "rotten_tomatoes": {
+  "capped_summary": {
+   "median_chars": 111,
+   "pos_rate": 0.5,
+   "rows": 10660,
+   "top_domains": {
+    "movie_snippets": 10660
+   },
+   "variety": {
+    "unknown": 10660
+   }
+  },
+  "counts": {
+   "after_clean": 10662,
+   "after_internal_dedupe": 10660,
+   "binary_full": 10660,
+   "capped": 10660,
+   "dropped_pool_dedupe": 0,
+   "neutral": 0,
+   "raw": 10662
+  },
+  "files": [
+   "data/external/sentiment/rotten_tomatoes.parquet",
+   "data/external/sentiment/rotten_tomatoes__full.parquet"
+  ],
+  "full_pos_rate": 0.5,
+  "label_quality": "critic fresh/rotten flag",
+  "license": "unknown (Pang & Lee 2005; research use)",
+  "neutral_handling": "none (binary)",
+  "neutral_orig_labels": {},
+  "source": "review",
+  "url": "https://huggingface.co/datasets/cornell-movie-review-data/rotten_tomatoes"
+ },
+ "sentiment140": {
+  "capped_summary": {
+   "median_chars": 63,
+   "pos_rate": 0.5,
+   "rows": 100000,
+   "top_domains": {
+    "tweets": 100000
+   },
+   "variety": {
+    "unknown": 100000
+   }
+  },
+  "counts": {
+   "after_clean": 1596961,
+   "after_internal_dedupe": 1514259,
+   "binary_full": 1514240,
+   "capped": 100000,
+   "dropped_pool_dedupe": 19,
+   "neutral": 0,
+   "raw": 1600000
+  },
+  "files": [
+   "data/external/sentiment/sentiment140.parquet",
+   "data/external/sentiment/sentiment140__full.parquet"
+  ],
+  "full_pos_rate": 0.4966,
+  "label_quality": "distant (emoticons, removed from text)",
+  "license": "unknown (Go, Bhayani & Huang 2009; academic use)",
+  "neutral_handling": "training set has no neutral class",
+  "neutral_orig_labels": {},
+  "source": "twitter",
+  "url": "https://cs.stanford.edu/people/alecmgo/trainingandtestdata.zip (training set only; 2009 tweets)"
+ },
+ "sst2": {
+  "capped_summary": {
+   "median_chars": 37,
+   "pos_rate": 0.5,
+   "rows": 52480,
+   "top_domains": {
+    "movie_phrases": 52480
+   },
+   "variety": {
+    "unknown": 52480
+   }
+  },
+  "counts": {
+   "after_clean": 68218,
+   "after_internal_dedupe": 59281,
+   "binary_full": 59268,
+   "capped": 52480,
+   "dropped_pool_dedupe": 13,
+   "neutral": 0,
+   "raw": 68221
+  },
+  "files": [
+   "data/external/sentiment/sst2.parquet",
+   "data/external/sentiment/sst2__full.parquet"
+  ],
+  "full_pos_rate": 0.5573,
+  "label_quality": "human (SST phrase treebank, binarised)",
+  "license": "unknown (Socher et al. 2013; research use)",
+  "neutral_handling": "neutral phrases excluded upstream",
+  "neutral_orig_labels": {},
+  "source": "other",
+  "url": "https://huggingface.co/datasets/stanfordnlp/sst2 (GLUE; train = phrases incl. fragments)"
+ },
+ "tweet_eval_sentiment": {
+  "capped_summary": {
+   "median_chars": 108,
+   "pos_rate": 0.5,
+   "rows": 22712,
+   "top_domains": {
+    "tweets": 22712
+   },
+   "variety": {
+    "unknown": 22712
+   }
+  },
+  "counts": {
+   "after_clean": 59899,
+   "after_internal_dedupe": 59708,
+   "binary_full": 32334,
+   "capped": 22712,
+   "dropped_pool_dedupe": 3,
+   "neutral": 27371,
+   "raw": 59899
+  },
+  "files": [
+   "data/external/sentiment/tweet_eval_sentiment.parquet",
+   "data/external/sentiment/tweet_eval_sentiment__full.parquet",
+   "data/external/sentiment/tweet_eval_sentiment__neutral.parquet"
+  ],
+  "full_pos_rate": 0.6488,
+  "label_quality": "human crowd (SemEval-2017)",
+  "license": "unknown (SemEval-2017 Task 4 release; Twitter ToS; research use)",
+  "neutral_handling": "neutral -> __neutral",
+  "neutral_orig_labels": {
+   "neutral": 27371
+  },
+  "source": "twitter",
+  "url": "https://huggingface.co/datasets/cardiffnlp/tweet_eval (config sentiment = SemEval-2017 Task 4A)"
+ },
+ "yelp_polarity": {
+  "capped_summary": {
+   "median_chars": 523,
+   "pos_rate": 0.5,
+   "rows": 150000,
+   "top_domains": {
+    "yelp": 150000
+   },
+   "variety": {
+    "en-US": 150000
+   }
+  },
+  "counts": {
+   "after_clean": 597976,
+   "after_internal_dedupe": 597513,
+   "binary_full": 597506,
+   "capped": 150000,
+   "dropped_pool_dedupe": 7,
+   "neutral": 0,
+   "raw": 598000
+  },
+  "files": [
+   "data/external/sentiment/yelp_polarity.parquet",
+   "data/external/sentiment/yelp_polarity__full.parquet"
+  ],
+  "full_pos_rate": 0.5001,
+  "label_quality": "author star rating (1-2 neg, 4-5 pos; 3 excluded upstream)",
+  "license": "Yelp Dataset Terms (academic, non-commercial)",
+  "neutral_handling": "3-star already excluded upstream",
+  "neutral_orig_labels": {},
+  "source": "review",
+  "url": "https://huggingface.co/datasets/fancyzhx/yelp_polarity (Zhang et al. 2015)"
+ }
+}

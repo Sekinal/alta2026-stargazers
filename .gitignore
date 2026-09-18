@@ -2,7 +2,7 @@
 __pycache__/
 *.pyc
 # competition data is not redistributable
-data/
+/data/
 baseline/
 scoring/
 # large / generated artefacts
