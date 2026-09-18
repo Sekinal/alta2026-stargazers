@@ -47,6 +47,24 @@ scorer, and prints the shift diagnostics (segment shares vs valid, and segment+u
 If shift WARNs appear or the test has < 400 rows, stay on `segment+ukg` (not a prevalence policy).
 Upload `submissions/test_<LEAD>_segment+ukg/answer.zip` (answer.csv at the zip root).
 
+## Current lead: `stk_v4` (0.870 OOF, segment+ukg), verified end to end on the fake test (both machines)
+Weight-free logit mean of `enc_deb_l_x3` (deberta-v3-large, seeds 13/14/15), `cls_e5me5_lr`, `llm_q35_9b_probe`.
+```
+# encoders (remote GPU): each seed averages its 5 fold checkpoints
+for s in 13 14 15; do R enc_test_$s "CUDA_VISIBLE_DEVICES=0 uv run python experiments/encoders/predict_test.py --run enc_deb_l_s$s --test data/test.csv"; done
+# LLM probe (remote GPU)
+R llm_test "CUDA_VISIBLE_DEVICES=1 uv run python experiments/llm/predict_test.py --run llm_q35_9b_probe --test data/test.csv"
+# classical: embed on the remote, then predict (laptop or remote)
+R cls_test_emb "CUDA_VISIBLE_DEVICES=0 uv run python experiments/classical/embed.py --test data/test.csv e5_large me5_sarc"
+uv run python experiments/classical/predict_test.py --run cls_e5me5_lr --test data/test.csv
+# blends: ONLY via validate blend (it writes the metadata + test binding)
+uv run python -m alta.validate blend enc_deb_l_x3 enc_deb_l_s13 enc_deb_l_s14 enc_deb_l_s15 --method mean --force
+uv run python -m alta.validate blend stk_v4 enc_deb_l_x3 cls_e5me5_lr llm_q35_9b_probe --method logit --force
+uv run python -m alta.validate check stk_v4
+uv run python -m alta.validate submit stk_v4 --policy segment+ukg --test data/test.csv
+```
+Expect the organisers' dev board (valid.csv) to show ~0.856 for this lead: noise from valid's 30 UK sarcastic rows.
+
 ## Rules that still apply
 - Never use BESSTIE or anything derived from it; never tune on the test file.
 - Up to 3 test-phase submissions per team: the first is the lead; later ones only for principled alternatives.
