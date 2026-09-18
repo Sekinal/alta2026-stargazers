@@ -76,6 +76,20 @@ def _join_exact(left: pl.DataFrame, right: pl.DataFrame, run: str, split: str) -
     return left.join(right, on="uid", how="left", maintain_order="left")
 
 
+def _inherited_provenance(runs: list[str]) -> dict:
+    """A weight-free blend is exactly as honest as its members: it inherits folds_measured and a
+    passing canary only if EVERY member has them (recorded per member for audit)."""
+    metas = {r: read_run(r)[1] for r in runs}
+    out = {"folds_measured": all(m.get("folds_measured") for m in metas.values())}
+    can = {r: (m.get("canary") or {}) for r, m in metas.items()}
+    if all(isinstance(c, dict) and c.get("passed") for c in can.values()):
+        out["canary"] = {"passed": True, "via": "all members passed",
+                         "members": {r: {k: c.get(k) for k in ("mean", "floor", "ref")} for r, c in can.items()}}
+    else:
+        out["member_canaries_missing"] = [r for r, c in can.items() if not (isinstance(c, dict) and c.get("passed"))]
+    return out
+
+
 def blend(runs: list[str], name: str, method: str = "mean", force: bool = False) -> str:
     hashes = _check_members(runs, name, force)
     oof, test = _member_frames(runs)
@@ -89,7 +103,8 @@ def blend(runs: list[str], name: str, method: str = "mean", force: bool = False)
         return out
 
     save_preds(name, combine(oof), None if test is None else combine(test),
-               meta={"kind": "blend", "method": method, "members": runs, "member_fold_hashes": hashes},
+               meta={"kind": "blend", "method": method, "members": runs, "member_fold_hashes": hashes,
+                     **_inherited_provenance(runs)},
                test_csv=_member_test_csv(runs) if test is not None else None)
     return name
 

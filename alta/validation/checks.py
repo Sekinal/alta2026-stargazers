@@ -82,7 +82,9 @@ def check_run(run: str, pool: pl.DataFrame | None = None) -> list[tuple[str, str
         out.append((FAIL, f"permutation canary FAILED: shuffled-label score {can.get('mean')} vs floor "
                           f"{can.get('floor')} (+{can.get('margin')}), max AUC z {can.get('max_auc_z')}"))
     else:
-        out.append((OK, f"permutation canary passed ({can.get('mean')} vs floor {can.get('floor')})"))
+        detail = (can["via"] + f" ({', '.join(can.get('members', {}))})") if can.get("via") \
+            else f"{can.get('mean')} vs floor {can.get('floor')}"
+        out.append((OK, f"permutation canary passed: {detail}"))
 
     if any(level == FAIL for level, _ in out):
         return out

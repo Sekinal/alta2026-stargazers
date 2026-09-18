@@ -241,6 +241,7 @@ def save_preds(run: str, oof: pl.DataFrame, test: pl.DataFrame | None = None,
     out = pl.concat(parts).with_columns(pl.col("p_sent", "p_sarc").cast(pl.Float64))
     path = PREDS / f"{run}.parquet"
     out.write_parquet(path)
+    folds_meta = {} if (meta or {}).get("folds_measured") and folds_used is None else folds_meta
     meta = {**(meta or {}), **test_meta, **folds_meta, "run": run, "fold_hash": fold_hash(), "git": git_commit()}
     (PREDS / f"{run}.json").write_text(json.dumps(meta, indent=2))
     return path
