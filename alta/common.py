@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import subprocess
 from pathlib import Path
 
@@ -114,8 +115,34 @@ def _assign_folds(df: pl.DataFrame, seed: int = SEED) -> pl.DataFrame:
     return df.join(groups.select("text", "fold"), on="text", how="left")
 
 
+CANARY_ENV = "ALTA_CANARY_SEED"
+
+
+def shuffle_within_segment(pool: pl.DataFrame, seed: int) -> pl.DataFrame:
+    """Permute (sentiment, sarcasm) pairs within each variety x source segment."""
+    rng = np.random.default_rng(seed)
+    seg = (pool["variety"].cast(pl.String) + "|" + pool["source"].cast(pl.String)).to_numpy()
+    y = pool.select("sentiment", "sarcasm").to_numpy().copy()
+    for s in np.unique(seg):
+        idx = np.flatnonzero(seg == s)
+        y[idx] = y[rng.permutation(idx)]
+    return pool.with_columns(pl.Series("sentiment", y[:, 0]).cast(pl.Int8),
+                             pl.Series("sarcasm", y[:, 1]).cast(pl.Int8))
+
+
 def load_pool(refresh: bool = False) -> pl.DataFrame:
-    """train + valid with uid, origin ('train'|'valid') and fold columns (parquet-cached)."""
+    """train + valid with uid, origin ('train'|'valid') and fold columns (parquet-cached).
+
+    If the environment variable ALTA_CANARY_SEED is set, labels are shuffled within segment
+    (permutation canary): every pipeline that gets its labels from here is then run on noise.
+    Always load labels through this function, never by reading data/*.csv directly.
+    """
+    seed = os.environ.get(CANARY_ENV)
+    pool = _load_pool(refresh)
+    return pool if seed is None else shuffle_within_segment(pool, int(seed))
+
+
+def _load_pool(refresh: bool = False) -> pl.DataFrame:
     src_sha = _csv_sha(DATA / "train.csv", DATA / "valid.csv")
     stamp = CACHE.with_suffix(".sha")
     if CACHE.exists() and not refresh and stamp.exists() and stamp.read_text() == src_sha:
@@ -179,7 +206,8 @@ def _validate_probs(df: pl.DataFrame, what: str) -> None:
 
 
 def save_preds(run: str, oof: pl.DataFrame, test: pl.DataFrame | None = None,
-               meta: dict | None = None, test_csv: str | Path | None = None) -> Path:
+               meta: dict | None = None, test_csv: str | Path | None = None,
+               folds_used: pl.DataFrame | None = None) -> Path:
     """oof/test: frames with uid, p_sent, p_sarc (probability of the positive class).
 
     Test predictions must name the file they were made for (``test_csv``): its fingerprint and
@@ -188,6 +216,17 @@ def save_preds(run: str, oof: pl.DataFrame, test: pl.DataFrame | None = None,
     PREDS.mkdir(exist_ok=True)
     cols = ["uid", "p_sent", "p_sarc"]
     _validate_probs(oof.select(cols), f"{run} oof")
+    if os.environ.get(CANARY_ENV) is not None and not run.endswith(f"__canary{os.environ[CANARY_ENV]}"):
+        run = f"{run}__canary{os.environ[CANARY_ENV]}"  # never let a shuffled-label run shadow the real one
+    folds_meta = {"folds_measured": False}
+    if folds_used is not None:  # uid -> fold the model actually held out (from cv_fit_predict)
+        pool = load_pool()
+        got = pool.select("uid", "fold").join(folds_used.select("uid", pl.col("fold").alias("used")),
+                                              on="uid", how="left")
+        bad = got.filter(pl.col("used").is_null() | (pl.col("used") != pl.col("fold"))).height
+        if bad:
+            raise ValueError(f"{run}: {bad} rows were held out in a different fold than the project folds")
+        folds_meta = {"folds_measured": True}
     parts = [oof.select(cols).with_columns(pl.lit("oof").alias("split"))]
     test_meta = {}
     if test is not None:
@@ -202,7 +241,7 @@ def save_preds(run: str, oof: pl.DataFrame, test: pl.DataFrame | None = None,
     out = pl.concat(parts).with_columns(pl.col("p_sent", "p_sarc").cast(pl.Float64))
     path = PREDS / f"{run}.parquet"
     out.write_parquet(path)
-    meta = {**(meta or {}), **test_meta, "run": run, "fold_hash": fold_hash(), "git": git_commit()}
+    meta = {**(meta or {}), **test_meta, **folds_meta, "run": run, "fold_hash": fold_hash(), "git": git_commit()}
     (PREDS / f"{run}.json").write_text(json.dumps(meta, indent=2))
     return path
 

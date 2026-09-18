@@ -19,6 +19,7 @@ from alta.validation.resampling import (binding_rates, paired, replicate_scores,
 RESULTS = ROOT / "results"
 LEDGER = RESULTS / "ledger.csv"
 BASELINE_VALID = 0.7740  # organisers' distilbert baseline on valid.csv
+NOISE_FLOOR = 0.6416     # uniform-noise probabilities under segment+ukg (segment alone predicts sentiment)
 B_DEFAULT = 2000
 # The test-sampling bootstrap ignores the CV estimate's own error, the policy refit and the
 # final-model difference; red-team pseudo-leaderboards found its 90% band covers only ~82%.
@@ -103,7 +104,8 @@ def report(run: str, specs=policies.DEFAULT_POLICIES, B: int = B_DEFAULT, write:
     lo, hi = head["score"] - 1.645 * sd, head["score"] + 1.645 * sd
     lines += [f"## Expected test score for `{spec}`",
               f"**Point estimate {head['score']:.4f} (pool CV; red-team: ~unbiased for the chosen system). "
-              f"90% interval [{lo:.4f}, {hi:.4f}]** = CV +- 1.645 x {INTERVAL_INFLATION} x bootstrap SD.", "",
+              f"90% interval [{lo:.4f}, {hi:.4f}]** = CV +- 1.645 x {INTERVAL_INFLATION} x bootstrap SD. "
+              f"References: no-information floor {NOISE_FLOOR}, organisers' baseline {BASELINE_VALID}.", "",
               f"Test-sampling-only bootstrap (B={B}, valid-sized stratified replicates; its q05/q95 are too "
               "narrow on their own, and boot mean runs ~0.0015 pessimistic):", "",
               _fmt(boot), "", "binding varieties: "

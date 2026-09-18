@@ -1,6 +1,7 @@
 """Validation CLI.
 
   uv run python -m alta.validate check RUN
+  uv run python -m alta.validate canary RUN          (after ALTA_CANARY_SEED=s runs saved RUN__canary<s>)
   uv run python -m alta.validate report RUN [--policies a,b] [--B 2000] [--plots] [--no-write]
   uv run python -m alta.validate compare RUN_A RUN_B [--policy segment+ukg]
   uv run python -m alta.validate board
@@ -24,6 +25,7 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="alta.validate")
     sub = ap.add_subparsers(dest="cmd", required=True)
     s = sub.add_parser("check"); s.add_argument("run")
+    s = sub.add_parser("canary"); s.add_argument("run")
     s = sub.add_parser("report"); s.add_argument("run")
     s.add_argument("--policies", default=",".join(policies.DEFAULT_POLICIES))
     s.add_argument("--B", type=int, default=report.B_DEFAULT)
@@ -46,6 +48,11 @@ def main(argv=None) -> int:
     if getattr(a, "B", 2) < 2:
         ap.error("--B must be >= 2")
 
+    if a.cmd == "canary":
+        from alta.validation.harness import canary_from_runs
+        res = canary_from_runs(a.run)
+        print(res)
+        return 0 if res["passed"] else 1
     if a.cmd == "check":
         res = check_run(a.run)
         print(format_checks(res))
@@ -66,6 +73,8 @@ def main(argv=None) -> int:
         test_csv = submission.DATA / "valid.csv" if a.dev else a.test
         truth = submission.DATA / "valid.csv" if a.dev else None
         res = submission.check_submission(z, test_csv, truth)
+        if not a.dev:
+            res += submission.shift_diagnostics(a.run, a.test)
         print(z)
         print(format_checks(res))
         return 1 if any(level == FAIL for level, _ in res) else 0

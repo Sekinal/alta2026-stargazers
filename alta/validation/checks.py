@@ -71,6 +71,18 @@ def check_run(run: str, pool: pl.DataFrame | None = None) -> list[tuple[str, str
         out.append((OK, "fold_hash matches current folds"))
     if "git" not in meta:
         out.append((WARN, "no git commit recorded in meta"))
+    if not meta.get("folds_measured"):
+        out.append((WARN, "folds not measured: fold_hash only proves the pool's folds, not the ones the model "
+                          "used; train through alta.validation.harness.cv_fit_predict and pass folds_used"))
+    can = meta.get("canary")
+    if can is None:
+        out.append((WARN, "no permutation canary in meta (alta.validation.harness.canary); leaks from "
+                          "supervised preprocessing / in-sample predictions are invisible without it"))
+    elif not can.get("passed"):
+        out.append((FAIL, f"permutation canary FAILED: shuffled-label score {can.get('mean')} vs floor "
+                          f"{can.get('floor')} (+{can.get('margin')}), max AUC z {can.get('max_auc_z')}"))
+    else:
+        out.append((OK, f"permutation canary passed ({can.get('mean')} vs floor {can.get('floor')})"))
 
     if any(level == FAIL for level, _ in out):
         return out
@@ -81,9 +93,19 @@ def check_run(run: str, pool: pl.DataFrame | None = None) -> list[tuple[str, str
     folds = per_fold(d, pred)
     spread = max(f["score"] for f in folds) - min(f["score"] for f in folds)
     out.append((WARN if spread > 0.06 else OK, f"per-fold score spread {spread:.3f} (threshold 0.5)"))
-    s = components(d, pred)["score"]
+    from alta.validation import policies
+    from alta.validation.resampling import replicate_indices, replicate_scores
+    hpred, _ = policies.crossfit(policies.DEFAULT_POLICY, d)  # the operating point we ship
+    s = components(d, hpred)["score"]
     if s > 0.93:
-        out.append((WARN, f"OOF score {s:.3f} is implausibly high for this task: check for fold leakage"))
+        out.append((WARN, f"headline score {s:.3f} is implausibly high for this task: check for fold leakage"))
+    # valid rows leaked (e.g. trained on valid): valid subset beats pool by far more than sampling allows
+    valid = d.origin == "valid"
+    sv = components(d.subset(valid), {t: v[valid] for t, v in hpred.items()})["score"]
+    boot_sd = float(replicate_scores(d, hpred, replicate_indices(d, B=300, seed=1))["score"].std(ddof=1))
+    zv = (sv - s) / (boot_sd * np.sqrt(1 - valid.sum() / len(d)))
+    out.append((WARN if zv > 2 else OK, f"valid-vs-pool gap z = {zv:.2f} (valid {sv:.3f}, pool {s:.3f}; "
+                                         "> 2 suggests valid rows leaked into training)"))
     uk_reddit = (d.variety == 1) & (d.source == 1)
     from sklearn.metrics import roc_auc_score
     auc = roc_auc_score(d.y["sarc"][uk_reddit], d.p["sarc"][uk_reddit])

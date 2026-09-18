@@ -276,7 +276,9 @@ def test_scorer_docker_equivalence(env):
     (d / "in" / "ref" / "truth.csv").write_bytes((common.DATA / "valid.csv").read_bytes())
     (d / "prog").mkdir()
     (d / "prog" / "evaluate.py").write_bytes(vsub.SCORER.read_bytes())
-    subprocess.run(["docker", "run", "--rm", "-v", f"{d}:/w", "codalab/codalab-legacy:py37",
+    import os
+    subprocess.run(["docker", "run", "--rm", "--user", f"{os.getuid()}:{os.getgid()}", "-v", f"{d}:/w",
+                    "codalab/codalab-legacy:py37",
                     "python", "/w/prog/evaluate.py", "/w/in", "/w/out"], check=True, capture_output=True)
     score = [l for l in (d / "out" / "scores.txt").read_text().splitlines() if l.startswith("score")][0]
     assert score.split(":")[1].strip() in ours

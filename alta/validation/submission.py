@@ -90,6 +90,42 @@ def make_test_submission(run: str, spec: str, test_csv: Path, name: str | None =
                    "params": _jsonable(params)})
 
 
+def shift_diagnostics(run: str, test_csv: Path) -> list[tuple[str, str]]:
+    """Is the test set valid-like? Prevalence policies force predicted rates to the pool
+    prevalence, so the answer's rates can't reveal a shift; use segment+ukg's rates instead."""
+    out: list[tuple[str, str]] = []
+    pool = load_pool()
+    test = load_test(test_csv)
+    valid = pool.filter(pl.col("origin") == "valid")
+    if test.height < 400:
+        out.append(("WARN", f"test has {test.height} rows (< 400): prevalence policies get noisy; prefer segment+ukg"))
+    seg = lambda f: f.select((pl.col("variety").cast(pl.String) + "/" + pl.col("source").cast(pl.String)).alias("seg"))
+    vshare = seg(valid).group_by("seg").len().with_columns((pl.col("len") / valid.height).alias("p"))
+    tcount = seg(test).group_by("seg").len()
+    for r in vshare.join(tcount, on="seg", how="left", suffix="_t").iter_rows(named=True):
+        n_t = r["len_t"] or 0
+        sd = np.sqrt(r["p"] * (1 - r["p"]) / test.height)
+        z = (n_t / test.height - r["p"]) / sd
+        out.append(("WARN" if abs(z) > 3 else "OK", f"segment {r['seg']} share {n_t / test.height:.3f} vs valid {r['p']:.3f} (z {z:+.1f})"))
+    params = policies.fit(policies.DEFAULT_POLICY, load_oof(run, pool))
+    td = load_test_preds(run, test)
+    pred = policies.apply(params, td)
+    prev = pool.group_by("variety", "source").agg(pl.col("sentiment", "sarcasm").mean())
+    for v, vn in ((0, "en-AU"), (1, "en-UK")):
+        for src_i, src in ((0, "google"), (1, "reddit")):
+            m = (td.variety == v) & (td.source == src_i)
+            if not m.any():
+                continue
+            row = prev.filter((pl.col("variety").cast(pl.String) == vn) & (pl.col("source").cast(pl.String) == src))
+            for t, col in (("sent", "sentiment"), ("sarc", "sarcasm")):
+                rate, q = float(pred[t][m].mean()), float(row[col][0])
+                sd = np.sqrt(max(q * (1 - q), 1e-4) / m.sum()) + 0.03  # + model rate error
+                z = (rate - q) / sd
+                out.append(("WARN" if abs(z) > 3 else "OK",
+                            f"{vn}/{src} {col}: {policies.DEFAULT_POLICY} rate {rate:.3f} vs pool prevalence {q:.3f} (z {z:+.1f})"))
+    return out
+
+
 def official_score(answer_csv: Path, truth_csv: Path) -> dict[str, float]:
     """Run the organisers' evaluate.py in its own environment (pandas, as on Codabench)."""
     with tempfile.TemporaryDirectory() as tmp:
