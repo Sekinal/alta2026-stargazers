@@ -23,3 +23,5 @@ submissions/
 .gpu.lock
 experiments/*/cache/
 experiments/*/logs/
+results/remote/
+logs/
