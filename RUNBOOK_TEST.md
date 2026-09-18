@@ -22,6 +22,13 @@ R dedupe_test_sarc "uv run --with pyahocorasick python experiments/data/dedupe.p
 ```
 Any model trained on external data before this step must be retrained if its corpus lost rows.
 
+## 1b. Recover Reddit context for the test rows (only if a context-aware member is in the lead)
+```
+R ctx_test "uv run python experiments/data/context_match.py --input data/test.csv --out data/external/context/test_context.parquet"
+```
+Keyed by test uid (x00000...). Check the match rate against the pool's (AU ~92%, UK ~56%+); a much lower rate means
+the test came from a different crawl, in which case the context-aware members fall back to their no-context prompts.
+
 ## 2. Test predictions per member (each saves with `save_preds(..., test_csv=data/test.csv)`)
 - Encoders (remote GPU): `experiments/encoders/predict_test.py --run RUN --test data/test.csv`
   (averages the 5 fold checkpoints in models/RUN/).
