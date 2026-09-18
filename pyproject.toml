@@ -5,14 +5,22 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "accelerate>=1.15.0",
+    "bitsandbytes>=0.50.2",
+    "catboost>=1.2.10",
     "lets-plot>=4.11.0",
+    "lightgbm>=4.7.0",
     "numpy>=2.5.3",
+    "peft>=0.21.0",
     "polars>=1.44.2",
+    "protobuf>=7.36.2",
     "scikit-learn>=1.9.1",
     "scipy>=1.18.1",
     "sentence-transformers>=6.0.1",
+    "sentencepiece>=0.2.2",
     "torch>=2.14.0",
     "umap-learn>=0.5.12",
+    "xgboost>=3.4.1",
 ]
 
 [dependency-groups]
