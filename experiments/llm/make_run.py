@@ -47,6 +47,18 @@ def load_cache(model: str, tag: str, split: str, uids: list[str]):
     return df["prob"].to_numpy()[idx], df["margin"].to_numpy()[idx], hid[idx].astype(np.float32)
 
 
+def load_multi(model: str, tag: str, split: str, uids: list[str], layer: int):
+    """prob of the first tag; margins (n, k) and layer-`layer` hidden states concatenated."""
+    probs, margins, hids = [], [], []
+    for t in tag.split("+"):
+        m = model
+        if ":" in t:  # "model:tag" picks another model's cache
+            m, t = t.split(":")
+        p, mg, h = load_cache(m, t, split, uids)
+        probs.append(p); margins.append(mg[:, None]); hids.append(h[:, layer])
+    return probs[0], np.concatenate(margins, 1), np.concatenate(hids, 1)
+
+
 def segment_dummies(df: pl.DataFrame) -> np.ndarray:
     return np.stack([(df["variety"] == "en-UK").to_numpy(), (df["source"] == "reddit").to_numpy(),
                      ((df["variety"] == "en-UK") & (df["source"] == "reddit")).to_numpy()],
@@ -84,14 +96,15 @@ def build(run: str, kind: str, model: str, sarc: str, sent: str, layer: int, C: 
     test = load_test(test_path) if test_path else None
     out = {}
     for task, tag in (("sarc", sarc), ("sent", sent)):
-        prob, margin, hid = load_cache(model, tag, "pool", pool["uid"].to_list())
+        # "a+b" concatenates the features of several cached prompts (prob/margin of the first)
+        prob, margin, hid = load_multi(model, tag, "pool", pool["uid"].to_list(), layer)
         if test is not None:
-            prob_t, margin_t, hid_t = load_cache(model, tag, "test", test["uid"].to_list())
+            prob_t, margin_t, hid_t = load_multi(model, tag, "test", test["uid"].to_list(), layer)
         if kind == "zs":
             out[task] = (prob, prob_t if test is not None else None)
             continue
-        X = np.concatenate([hid[:, layer], margin[:, None], segment_dummies(pool)], 1)
-        Xt = (np.concatenate([hid_t[:, layer], margin_t[:, None], segment_dummies(test)], 1)
+        X = np.concatenate([hid, margin, segment_dummies(pool)], 1)
+        Xt = (np.concatenate([hid_t, margin_t, segment_dummies(test)], 1)
               if test is not None else None)
         if task == "sarc":
             y = pool["sarcasm"].to_numpy()
@@ -129,8 +142,11 @@ def build(run: str, kind: str, model: str, sarc: str, sent: str, layer: int, C: 
             "recipe": {"kind": kind, "model": model, "sarc": sarc, "sent": sent,
                        "layer": layer, "C": C},
             **(extra_meta or {})}
+    if kind == "zs":
+        meta.setdefault("canary", "n/a zero-shot")
     if save:
-        save_preds(run, oof_df, test_df, meta, test_csv=test_path or None)
+        save_preds(run, oof_df, test_df, meta, test_csv=test_path or None,
+                   folds_used=None if kind == "zs" else pool.select("uid", "fold"))
     return oof_df, test_df, meta
 
 

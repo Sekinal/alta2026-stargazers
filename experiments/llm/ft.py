@@ -29,7 +29,7 @@ sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parent))
 from llm_common import CACHE, ROOT, build_prompts, load_model, verbalizer_ids  # noqa: E402
 
 sys.path.insert(0, str(ROOT))
-from alta.common import load_pool, load_test  # noqa: E402
+from alta.common import load_pool, load_test, save_preds  # noqa: E402
 
 MODEL_DIR = ROOT / "models"
 OUT = ROOT / "experiments" / "llm" / "out"
@@ -73,7 +73,7 @@ def pad_batch(seqs, pad_id):
 
 
 @torch.no_grad()
-def predict(inner, head, tok, df, task, max_text_tokens, max_batch_tokens=6000):
+def predict(inner, head, tok, df, task, max_text_tokens, max_batch_tokens=3000):
     prompts = build_prompts(tok, df, PROMPTS[task], max_text_tokens)
     seqs = encode(tok, prompts)
     order = np.argsort([-len(s) for s in seqs])
@@ -107,6 +107,18 @@ def main():
     ap.add_argument("--limit-train", type=int, default=0, help="for timing only")
     ap.add_argument("--test", default="")
     ap.add_argument("--predict-only", action="store_true")
+    # adapter ladder (R1 LoRA+rsLoRA, R2 EVA, R2b PiSSA, R3 +DoRA, R4 +Riemannian)
+    ap.add_argument("--alpha", type=float, default=0, help="default 2r (or 16 with --rslora)")
+    ap.add_argument("--rslora", action="store_true")
+    ap.add_argument("--init", default="gaussian", choices=["gaussian", "eva", "pissa_niter_16"])
+    ap.add_argument("--eva-rho", type=float, default=2.0)
+    ap.add_argument("--dora", action="store_true")
+    ap.add_argument("--riemannian", action="store_true")
+    ap.add_argument("--targets", default="all-linear")
+    ap.add_argument("--dropout", type=float, default=0.05)
+    ap.add_argument("--wd", type=float, default=0.0)
+    ap.add_argument("--save-run", action="store_true",
+                    help="save the held-out fold as a partial run preds/<run>.parquet (screening)")
     a = ap.parse_args()
 
     from peft import LoraConfig, PeftModel, get_peft_model
@@ -140,16 +152,50 @@ def main():
     if a.predict_only:
         model = PeftModel.from_pretrained(model, adir)
     else:
-        cfg = LoraConfig(r=a.r, lora_alpha=2 * a.r, lora_dropout=0.05, bias="none",
-                         target_modules=["q_proj", "k_proj", "v_proj", "o_proj",
-                                         "gate_proj", "up_proj", "down_proj"])
+        from peft import EvaConfig, initialize_lora_eva_weights
+        targets = (a.targets if a.targets == "all-linear" else
+                   ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"])
+        alpha = a.alpha or (16.0 if a.rslora else 2.0 * a.r)
+        cfg = LoraConfig(r=a.r, lora_alpha=alpha, lora_dropout=a.dropout, bias="none",
+                         target_modules=targets, use_rslora=a.rslora, use_dora=a.dora,
+                         init_lora_weights=True if a.init == "gaussian" else a.init,
+                         eva_config=EvaConfig(rho=a.eva_rho, use_label_mask=False)
+                         if a.init == "eva" else None)
         model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
         model.enable_input_require_grads()
+        t_init = time.time()
         model = get_peft_model(model, cfg)
+        train = pool.filter(pl.col("fold") != a.fold)  # training folds only (also for EVA init)
+        stats = {"args": vars(a), "alpha": alpha}
+        if a.init == "eva":
+            # activation SVDs from the TRAINING folds only (never the held-out fold / test)
+            ev = []
+            for task in tasks:
+                d = training_rows(train, task, a.sent_rows)
+                ev += encode(tok, build_prompts(tok, d, PROMPTS[task], a.max_text_tokens))
+            ev = [ev[i] for i in rng.permutation(len(ev))]
+
+            eva_loader = []
+            for i in range(0, len(ev), 8):
+                ids_, att = pad_batch(ev[i:i + 8], tok.pad_token_id)
+                eva_loader.append({"input_ids": ids_, "attention_mask": att})
+
+            with torch.no_grad():
+                initialize_lora_eva_weights(model, eva_loader, show_progress_bar=False)
+            del eva_loader
+            ranks = model.peft_config["default"].rank_pattern or {}
+            rv = np.array(list(ranks.values()) or [a.r])
+            stats["eva_ranks"] = {"n_layers": len(ranks), "min": int(rv.min()), "median": float(np.median(rv)),
+                                  "max": int(rv.max()), "counts": {int(k): int(v) for k, v in zip(*np.unique(rv, return_counts=True))},
+                                  "by_module": {m: float(np.mean([v for k, v in ranks.items() if k.endswith(m)] or [0]))
+                                                for m in ("q_proj", "k_proj", "v_proj", "o_proj", "gate_proj",
+                                                          "up_proj", "down_proj", "in_proj_qkv", "in_proj_z",
+                                                          "out_proj")}}
+            print("EVA ranks", json.dumps(stats["eva_ranks"]), flush=True)
+        stats["init_s"] = time.time() - t_init
         model.print_trainable_parameters()
 
         # ---------------------------------------------------------------- training data
-        train = pool.filter(pl.col("fold") != a.fold)
         examples = []  # (token ids, task, label)
         for task in tasks:
             d = training_rows(train, task, a.sent_rows)
@@ -178,7 +224,11 @@ def main():
               f"load {time.time() - t0:.0f}s", flush=True)
 
         params = [p for p in model.parameters() if p.requires_grad]
-        opt = torch.optim.AdamW(params, lr=a.lr, weight_decay=0.0)
+        if a.riemannian:
+            from peft.optimizers import create_riemannian_optimizer
+            opt = create_riemannian_optimizer(model, torch.optim.AdamW, lr=a.lr, weight_decay=a.wd)
+        else:
+            opt = torch.optim.AdamW(params, lr=a.lr, weight_decay=a.wd)
         warm = max(1, int(0.06 * steps))
         sched = torch.optim.lr_scheduler.LambdaLR(
             opt, lambda s: min(1.0, (s + 1) / warm) * max(0.0, (steps - s) / max(1, steps - warm)))
@@ -200,7 +250,10 @@ def main():
                 print(f"  batch {bi + 1}/{len(batches)} loss {np.mean(run_loss[-100:]):.4f} "
                       f"{(bi + 1) * a.bs / el:.2f} ex/s, eta {el / (bi + 1) * (len(batches) - bi - 1) / 60:.1f} min, "
                       f"peak {torch.cuda.max_memory_allocated() / 2**30:.2f} GiB", flush=True)
-        print(f"train time {(time.time() - t1) / 60:.1f} min", flush=True)
+        stats.update(train_min=(time.time() - t1) / 60, n_examples=len(examples),
+                     peak_gib=torch.cuda.max_memory_allocated() / 2**30,
+                     loss_curve=[float(np.mean(run_loss[i:i + 100])) for i in range(0, len(run_loss), 100)])
+        print(f"train time {stats['train_min']:.1f} min", flush=True)
         model.save_pretrained(adir)
         (adir / "train_args.json").write_text(json.dumps(vars(a), indent=2))
 
@@ -218,6 +271,17 @@ def main():
             res[f"m_{task}"] = predict(inner, head, tok, df, task, a.max_text_tokens)
         name = f"fold{a.fold}.parquet" if split == "pool" else f"fold{a.fold}_test.parquet"
         pl.DataFrame(res).write_parquet(out_dir / name)
+        if split == "pool" and a.save_run:
+            sig = lambda x: 1 / (1 + np.exp(-x))  # noqa: E731
+            part = pl.DataFrame({"uid": res["uid"], "p_sent": sig(res["m_sent"]),
+                                 "p_sarc": sig(res["m_sarc"])})
+            save_preds(a.run, part, meta={
+                "model": a.model, "kind": "ft-holdout", "holdout_fold": a.fold, "seed": a.seed,
+                "prompt_sarc": PROMPTS["sarc"], "prompt_sent": PROMPTS["sent"], "shots": 0,
+                "description": f"Qwen LoRA verbalizer fine-tune, trained on folds != {a.fold}, "
+                               f"predicts fold {a.fold} only (screening run)", "train_stats": stats})
+    if not a.predict_only:
+        (out_dir / f"fold{a.fold}_stats.json").write_text(json.dumps(stats, indent=2))
     print(f"predict time {(time.time() - t2) / 60:.1f} min; total {(time.time() - t0) / 60:.1f} min",
           flush=True)
 

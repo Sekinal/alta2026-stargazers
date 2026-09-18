@@ -95,9 +95,12 @@ def evaluate(names: list[str], base_run: str, C: float) -> dict:
     var, fold, reddit = d.variety, d.fold, d.source.astype(float)[:, None]
     y = {t: pool[LABEL[t]].to_numpy() for t in TASKS}
     X, cols = load_set(names, uids)
-    b = pl.DataFrame({"uid": uids}).join(pl.read_parquet(PREDS / f"{base_run}.parquet").filter(pl.col("split") == "oof"),
-                                         on="uid", how="left", maintain_order="left")
-    B = np.column_stack([logit(b["p_sent"].to_numpy()), logit(b["p_sarc"].to_numpy()), reddit])
+    cols_b = []
+    for run in base_run.split(","):  # comma-separated base runs: all their logits enter the base
+        b = pl.DataFrame({"uid": uids}).join(pl.read_parquet(PREDS / f"{run}.parquet").filter(pl.col("split") == "oof"),
+                                             on="uid", how="left", maintain_order="left")
+        cols_b += [logit(b["p_sent"].to_numpy()), logit(b["p_sarc"].to_numpy())]
+    B = np.column_stack(cols_b + [reddit])
 
     alone = summary(d, {t: crossfit(np.hstack([X, reddit]), y[t], var, fold, C) for t in TASKS})
     base = summary(d, {t: crossfit(B, y[t], var, fold, C) for t in TASKS})
@@ -148,7 +151,7 @@ def main() -> None:
     for g in groups:
         r = evaluate(g, a.base, a.C)
         show("+".join(g), r)
-        if not a.joint:
+        if not a.joint and a.base == "cls_e5me5_lr":
             side = STORE / f"{g[0]}.json"
             meta = json.loads(side.read_text()) if side.exists() else {}
             meta["quick_eval"] = r

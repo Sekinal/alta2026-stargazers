@@ -46,8 +46,11 @@ def main():
     meta = json.loads((PREDS / f"{a.run}.json").read_text())
     r = meta["recipe"]
     if r["kind"] in ("zs", "probe"):
-        for tag in (r["sarc"], r["sent"]):
-            sh([str(HERE / "score.py"), "--model", r["model"], *split_tag(tag), "--test", a.test])
+        for tag in r["sarc"].split("+") + r["sent"].split("+"):
+            model = r["model"]
+            if ":" in tag:  # another model's cache, e.g. "qwen3.5-9b-nf4:sarc_v2"
+                model, tag = tag.split(":")
+            sh([str(HERE / "score.py"), "--model", model, *split_tag(tag), "--test", a.test])
         sys.path.insert(0, str(HERE))
         from make_run import build
         keep = {k: v for k, v in meta.items() if k not in ("run", "fold_hash", "git")}

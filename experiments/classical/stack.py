@@ -32,7 +32,7 @@ import polars as pl
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import log_loss
 
-from common import LABEL, fmt, pool, quick
+from common import LABEL, ROOT, fmt, pool, quick
 from features import handcrafted
 from alta.common import CANARY_ENV, PREDS, fold_hash, save_preds
 
@@ -76,8 +76,34 @@ def load_members(runs: list[str], uids: np.ndarray, split: str = "oof") -> dict[
     return out
 
 
-def design(M: dict, runs: list[str], t: str, cfg: dict, seg: np.ndarray, meta: np.ndarray | None):
-    """Feature matrix for task t; returns (X, monotone flags)."""
+STORE = ROOT / "experiments" / "features" / "store"
+
+
+def load_feats(sets: list[str], uids: np.ndarray, test_path=None) -> np.ndarray | None:
+    """Label-free feature sets from experiments/features/store (CONTRACT.md), standardised with the
+    POOL mean/sd (unsupervised; the same transform is applied to test rows)."""
+    if not sets:
+        return None
+    from alta.common import frame_fingerprint, load_test
+    order = pl.DataFrame({"uid": uids})
+    out = []
+    for s_ in sets:
+        pool_f = pl.read_parquet(STORE / f"{s_}__pool.parquet")
+        cols = [c for c in pool_f.columns if c != "uid"]
+        ref = pool_f.select(cols).to_numpy().astype(np.float64)
+        mu, sd = np.nanmean(ref, 0), np.nanstd(ref, 0) + 1e-9
+        src = pool_f if test_path is None else pl.read_parquet(
+            STORE / f"{s_}__test-{frame_fingerprint(load_test(test_path))[:10]}.parquet")
+        d = order.join(src, on="uid", how="left", maintain_order="left")
+        if d.select(cols).null_count().sum_horizontal().item():
+            raise ValueError(f"feature set {s_}: missing rows or NaNs")
+        out.append((d.select(cols).to_numpy() - mu) / sd)
+    return np.hstack(out)
+
+
+def design(M: dict, runs: list[str], t: str, cfg: dict, seg: np.ndarray, meta: np.ndarray | None,
+           extra: np.ndarray | None = None):
+    """Feature matrix for task t; returns (X, monotone flags). extra = standardised feature-set columns."""
     other = "sarc" if t == "sent" else "sent"
     cols = [M[r][t] for r in runs]
     mono = [1] * len(runs)
@@ -95,6 +121,9 @@ def design(M: dict, runs: list[str], t: str, cfg: dict, seg: np.ndarray, meta: n
     if cfg["meta"] and meta is not None:
         cols += list(meta.T)
         mono += [0] * meta.shape[1]
+    if extra is not None:
+        cols += list(extra.T)
+        mono += [0] * extra.shape[1]
     return np.column_stack(cols), mono
 
 
@@ -151,13 +180,16 @@ def fit_predict(cfg, X, y, var, fold, Xte, var_te, mono) -> np.ndarray:
     return m.predict(Xte)
 
 
+FEATS: dict = {}  # task -> standardised feature-set matrix for the pool (set in main)
+
+
 def crossfit(cfg, runs, M, y, seg, fold, meta, rows=None) -> dict[str, np.ndarray]:
     """Cross-fitted stacker probabilities for `rows` (bool mask; default all) by their fold ids."""
     rows = np.ones(len(seg), bool) if rows is None else rows
     out = {t: np.full(len(seg), np.nan) for t in TASKS}
     var = seg // 2
     for t in TASKS:
-        X, mono = design(M, runs, t, cfg, seg, meta)
+        X, mono = design(M, runs, t, cfg, seg, meta, FEATS.get(t))
         for k in np.unique(fold[rows]):
             tr, te = rows & (fold != k), rows & (fold == k)
             out[t][te] = fit_predict(cfg, X[tr], y[t][tr], var[tr], fold[tr], X[te], var[te], mono)
@@ -202,12 +234,17 @@ def main() -> None:
     ap.add_argument("--xtask", action="store_true")
     ap.add_argument("--meta", action="store_true")
     ap.add_argument("--select", action="store_true")
+    ap.add_argument("--feats-sent", default="", help="comma-separated feature sets (experiments/features/store)")
+    ap.add_argument("--feats-sarc", default="")
     a = ap.parse_args()
-    cfg = {"l2": a.l2, "C": a.C, "xtask": a.xtask, "meta": a.meta}
+    cfg = {"l2": a.l2, "C": a.C, "xtask": a.xtask, "meta": a.meta,
+           "feats": {"sent": [x for x in a.feats_sent.split(",") if x], "sarc": [x for x in a.feats_sarc.split(",") if x]}}
     df = pool()
     uids, seg, fold = df["uid"].to_numpy(), df["seg"].to_numpy(), df["fold"].to_numpy()
     y = {t: df[LABEL[t]].to_numpy() for t in TASKS}
     M = load_members(a.runs, uids)
+    for t in TASKS:
+        FEATS[t] = load_feats(cfg["feats"][t], uids)
     meta = None
     if a.meta:
         H, names = handcrafted(df)
@@ -222,7 +259,7 @@ def main() -> None:
             picks.append(chosen)
             print(f"outer fold {k}: {chosen}", flush=True)
             for t in TASKS:
-                X, mono = design(M, chosen, t, cfg, seg, meta)
+                X, mono = design(M, chosen, t, cfg, seg, meta, FEATS.get(t))
                 te = fold == k
                 oof[t][te] = fit_predict(cfg, X[inner], y[t][inner], seg[inner] // 2, fold[inner],
                                          X[te], seg[te] // 2, mono)
@@ -240,7 +277,7 @@ def main() -> None:
                      "test_protocol": "average of the 5 fold stackers applied to members' test preds"})
 
 
-def predict_test(run: str, test_df: pl.DataFrame) -> dict[str, np.ndarray]:
+def predict_test(run: str, test_df: pl.DataFrame, test_path=None) -> dict[str, np.ndarray]:
     """Average of the 5 fold stackers (each fitted on the other folds' OOF rows) on the members' test preds."""
     meta = json.loads((PREDS / f"{run}.json").read_text())
     cfg, members = meta["config"], meta["members"]
@@ -258,8 +295,9 @@ def predict_test(run: str, test_df: pl.DataFrame) -> dict[str, np.ndarray]:
         meta_tr, meta_te = H[:, idx], Ht[:, idx]
     out = {}
     for t in TASKS:
-        X, mono = design(M, members, t, cfg, seg, meta_tr)
-        Xt, _ = design(Mt, members, t, cfg, seg_t, meta_te)
+        fs = cfg.get("feats", {}).get(t, [])
+        X, mono = design(M, members, t, cfg, seg, meta_tr, load_feats(fs, df["uid"].to_numpy()))
+        Xt, _ = design(Mt, members, t, cfg, seg_t, meta_te, load_feats(fs, test_df["uid"].to_numpy(), test_path))
         ps = []
         for k in range(5):
             tr = fold != k

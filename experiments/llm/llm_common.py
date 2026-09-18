@@ -28,6 +28,7 @@ MODELS = {
     "qwen3.5-4b": "Qwen/Qwen3.5-4B",
     "qwen3.5-9b": "Qwen/Qwen3.5-9B",
     "qwen3.5-27b": "Qwen/Qwen3.5-27B",
+    "qwen3.5-9b-nf4": "Qwen/Qwen3.5-9B",  # 4-bit NF4 on the fly (bitsandbytes)
 }
 
 _NT = re.compile(r"(\w) n't\b")
@@ -155,8 +156,14 @@ def load_model(name: str):
     tok.padding_side = "left"
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
+    kw = {}
+    if name.endswith("-nf4"):
+        from transformers import BitsAndBytesConfig
+        kw["quantization_config"] = BitsAndBytesConfig(
+            load_in_4bit=True, bnb_4bit_quant_type="nf4", bnb_4bit_compute_dtype=torch.bfloat16,
+            bnb_4bit_use_double_quant=True, llm_int8_skip_modules=["lm_head"])
     model = AutoModelForCausalLM.from_pretrained(
-        repo, device_map={"": 0}, dtype=torch.bfloat16, low_cpu_mem_usage=True)
+        repo, device_map={"": 0}, dtype=torch.bfloat16, low_cpu_mem_usage=True, **kw)
     model.eval()
     return tok, model
 

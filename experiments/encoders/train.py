@@ -77,6 +77,10 @@ def run_fold(a, pool: pl.DataFrame, k: int) -> None:
     total = steps_per_epoch * a.epochs
     sched = get_linear_schedule_with_warmup(opt, int(a.warmup * total), total)
     bce = torch.nn.BCEWithLogitsLoss()
+    bce_each = torch.nn.BCEWithLogitsLoss(reduction="none")
+    # Optionally train the sarcasm heads on one variety only (the other's sarcasm loss is masked).
+    sarc_mask = np.ones(len(ids), dtype=np.float32) if a.sarc_only is None \
+        else (tr["variety"].cast(pl.String) == a.sarc_only).cast(pl.Float32).to_numpy()
 
     t0 = time.time()
     for ep in range(a.epochs):
@@ -94,8 +98,9 @@ def run_fold(a, pool: pl.DataFrame, k: int) -> None:
             v = torch.as_tensor(var[idx], device=dev)
             with torch.autocast("cuda", dtype=torch.bfloat16):
                 ls, lc = model(x.to(dev), m.to(dev), v)
-            loss = bce(ls.float(), torch.as_tensor(y_sent[idx], device=dev)) \
-                + a.sarc_w * bce(lc.float(), torch.as_tensor(y_sarc[idx], device=dev))
+            sm = torch.as_tensor(sarc_mask[idx], device=dev)
+            l_sarc = (bce_each(lc.float(), torch.as_tensor(y_sarc[idx], device=dev)) * sm).sum() / sm.sum().clamp(min=1)
+            loss = bce(ls.float(), torch.as_tensor(y_sent[idx], device=dev)) + a.sarc_w * l_sarc
             (loss / a.accum).backward()
             run_loss += loss.item(); n += 1
             if (bi + 1) % a.accum == 0 or bi == len(batches) - 1:
@@ -152,6 +157,8 @@ def main() -> None:
     ap.add_argument("--sarc_w", type=float, default=1.0)
     ap.add_argument("--seed", type=int, default=13)
     ap.add_argument("--no_prefix", action="store_true")
+    ap.add_argument("--sarc_only", default=None, choices=["en-AU", "en-UK"],
+                    help="sarcasm loss only on this variety's rows")
     ap.add_argument("--grad_ckpt", action="store_true")
     ap.add_argument("--optim", default="adamw8bit", choices=["adamw8bit", "adamw"])
     ap.add_argument("--pilot", action="store_true")

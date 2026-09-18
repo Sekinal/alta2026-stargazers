@@ -79,14 +79,18 @@ def predict(run: str, test_path: Path, force: bool = False) -> None:
         import gbdt
         cfg = meta["config"]
         clf = cfg["clf"].split(",")
-        ensure_embeddings([cfg["emb"], *clf], test_path)
-        E, Et, L, Lt = (embed.load(cfg["emb"]), embed.load(cfg["emb"], test_path),
-                        gbdt.logits(clf), gbdt.logits(clf, test_path))
+        ensure_embeddings([c for c in clf if c in gbdt.CLF_LOGITS], test_path)
+        names = cfg["emb"].split("+")
+        ensure_embeddings(names, test_path)
+        E = np.hstack([embed.load(n) for n in names])
+        Et = np.hstack([embed.load(n, test_path) for n in names])
+        L, Lt = gbdt.logits(clf), gbdt.logits(clf, test_path)
+        mode, colsample = cfg.get("features", "pca"), cfg.get("colsample", 0.5)
 
         def fit_fold(k):
             tr = fold != k
-            A, B = gbdt.dense_features(df.filter(pl.col("fold") != k), test, E[tr], Et, L[tr], Lt)
-            return {t: gbdt.fit_predict(cfg["algo"], A, y[t][tr], fold[tr], B) for t in y}
+            A, B = gbdt.dense_features(df.filter(pl.col("fold") != k), test, E[tr], Et, L[tr], Lt, mode=mode)
+            return {t: gbdt.fit_predict(cfg["algo"], A, y[t][tr], fold[tr], B, colsample) for t in y}
         p = fold_average(fit_fold)
     elif kind in ("stack", "blend"):
         for m in meta["members"]:
@@ -96,7 +100,7 @@ def predict(run: str, test_path: Path, force: bool = False) -> None:
                 predict(m, test_path, force)
         if kind == "stack":
             import stack
-            p = stack.predict_test(run, test)
+            p = stack.predict_test(run, test, test_path)
         else:
             import stack
             M = stack.load_members(meta["members"], test["uid"].to_numpy(), split="test")
