@@ -27,3 +27,8 @@ results/remote/
 logs/
 redteam/*/out/
 experiments/features/store/
+# experiment CSVs hold raw/perturbed competition text
+experiments/**/*.csv
+experiments/robustness/holdout_*/
+experiments/**/catboost_info/
+*.npy
