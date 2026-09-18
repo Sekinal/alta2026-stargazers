@@ -16,7 +16,8 @@ scripts/remote_push.sh   # also syncs data/
 ```
 R dedupe_test "PYTHONPATH=. uv run --with pyahocorasick python experiments/data/dedupe_sentiment.py --against data/test.csv data/external/*/*.parquet"
 R dedupe_test_manifest "uv run python experiments/data/dedupe_indomain.py --in data/external/indomain --against data/test.csv"
-# sarcasm sets also carry parent_text (context), which the command above does not check:
+# the first command checks every text column (text, parent_text, context, title, selftext);
+# this second, independent implementation is a cross-check on the sarcasm sets:
 R dedupe_test_sarc "uv run --with pyahocorasick python experiments/data/dedupe.py --test data/test.csv data/external/sarcasm/*.parquet"
 ```
 Any model trained on external data before this step must be retrained if its corpus lost rows.
