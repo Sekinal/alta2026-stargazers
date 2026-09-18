@@ -1,0 +1,248 @@
+            <iframe src='about:blank' style='border:none !important;' width='1200' height='520' srcdoc="&lt;html lang=&quot;en&quot;>
+   &lt;head>
+       &lt;meta charset=&quot;UTF-8&quot;>
+       &lt;style> html, body { margin: 0; padding: 0; overflow: hidden; } &lt;/style>
+       &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;library&quot; src=&quot;https://cdn.jsdelivr.net/gh/JetBrains/lets-plot@v4.11.0/js-package/distr/lets-plot.min.js&quot;>&lt;/script>
+   &lt;/head>
+   &lt;body>
+          &lt;div id=&quot;mwJKNq&quot; >&lt;/div>
+   &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;plot&quot;>
+   
+   (function() {
+   // ----------
+   
+   const forceImmediateRender = false;
+   const responsive = false;
+   
+   let sizing = {
+       width_mode: &quot;FIXED&quot;,
+       height_mode: &quot;FIXED&quot;,
+       width: 1200.0, 
+       height: 520.0 
+   };
+   
+   const preferredWidth = document.body.dataset.letsPlotPreferredWidth;
+   if (preferredWidth !== undefined) {
+       sizing = {
+           width_mode: 'FIXED',
+           height_mode: 'SCALED',
+           width: parseFloat(preferredWidth)
+       };
+   }
+   
+   const containerDiv = document.getElementById(&quot;mwJKNq&quot;);
+   let fig = null;
+   
+   function renderPlot() {
+       if (fig === null) {
+           const plotSpec = {
+&quot;data&quot;:{
+&quot;segment&quot;:[&quot;AU-google&quot;,&quot;AU-reddit&quot;,&quot;UK-google&quot;,&quot;UK-reddit&quot;,&quot;AU-google&quot;,&quot;AU-reddit&quot;,&quot;UK-google&quot;,&quot;UK-reddit&quot;],
+&quot;task&quot;:[&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;],
+&quot;observed&quot;:[0.9178438661710036,0.7827844311377246,0.9188377723970945,0.9046369203849519,0.8908921933085506,0.6140718562874254,0.9994188861985474,0.7295713035870521],
+&quot;chance&quot;:[0.6105723386907311,0.5652606961725252,0.6231906149417539,0.7970498657046696,0.8735178480120507,0.5129088131122983,0.9990319460159818,0.6602087031334557],
+&quot;variety&quot;:[&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;],
+&quot;lab&quot;:[&quot;0.92&quot;,&quot;0.78&quot;,&quot;0.92&quot;,&quot;0.90&quot;,&quot;0.89&quot;,&quot;0.61&quot;,&quot;1.00&quot;,&quot;0.73&quot;]
+},
+&quot;mapping&quot;:{
+},
+&quot;data_meta&quot;:{
+&quot;series_annotations&quot;:[{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;segment&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;task&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;observed&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;chance&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;variety&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;lab&quot;
+}]
+},
+&quot;theme&quot;:{
+&quot;name&quot;:&quot;minimal2&quot;,
+&quot;axis_title&quot;:{
+&quot;size&quot;:12.0,
+&quot;blank&quot;:false
+},
+&quot;legend_position&quot;:&quot;bottom&quot;,
+&quot;panel_grid_major&quot;:{
+&quot;color&quot;:&quot;#e5e5e5&quot;,
+&quot;size&quot;:0.4,
+&quot;blank&quot;:false
+},
+&quot;panel_grid_minor&quot;:{
+&quot;blank&quot;:true
+},
+&quot;plot_title&quot;:{
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:16.0,
+&quot;blank&quot;:false
+},
+&quot;plot_subtitle&quot;:{
+&quot;color&quot;:&quot;#555555&quot;,
+&quot;size&quot;:12.0,
+&quot;blank&quot;:false
+},
+&quot;plot_caption&quot;:{
+&quot;color&quot;:&quot;#777777&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:false
+},
+&quot;strip_background&quot;:{
+&quot;fill&quot;:&quot;#eef1f5&quot;,
+&quot;color&quot;:&quot;#eef1f5&quot;,
+&quot;blank&quot;:false
+},
+&quot;strip_text&quot;:{
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:12.0,
+&quot;blank&quot;:false
+}
+},
+&quot;facet&quot;:{
+&quot;name&quot;:&quot;wrap&quot;,
+&quot;facets&quot;:&quot;task&quot;,
+&quot;order&quot;:1.0,
+&quot;dir&quot;:&quot;h&quot;
+},
+&quot;coord&quot;:{
+&quot;name&quot;:&quot;flip&quot;,
+&quot;flip&quot;:true
+},
+&quot;ggtitle&quot;:{
+&quot;text&quot;:&quot;How often do a text's 10 nearest neighbours share its label?&quot;,
+&quot;subtitle&quot;:&quot;dot = observed (bge-large, neighbours within the same variety x source segment); bar = chance given the segment base rate&quot;
+},
+&quot;guides&quot;:{
+&quot;x&quot;:{
+&quot;title&quot;:&quot;&quot;
+},
+&quot;y&quot;:{
+&quot;title&quot;:&quot;mean kNN label agreement (k = 10)&quot;
+},
+&quot;color&quot;:{
+&quot;title&quot;:&quot;&quot;
+}
+},
+&quot;ggsize&quot;:{
+&quot;width&quot;:1200.0,
+&quot;height&quot;:520.0
+},
+&quot;kind&quot;:&quot;plot&quot;,
+&quot;scales&quot;:[{
+&quot;aesthetic&quot;:&quot;color&quot;,
+&quot;breaks&quot;:[&quot;en-AU&quot;,&quot;en-UK&quot;],
+&quot;values&quot;:[&quot;#1b9e77&quot;,&quot;#7570b3&quot;]
+},{
+&quot;aesthetic&quot;:&quot;y&quot;,
+&quot;limits&quot;:[0.45,1.05]
+}],
+&quot;layers&quot;:[{
+&quot;geom&quot;:&quot;errorbar&quot;,
+&quot;mapping&quot;:{
+&quot;x&quot;:&quot;segment&quot;,
+&quot;ymin&quot;:&quot;chance&quot;,
+&quot;ymax&quot;:&quot;observed&quot;,
+&quot;color&quot;:&quot;variety&quot;
+},
+&quot;data_meta&quot;:{
+},
+&quot;width&quot;:0.0,
+&quot;size&quot;:1.4,
+&quot;data&quot;:{
+}
+},{
+&quot;geom&quot;:&quot;point&quot;,
+&quot;mapping&quot;:{
+&quot;x&quot;:&quot;segment&quot;,
+&quot;y&quot;:&quot;chance&quot;
+},
+&quot;data_meta&quot;:{
+},
+&quot;shape&quot;:124.0,
+&quot;size&quot;:8.0,
+&quot;color&quot;:&quot;#555555&quot;,
+&quot;data&quot;:{
+}
+},{
+&quot;geom&quot;:&quot;point&quot;,
+&quot;mapping&quot;:{
+&quot;x&quot;:&quot;segment&quot;,
+&quot;y&quot;:&quot;observed&quot;,
+&quot;color&quot;:&quot;variety&quot;
+},
+&quot;data_meta&quot;:{
+},
+&quot;size&quot;:5.0,
+&quot;data&quot;:{
+}
+},{
+&quot;geom&quot;:&quot;text&quot;,
+&quot;mapping&quot;:{
+&quot;x&quot;:&quot;segment&quot;,
+&quot;y&quot;:&quot;observed&quot;,
+&quot;label&quot;:&quot;lab&quot;
+},
+&quot;data_meta&quot;:{
+},
+&quot;nudge_y&quot;:0.012,
+&quot;hjust&quot;:0.0,
+&quot;size&quot;:7.0,
+&quot;data&quot;:{
+}
+}],
+&quot;metainfo_list&quot;:[],
+&quot;spec_id&quot;:&quot;3&quot;
+};
+           fig = LetsPlot.buildPlotFromProcessedSpecs(plotSpec, containerDiv, sizing);
+       } else {
+           fig.updateView({});
+       }
+   }
+   
+   const renderImmediately = 
+       forceImmediateRender || (
+           sizing.width_mode === 'FIXED' &amp;&amp; 
+           (sizing.height_mode === 'FIXED' || sizing.height_mode === 'SCALED')
+       );
+   
+   if (renderImmediately) {
+       renderPlot();
+   }
+   
+   if (!renderImmediately || responsive) {
+       // Set up observer for initial sizing or continuous monitoring
+       var observer = new ResizeObserver(function(entries) {
+           for (let entry of entries) {
+               if (entry.contentBoxSize &amp;&amp; 
+                   entry.contentBoxSize[0].inlineSize > 0) {
+                   if (!responsive &amp;&amp; observer) {
+                       observer.disconnect();
+                       observer = null;
+                   }
+                   renderPlot();
+                   if (!responsive) {
+                       break;
+                   }
+               }
+           }
+       });
+       
+       observer.observe(containerDiv);
+   }
+   
+   // ----------
+   })();
+   
+   &lt;/script>
+   &lt;/body>
+&lt;/html>"></iframe>    

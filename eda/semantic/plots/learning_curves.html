@@ -1,0 +1,214 @@
+            <iframe src='about:blank' style='border:none !important;' width='1200' height='560' srcdoc="&lt;html lang=&quot;en&quot;>
+   &lt;head>
+       &lt;meta charset=&quot;UTF-8&quot;>
+       &lt;style> html, body { margin: 0; padding: 0; overflow: hidden; } &lt;/style>
+       &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;library&quot; src=&quot;https://cdn.jsdelivr.net/gh/JetBrains/lets-plot@v4.11.0/js-package/distr/lets-plot.min.js&quot;>&lt;/script>
+   &lt;/head>
+   &lt;body>
+          &lt;div id=&quot;zyNIAy&quot; >&lt;/div>
+   &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;plot&quot;>
+   
+   (function() {
+   // ----------
+   
+   const forceImmediateRender = false;
+   const responsive = false;
+   
+   let sizing = {
+       width_mode: &quot;FIXED&quot;,
+       height_mode: &quot;FIXED&quot;,
+       width: 1200.0, 
+       height: 560.0 
+   };
+   
+   const preferredWidth = document.body.dataset.letsPlotPreferredWidth;
+   if (preferredWidth !== undefined) {
+       sizing = {
+           width_mode: 'FIXED',
+           height_mode: 'SCALED',
+           width: parseFloat(preferredWidth)
+       };
+   }
+   
+   const containerDiv = document.getElementById(&quot;zyNIAy&quot;);
+   let fig = null;
+   
+   function renderPlot() {
+       if (fig === null) {
+           const plotSpec = {
+&quot;data&quot;:{
+&quot;task&quot;:[&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;],
+&quot;variety&quot;:[&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;],
+&quot;frac&quot;:[0.25,0.25,0.5,0.5,0.75,0.75,1.0,1.0,0.25,0.25,0.5,0.5,0.75,0.75,1.0,1.0,0.25,0.25,0.5,0.5,0.75,0.75,1.0,1.0,0.25,0.25,0.5,0.5,0.75,0.75,1.0,1.0],
+&quot;mode&quot;:[&quot;own only&quot;,&quot;own + other variety&quot;,&quot;own only&quot;,&quot;own + other variety&quot;,&quot;own only&quot;,&quot;own + other variety&quot;,&quot;own only&quot;,&quot;own + other variety&quot;,&quot;own only&quot;,&quot;own + other variety&quot;,&quot;own only&quot;,&quot;own + other variety&quot;,&quot;own only&quot;,&quot;own + other variety&quot;,&quot;own only&quot;,&quot;own + other variety&quot;,&quot;own only&quot;,&quot;own + other variety&quot;,&quot;own only&quot;,&quot;own + other variety&quot;,&quot;own only&quot;,&quot;own + other variety&quot;,&quot;own only&quot;,&quot;own + other variety&quot;,&quot;own only&quot;,&quot;own + other variety&quot;,&quot;own only&quot;,&quot;own + other variety&quot;,&quot;own only&quot;,&quot;own + other variety&quot;,&quot;own only&quot;,&quot;own + other variety&quot;],
+&quot;macroF1&quot;:[0.729487864221708,0.6862956334856785,0.7384686495990802,0.708097604318551,0.7433417498415367,0.726104711419095,0.7472856452445638,0.731637310484901,0.6572697964466407,0.6055076548406526,0.6798215928703996,0.6295423622734775,0.6820389380530973,0.6389679386728455,0.6825277765170678,0.6444583706875793,0.8945157946915416,0.9020814414758878,0.89980883828117,0.9041168328805187,0.8947078201277998,0.8993152537220793,0.8978974418121648,0.9003741431343797,0.9565893229742415,0.9536959991136795,0.9581379024778445,0.955271957368621,0.9587743524320889,0.958097504752963,0.9590786642784008,0.9584174046080366]
+},
+&quot;mapping&quot;:{
+&quot;x&quot;:&quot;frac&quot;,
+&quot;y&quot;:&quot;macroF1&quot;,
+&quot;color&quot;:&quot;variety&quot;,
+&quot;linetype&quot;:&quot;mode&quot;
+},
+&quot;data_meta&quot;:{
+&quot;series_annotations&quot;:[{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;task&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;variety&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;frac&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;mode&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;macroF1&quot;
+}]
+},
+&quot;theme&quot;:{
+&quot;name&quot;:&quot;minimal2&quot;,
+&quot;axis_title&quot;:{
+&quot;size&quot;:12.0,
+&quot;blank&quot;:false
+},
+&quot;legend_position&quot;:&quot;bottom&quot;,
+&quot;panel_grid_major&quot;:{
+&quot;color&quot;:&quot;#e5e5e5&quot;,
+&quot;size&quot;:0.4,
+&quot;blank&quot;:false
+},
+&quot;panel_grid_minor&quot;:{
+&quot;blank&quot;:true
+},
+&quot;plot_title&quot;:{
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:16.0,
+&quot;blank&quot;:false
+},
+&quot;plot_subtitle&quot;:{
+&quot;color&quot;:&quot;#555555&quot;,
+&quot;size&quot;:12.0,
+&quot;blank&quot;:false
+},
+&quot;plot_caption&quot;:{
+&quot;color&quot;:&quot;#777777&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:false
+},
+&quot;strip_background&quot;:{
+&quot;fill&quot;:&quot;#eef1f5&quot;,
+&quot;color&quot;:&quot;#eef1f5&quot;,
+&quot;blank&quot;:false
+},
+&quot;strip_text&quot;:{
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:12.0,
+&quot;blank&quot;:false
+}
+},
+&quot;facet&quot;:{
+&quot;name&quot;:&quot;wrap&quot;,
+&quot;facets&quot;:&quot;task&quot;,
+&quot;scales&quot;:&quot;free_y&quot;,
+&quot;order&quot;:1.0,
+&quot;dir&quot;:&quot;h&quot;
+},
+&quot;ggtitle&quot;:{
+&quot;text&quot;:&quot;Learning curves: does adding the other variety's data help?&quot;,
+&quot;subtitle&quot;:&quot;bge-large linear probe, OOF macro-F1 on the target variety; x = fraction of the target variety's own training rows&quot;
+},
+&quot;guides&quot;:{
+&quot;x&quot;:{
+&quot;title&quot;:&quot;fraction of own-variety training data&quot;
+},
+&quot;y&quot;:{
+&quot;title&quot;:&quot;macro-F1 (target variety)&quot;
+},
+&quot;color&quot;:{
+&quot;title&quot;:&quot;&quot;
+},
+&quot;linetype&quot;:{
+&quot;title&quot;:&quot;&quot;
+}
+},
+&quot;ggsize&quot;:{
+&quot;width&quot;:1200.0,
+&quot;height&quot;:560.0
+},
+&quot;kind&quot;:&quot;plot&quot;,
+&quot;scales&quot;:[{
+&quot;aesthetic&quot;:&quot;color&quot;,
+&quot;breaks&quot;:[&quot;en-AU&quot;,&quot;en-UK&quot;],
+&quot;values&quot;:[&quot;#1b9e77&quot;,&quot;#7570b3&quot;]
+},{
+&quot;aesthetic&quot;:&quot;linetype&quot;,
+&quot;breaks&quot;:[&quot;own only&quot;,&quot;own + other variety&quot;],
+&quot;values&quot;:[&quot;solid&quot;,&quot;dashed&quot;]
+}],
+&quot;layers&quot;:[{
+&quot;geom&quot;:&quot;line&quot;,
+&quot;mapping&quot;:{
+},
+&quot;data_meta&quot;:{
+},
+&quot;size&quot;:1.2,
+&quot;data&quot;:{
+}
+},{
+&quot;geom&quot;:&quot;point&quot;,
+&quot;mapping&quot;:{
+},
+&quot;data_meta&quot;:{
+},
+&quot;size&quot;:3.0,
+&quot;data&quot;:{
+}
+}],
+&quot;metainfo_list&quot;:[],
+&quot;spec_id&quot;:&quot;3&quot;
+};
+           fig = LetsPlot.buildPlotFromProcessedSpecs(plotSpec, containerDiv, sizing);
+       } else {
+           fig.updateView({});
+       }
+   }
+   
+   const renderImmediately = 
+       forceImmediateRender || (
+           sizing.width_mode === 'FIXED' &amp;&amp; 
+           (sizing.height_mode === 'FIXED' || sizing.height_mode === 'SCALED')
+       );
+   
+   if (renderImmediately) {
+       renderPlot();
+   }
+   
+   if (!renderImmediately || responsive) {
+       // Set up observer for initial sizing or continuous monitoring
+       var observer = new ResizeObserver(function(entries) {
+           for (let entry of entries) {
+               if (entry.contentBoxSize &amp;&amp; 
+                   entry.contentBoxSize[0].inlineSize > 0) {
+                   if (!responsive &amp;&amp; observer) {
+                       observer.disconnect();
+                       observer = null;
+                   }
+                   renderPlot();
+                   if (!responsive) {
+                       break;
+                   }
+               }
+           }
+       });
+       
+       observer.observe(containerDiv);
+   }
+   
+   // ----------
+   })();
+   
+   &lt;/script>
+   &lt;/body>
+&lt;/html>"></iframe>    
