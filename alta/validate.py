@@ -2,7 +2,7 @@
 
   uv run python -m alta.validate check RUN
   uv run python -m alta.validate report RUN [--policies a,b] [--B 2000] [--plots] [--no-write]
-  uv run python -m alta.validate compare RUN_A RUN_B [--policy fixed+ukg]
+  uv run python -m alta.validate compare RUN_A RUN_B [--policy segment+ukg]
   uv run python -m alta.validate board
   uv run python -m alta.validate blend NAME RUN [RUN ...] [--method mean|logit]
   uv run python -m alta.validate stack NAME RUN [RUN ...]
@@ -29,7 +29,8 @@ def main(argv=None) -> int:
     s.add_argument("--B", type=int, default=report.B_DEFAULT)
     s.add_argument("--plots", action="store_true"); s.add_argument("--no-write", action="store_true")
     s = sub.add_parser("compare"); s.add_argument("run_a"); s.add_argument("run_b")
-    s.add_argument("--policy", default="fixed+ukg"); s.add_argument("--B", type=int, default=report.B_DEFAULT)
+    s.add_argument("--policy", default=policies.DEFAULT_POLICY)
+    s.add_argument("--B", type=int, default=report.B_DEFAULT)
     sub.add_parser("board")
     for name in ("blend", "stack"):
         s = sub.add_parser(name); s.add_argument("name"); s.add_argument("runs", nargs="+")

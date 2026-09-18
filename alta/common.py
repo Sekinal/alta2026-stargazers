@@ -7,8 +7,10 @@ Protocol
   variety x source x sentiment x sarcasm and exact-duplicate texts share a fold.
 * Every model writes ONE parquet per run to ``preds/<run_name>.parquet`` via
   ``save_preds``. It contains out-of-fold probabilities for every pool row
-  (``split == "oof"``) and, optionally, fold-averaged probabilities for the test
-  rows (``split == "test"``). Columns: uid, split, p_sent, p_sarc.
+  (``split == "oof"``) and, optionally, probabilities for the test rows (``split == "test"``).
+  Test probabilities must be the AVERAGE OF THE 5 FOLD MODELS, not a refit on the full pool:
+  red-team pseudo-leaderboards found fold-averaging ties refit for linear probes and beats it by
+  ~0.009 (with half the seed variance) for seed-dependent models. Columns: uid, split, p_sent, p_sarc.
 * ``score`` reproduces the official metric (verified against scoring/evaluate.py).
 """
 

@@ -202,3 +202,15 @@ def test_dev_submission_roundtrip(fake_run, d):
     ours = components(d.subset(m), {t: pred[t][m] for t in TASKS})["score"]
     official = [m for lvl, m in res if "official scorer ran" in m][0]
     assert f"{ours:.4f}" in official
+
+
+def test_headline_policy_is_default_without_strong_evidence(d):
+    from alta.validation.report import choose_policy
+    rows = [{"policy": policies.DEFAULT_POLICY, "score": 0.80},
+            {"policy": "prev+ukg", "score": 0.803}]  # gain below SWITCH_MIN_GAIN
+    assert choose_policy(d, rows, B=50)[0] == policies.DEFAULT_POLICY
+
+
+def test_neg_rule_not_in_defaults():
+    assert all("neg" not in p for p in policies.DEFAULT_POLICIES)
+    assert policies.DEFAULT_POLICY in policies.DEFAULT_POLICIES

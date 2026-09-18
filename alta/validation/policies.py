@@ -28,8 +28,12 @@ from alta.validation.metrics import macro_f1_counts
 
 BASES = ("fixed", "global", "variety", "segment", "prev", "prevtuned")
 RULES = ("ukg", "neg")
-DEFAULT_POLICIES = ("fixed", "fixed+ukg", "global+ukg", "variety+ukg", "segment+ukg",
-                    "prev+ukg", "prevtuned+ukg", "variety+ukg+neg", "prev+ukg+neg")
+# The policy we ship. Red-team pseudo-leaderboards (60 draws x 99 candidates) showed that
+# choosing a policy per run by CV is close to noise (Spearman 0.2-0.5 with the truth) and
+# that always using segment+ukg beats the per-run argmax by 0.0015; prevtuned+ukg ties.
+# The +neg rule lost under every base, so it is not evaluated by default.
+DEFAULT_POLICY = "segment+ukg"
+DEFAULT_POLICIES = ("fixed+ukg", "global+ukg", "variety+ukg", "segment+ukg", "prev+ukg", "prevtuned+ukg")
 MULTIPLIERS = np.round(np.arange(0.5, 2.01, 0.05), 2)
 
 
