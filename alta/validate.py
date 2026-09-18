@@ -34,6 +34,7 @@ def main(argv=None) -> int:
     sub.add_parser("board")
     for name in ("blend", "stack"):
         s = sub.add_parser(name); s.add_argument("name"); s.add_argument("runs", nargs="+")
+        s.add_argument("--force", action="store_true", help="overwrite an existing run of that name")
         if name == "blend":
             s.add_argument("--method", default="mean", choices=["mean", "logit"])
     s = sub.add_parser("submit"); s.add_argument("run"); s.add_argument("--policy", required=True)
@@ -42,6 +43,8 @@ def main(argv=None) -> int:
     s = sub.add_parser("check-submission"); s.add_argument("zip", type=Path)
     s.add_argument("--test", type=Path, required=True); s.add_argument("--truth", type=Path)
     a = ap.parse_args(argv)
+    if getattr(a, "B", 2) < 2:
+        ap.error("--B must be >= 2")
 
     if a.cmd == "check":
         res = check_run(a.run)
@@ -54,9 +57,9 @@ def main(argv=None) -> int:
     elif a.cmd == "board":
         print(report.board())
     elif a.cmd == "blend":
-        print(ensemble.blend(a.runs, a.name, a.method))
+        print(ensemble.blend(a.runs, a.name, a.method, force=a.force))
     elif a.cmd == "stack":
-        print(ensemble.stack(a.runs, a.name))
+        print(ensemble.stack(a.runs, a.name, force=a.force))
     elif a.cmd == "submit":
         z = (submission.make_dev_submission(a.run, a.policy) if a.dev
              else submission.make_test_submission(a.run, a.policy, a.test))

@@ -14,7 +14,7 @@ import numpy as np
 import polars as pl
 from sklearn.linear_model import LogisticRegression
 
-from alta.common import load_pool, save_preds
+from alta.common import PREDS, fold_hash, load_pool, save_preds
 from alta.validation.data import TASKS, load_oof, read_run
 
 EPS = 1e-6
@@ -37,6 +37,22 @@ def _member_test_csv(runs: list[str]) -> str | None:
     return metas[0]["test_csv"]
 
 
+def _check_members(runs: list[str], name: str, force: bool) -> dict:
+    """Refuse to overwrite a member / existing run, and to launder stale folds."""
+    if name in runs:
+        raise ValueError(f"'{name}' is one of the members; choose another name")
+    if (PREDS / f"{name}.parquet").exists() and not force:
+        raise ValueError(f"run '{name}' already exists (pass force=True / --force to overwrite)")
+    if len(set(runs)) != len(runs):
+        raise ValueError("duplicate members")
+    current = fold_hash()
+    hashes = {r: read_run(r)[1].get("fold_hash") for r in runs}
+    stale = {r: h for r, h in hashes.items() if h != current}
+    if stale:
+        raise ValueError(f"members with missing/stale fold_hash (current {current}): {stale}")
+    return hashes
+
+
 def _member_frames(runs: list[str]) -> tuple[pl.DataFrame, pl.DataFrame | None]:
     """Wide frames uid -> p_sent_<run>, p_sarc_<run> for oof and (if all have it) test."""
     oof, test, have_test = None, None, _member_test_csv(runs) is not None
@@ -46,15 +62,22 @@ def _member_frames(runs: list[str]) -> tuple[pl.DataFrame, pl.DataFrame | None]:
             part = preds.filter(pl.col("split") == split).select(
                 "uid", pl.col("p_sent").alias(f"p_sent_{r}"), pl.col("p_sarc").alias(f"p_sarc_{r}"))
             if split == "oof":
-                oof = part if oof is None else oof.join(part, on="uid", how="inner")
+                oof = part if oof is None else _join_exact(oof, part, r, "oof")
             elif part.height == 0:
                 have_test = False
-            else:
-                test = part if test is None else test.join(part, on="uid", how="inner")
+            elif have_test:
+                test = part if test is None else _join_exact(test, part, r, "test")
     return oof, (test if have_test else None)
 
 
-def blend(runs: list[str], name: str, method: str = "mean") -> str:
+def _join_exact(left: pl.DataFrame, right: pl.DataFrame, run: str, split: str) -> pl.DataFrame:
+    if set(left["uid"].to_list()) != set(right["uid"].to_list()):
+        raise ValueError(f"member '{run}' {split} uids differ from the other members'")
+    return left.join(right, on="uid", how="left", maintain_order="left")
+
+
+def blend(runs: list[str], name: str, method: str = "mean", force: bool = False) -> str:
+    hashes = _check_members(runs, name, force)
     oof, test = _member_frames(runs)
 
     def combine(frame):
@@ -66,12 +89,13 @@ def blend(runs: list[str], name: str, method: str = "mean") -> str:
         return out
 
     save_preds(name, combine(oof), None if test is None else combine(test),
-               meta={"kind": "blend", "method": method, "members": runs},
+               meta={"kind": "blend", "method": method, "members": runs, "member_fold_hashes": hashes},
                test_csv=_member_test_csv(runs) if test is not None else None)
     return name
 
 
-def stack(runs: list[str], name: str, C: float = 1.0) -> str:
+def stack(runs: list[str], name: str, C: float = 1.0, force: bool = False) -> str:
+    hashes = _check_members(runs, name, force)
     pool = load_pool()
     members = [load_oof(r, pool) for r in runs]
     base = members[0]
@@ -85,16 +109,17 @@ def stack(runs: list[str], name: str, C: float = 1.0) -> str:
     test_csv = _member_test_csv(runs) if test is not None else None
     if test is not None:
         test_seg = pl.DataFrame({"uid": test["uid"]}).join(
-            _test_segments(test_csv), on="uid", how="left")
+            _test_segments(test_csv), on="uid", how="left", maintain_order="left")
+        if test_seg["variety"].null_count() or test_seg.height != test.height:
+            raise ValueError("members' test uids do not match the test file they are bound to")
         test_p = {t: np.zeros(test.height) for t in TASKS}
     for t in TASKS:
         for v in (0, 1):
             mv = base.variety == v
             X = features([m.p[t] for m in members], base.variety, base.source)
             y = base.y[t]
-            if y[mv].sum() < 5:  # degenerate (never happens per variety, kept for safety)
-                oof_p[t][mv] = X[mv, 0]
-                continue
+            if y[mv].sum() < 5:
+                raise ValueError(f"stack: fewer than 5 positives for {t} in variety {v}")
             for k in np.unique(base.fold):
                 tr, te = mv & (base.fold != k), mv & (base.fold == k)
                 clf = LogisticRegression(C=C, max_iter=1000).fit(X[tr], y[tr])
@@ -108,7 +133,8 @@ def stack(runs: list[str], name: str, C: float = 1.0) -> str:
     oof = pl.DataFrame({"uid": base.uid, "p_sent": oof_p["sent"], "p_sarc": oof_p["sarc"]})
     tst = None if test_p is None else pl.DataFrame(
         {"uid": test["uid"], "p_sent": test_p["sent"], "p_sarc": test_p["sarc"]})
-    save_preds(name, oof, tst, meta={"kind": "stack", "members": runs, "C": C}, test_csv=test_csv)
+    save_preds(name, oof, tst, meta={"kind": "stack", "members": runs, "C": C,
+                                     "member_fold_hashes": hashes}, test_csv=test_csv)
     return name
 
 

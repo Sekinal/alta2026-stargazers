@@ -79,7 +79,7 @@ def report(run: str, specs=policies.DEFAULT_POLICIES, B: int = B_DEFAULT, write:
     if any(level == FAIL for level, _ in checks):
         text = "\n".join(lines + ["**FAILED integrity checks: no scores reported.**"])
         print(text)
-        return text
+        raise SystemExit(1)
 
     d = load_oof(run, pool)
     rows = evaluate_policies(run, specs, pool)
@@ -137,14 +137,23 @@ def append_ledger(run: str, rows: list[dict], reps: dict, headline: str) -> None
         "boot_sd": float(reps["score"].std(ddof=1)) if r is best else None,
     } for r in rows])
     if LEDGER.exists():
-        new = pl.concat([pl.read_csv(LEDGER), new], how="diagonal_relaxed")
+        new = pl.concat([read_ledger(), new.with_columns(pl.col(STRING_COLS).cast(pl.String))],
+                        how="diagonal_relaxed")
     new.write_csv(LEDGER)
+
+
+STRING_COLS = ("time", "run", "code", "folds", "policy")
+
+
+def read_ledger() -> pl.DataFrame:
+    """Commit ids like 5e12345 / 1234567 must stay strings (type inference would mangle them)."""
+    return pl.read_csv(LEDGER, schema_overrides={c: pl.String for c in STRING_COLS})
 
 
 def board() -> str:
     if not LEDGER.exists():
         return "ledger is empty"
-    led = pl.read_csv(LEDGER).filter(pl.col("is_best"))
+    led = read_ledger().filter(pl.col("is_best"))
     latest = led.sort("time").group_by("run").last().sort("score", descending=True)
     return _fmt(latest.select("run", "policy", "score", "sent_AU", "sarc_UK", "fold_sd",
                               "valid_score", "boot_sd", "code", "time").to_dicts())

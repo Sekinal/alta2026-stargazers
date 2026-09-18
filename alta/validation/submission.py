@@ -45,6 +45,17 @@ def _write(frame: pl.DataFrame, pred: dict, name: str, info: dict) -> Path:
     return out_dir / "answer.zip"
 
 
+def _jsonable(o):
+    """Policy params -> JSON: tuple keys (variety, source) become 'v|s', numpy scalars -> Python."""
+    if isinstance(o, dict):
+        return {("|".join(map(str, k)) if isinstance(k, tuple) else str(k)): _jsonable(v) for k, v in o.items()}
+    if isinstance(o, (list, tuple)):
+        return [_jsonable(v) for v in o]
+    if isinstance(o, np.generic):
+        return o.item()
+    return o
+
+
 def _require_clean(run: str, pool) -> None:
     from alta.validation.checks import FAIL, check_run
     fails = [m for level, m in check_run(run, pool) if level == FAIL]
@@ -60,7 +71,8 @@ def make_dev_submission(run: str, spec: str, name: str | None = None) -> Path:
     valid = d.origin == "valid"
     order = np.argsort(d.uid[valid])  # v00000, v00001, ... = valid.csv order
     frame = pool.filter(pl.col("origin") == "valid").sort("uid")
-    assert (frame["uid"].to_numpy() == d.uid[valid][order]).all()
+    if not (frame["uid"].to_numpy() == d.uid[valid][order]).all():
+        raise RuntimeError("valid rows misaligned between pool and OOF")
     vp = {t: pred[t][valid][order] for t in pred}
     return _write(frame, vp, name or f"dev_{run}_{spec}",
                   {"run": run, "policy": spec, "phase": "dev", "source": "crossfit OOF"})
@@ -75,7 +87,7 @@ def make_test_submission(run: str, spec: str, test_csv: Path, name: str | None =
     return _write(test, pred, name or f"test_{run}_{spec}",
                   {"run": run, "policy": spec, "phase": "test", "test_csv": str(test_csv),
                    "test_sha": frame_fingerprint(test),
-                   "params": json.loads(json.dumps(params, default=str))})
+                   "params": _jsonable(params)})
 
 
 def official_score(answer_csv: Path, truth_csv: Path) -> dict[str, float]:
@@ -109,7 +121,7 @@ def check_submission(zip_path: Path, test_csv: Path, truth_csv: Path | None = No
             z.extractall(tmp)
             ans = pl.read_csv(Path(tmp) / "answer.csv")
             answer_csv = Path(tmp) / "answer.csv"
-            test = pl.read_csv(test_csv)
+            test = load_test(test_csv)  # same normalisation as the submission builder
             if ans.columns != COLUMNS:
                 out.append(("FAIL", f"columns {ans.columns} != {COLUMNS}"))
                 return out
@@ -117,7 +129,7 @@ def check_submission(zip_path: Path, test_csv: Path, truth_csv: Path | None = No
                 out.append(("FAIL", f"{ans.height} rows, test has {test.height}"))
                 return out
             for c in ("source", "variety", "text"):
-                if not (ans[c] == test[c]).all():
+                if not ans[c].cast(pl.String).eq_missing(test[c].cast(pl.String)).all():
                     out.append(("FAIL", f"column {c} differs from the test file (row order must match)"))
             for c in ("sentiment", "sarcasm"):
                 vals = set(ans[c].unique().to_list())
@@ -143,7 +155,8 @@ def check_submission(zip_path: Path, test_csv: Path, truth_csv: Path | None = No
             ref = truth_csv
             if ref is None:
                 ref = Path(tmp) / "dummy_truth.csv"
-                test.with_columns(pl.lit(0).alias("sentiment"), pl.lit(0).alias("sarcasm")).write_csv(ref)
+                test.select(pl.col("source", "variety").cast(pl.String), "text").with_columns(
+                    pl.lit(0).alias("sentiment"), pl.lit(0).alias("sarcasm")).write_csv(ref)
             try:
                 s = official_score(answer_csv, ref)
                 out.append(("OK", "official scorer ran" + (f": score {s['score']:.4f} " + str(s) if truth_csv else "")))

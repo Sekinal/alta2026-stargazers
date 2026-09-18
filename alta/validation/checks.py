@@ -94,7 +94,7 @@ def check_run(run: str, pool: pl.DataFrame | None = None) -> list[tuple[str, str
     test = preds.filter(pl.col("split") == "test")
     if test.height:
         seg_oof = d.segment()
-        test_rates = _test_segment_rates(test)
+        test_rates = _test_segment_rates(test, meta.get("test_csv"))
         for t in TASKS:
             for s, name in enumerate(SEGMENT_NAMES):
                 if name not in test_rates:
@@ -107,12 +107,14 @@ def check_run(run: str, pool: pl.DataFrame | None = None) -> list[tuple[str, str
     return out
 
 
-def _test_segment_rates(test_preds: pl.DataFrame) -> dict:
-    """Needs the test frame to know segments; uids of test rows are x-prefixed row numbers."""
-    from alta.common import DATA, load_test
-    path = DATA / "test.csv"
-    if not path.exists():
+def _test_segment_rates(test_preds: pl.DataFrame, test_csv: str | None) -> dict:
+    """Segments come from the test file the predictions are bound to (meta test_csv)."""
+    from pathlib import Path
+
+    from alta.common import load_test
+    if not test_csv or not Path(test_csv).exists():
         return {}
+    path = test_csv
     t = load_test(path).join(test_preds, on="uid", how="inner")
     out = {}
     for (v, s), g in t.group_by("variety", "source"):

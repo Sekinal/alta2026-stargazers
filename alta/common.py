@@ -51,6 +51,17 @@ def _read(path: Path, origin: str) -> pl.DataFrame:
     missing = {"source", "variety", "text"} - set(df.columns)
     if missing:
         raise ValueError(f"{path}: missing columns {sorted(missing)}")
+    if any("\r" in c for c in df.columns):
+        raise ValueError(f"{path}: CR-only line endings (old Mac format); convert to LF/CRLF first")
+    blank = df.select(pl.all_horizontal(pl.all().is_null())).to_series()
+    if blank.any():  # blank lines: pandas skips them, polars yields all-null rows
+        import warnings
+        warnings.warn(f"{path}: dropped {int(blank.sum())} blank line(s)")
+        df = df.filter(~blank)
+    if df.height == 0:
+        raise ValueError(f"{path}: no rows")
+    if df["source"].null_count() or df["variety"].null_count():
+        raise ValueError(f"{path}: null source/variety values")
     if df.height >= 100_000:
         raise ValueError(f"{path}: {df.height} rows exceeds 5-digit uids")
     bad_src = set(df["source"].unique().to_list()) - set(SOURCES)
@@ -204,7 +215,8 @@ def evaluate_oof(run: str, thr_sent: float = 0.5, thr_sarc: float = 0.5) -> dict
         (pl.col("p_sent") >= thr_sent).cast(pl.Int64).alias("sentiment_pred"),
         (pl.col("p_sarc") >= thr_sarc).cast(pl.Int64).alias("sarcasm_pred"),
     )
-    assert df.height == pool.height, "OOF predictions must cover every pool row"
+    if df.height != pool.height:
+        raise ValueError("OOF predictions must cover every pool row")
     return {"pool": score(df), "valid": score(df.filter(pl.col("origin") == "valid"))}
 
 
