@@ -26,3 +26,4 @@ experiments/*/logs/
 results/remote/
 logs/
 redteam/*/out/
+experiments/features/store/
