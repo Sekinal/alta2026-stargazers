@@ -1,0 +1,422 @@
+            <iframe src='about:blank' style='border:none !important;' width='600' height='400' srcdoc="&lt;html lang=&quot;en&quot;>
+   &lt;head>
+       &lt;meta charset=&quot;UTF-8&quot;>
+       &lt;style> html, body { margin: 0; padding: 0; overflow: hidden; } &lt;/style>
+       &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;library&quot; src=&quot;https://cdn.jsdelivr.net/gh/JetBrains/lets-plot@v4.11.0/js-package/distr/lets-plot.min.js&quot;>&lt;/script>
+   &lt;/head>
+   &lt;body>
+          &lt;div id=&quot;tvoQwg&quot; >&lt;/div>
+   &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;plot&quot;>
+   
+   (function() {
+   // ----------
+   
+   const forceImmediateRender = false;
+   const responsive = false;
+   
+   let sizing = {
+       width_mode: &quot;FIXED&quot;,
+       height_mode: &quot;FIXED&quot;,
+       width: 600.0, 
+       height: 400.0 
+   };
+   
+   const preferredWidth = document.body.dataset.letsPlotPreferredWidth;
+   if (preferredWidth !== undefined) {
+       sizing = {
+           width_mode: 'FIXED',
+           height_mode: 'SCALED',
+           width: parseFloat(preferredWidth)
+       };
+   }
+   
+   const containerDiv = document.getElementById(&quot;tvoQwg&quot;);
+   let fig = null;
+   
+   function renderPlot() {
+       if (fig === null) {
+           const plotSpec = {
+&quot;ggtitle&quot;:{
+&quot;text&quot;:&quot;What separates en-AU from en-UK text (top 20 unigrams each way)&quot;,
+&quot;subtitle&quot;:&quot;google word 1-2g: AUC 0.741 · google char 2-5g: AUC 0.746 · reddit word 1-2g: AUC 0.805 · reddit char 2-5g: AUC 0.812&quot;
+},
+&quot;theme&quot;:{
+&quot;plot_background&quot;:{
+&quot;fill&quot;:&quot;#fcfcfb&quot;,
+&quot;color&quot;:&quot;#fcfcfb&quot;,
+&quot;blank&quot;:false
+}
+},
+&quot;kind&quot;:&quot;subplots&quot;,
+&quot;layout&quot;:{
+&quot;ncol&quot;:2.0,
+&quot;nrow&quot;:1.0,
+&quot;name&quot;:&quot;grid&quot;
+},
+&quot;figures&quot;:[{
+&quot;data&quot;:{
+&quot;term&quot;:[&quot;pork&quot;,&quot;fried&quot;,&quot;cafe&quot;,&quot;kids&quot;,&quot;playground&quot;,&quot;coffee&quot;,&quot;thick&quot;,&quot;yum&quot;,&quot;rice&quot;,&quot;drive&quot;,&quot;servings&quot;,&quot;australia&quot;,&quot;beef&quot;,&quot;dining&quot;,&quot;dinner&quot;,&quot;great&quot;,&quot;ordered&quot;,&quot;stopped&quot;,&quot;serving&quot;,&quot;melbourne&quot;,&quot;music&quot;,&quot;pub&quot;,&quot;evening&quot;,&quot;visited&quot;,&quot;visit&quot;,&quot;starters&quot;,&quot;quiet&quot;,&quot;choice&quot;,&quot;drinks&quot;,&quot;london&quot;,&quot;wetherspoons&quot;,&quot;pint&quot;,&quot;disabled&quot;,&quot;branch&quot;,&quot;buffet&quot;,&quot;busy&quot;,&quot;english&quot;,&quot;tea&quot;,&quot;portions&quot;,&quot;always&quot;],
+&quot;z&quot;:[5.115297776247332,5.064691212032332,4.282946293025005,4.234284799713319,3.7203317265546625,3.6584368238642493,3.595115664614619,3.568418009619162,3.47900187668082,3.4049107948488335,3.393708883009985,3.3237564380344473,3.3203868621867008,3.3203868621867008,3.2808310498807227,3.251952879919997,3.227169759910855,3.158006105885038,3.144651666239881,3.1217227305417476,-3.4612911723906112,-3.329200027236804,-3.2743603720924983,-3.2195560236542575,-3.148534130395587,-3.12526013556569,-2.8455705177676256,-2.838053976773529,-2.807349150918984,-2.788972727582901,-2.7368250285999407,-2.7116028514827364,-2.6836652133368255,-2.6575318672899733,-2.6575318672899733,-2.5188146870232138,-2.5174658816173077,-2.5115424123533643,-2.470460960497617,-2.456809589416016],
+&quot;df_AU&quot;:[39.0,57.0,59.0,57.0,15.0,102.0,17.0,15.0,46.0,23.0,13.0,12.0,41.0,41.0,47.0,322.0,144.0,23.0,43.0,11.0,14.0,21.0,13.0,20.0,62.0,2.0,13.0,14.0,69.0,0.0,0.0,1.0,0.0,1.0,1.0,65.0,0.0,8.0,19.0,47.0],
+&quot;df_UK&quot;:[15.0,36.0,49.0,47.0,1.0,124.0,5.0,3.0,42.0,13.0,0.0,1.0,37.0,37.0,46.0,527.0,205.0,15.0,42.0,0.0,91.0,110.0,83.0,104.0,222.0,41.0,73.0,76.0,229.0,27.0,26.0,29.0,25.0,28.0,28.0,209.0,22.0,50.0,83.0,160.0],
+&quot;variety&quot;:[&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;]
+},
+&quot;mapping&quot;:{
+},
+&quot;data_meta&quot;:{
+&quot;series_annotations&quot;:[{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;term&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;z&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;df_AU&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;df_UK&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;source&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;variety&quot;
+}]
+},
+&quot;ggtitle&quot;:{
+&quot;text&quot;:&quot;google&quot;
+},
+&quot;guides&quot;:{
+&quot;x&quot;:{
+&quot;title&quot;:&quot;z (log-odds AU vs UK)&quot;
+}
+},
+&quot;theme&quot;:{
+&quot;name&quot;:&quot;minimal2&quot;,
+&quot;axis_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;axis_text&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:false
+},
+&quot;legend_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:true
+},
+&quot;legend_position&quot;:&quot;bottom&quot;,
+&quot;panel_grid_major&quot;:{
+&quot;color&quot;:&quot;#e6e5e0&quot;,
+&quot;size&quot;:0.4,
+&quot;blank&quot;:false
+},
+&quot;panel_grid_minor&quot;:{
+&quot;blank&quot;:true
+},
+&quot;plot_background&quot;:{
+&quot;fill&quot;:&quot;#fcfcfb&quot;,
+&quot;color&quot;:&quot;#fcfcfb&quot;,
+&quot;blank&quot;:false
+},
+&quot;plot_title&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:15.0,
+&quot;blank&quot;:false
+},
+&quot;plot_subtitle&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;plot_caption&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:9.0,
+&quot;blank&quot;:false
+},
+&quot;strip_text&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;axis_title_y&quot;:{
+&quot;blank&quot;:true
+},
+&quot;panel_grid_major_y&quot;:{
+&quot;blank&quot;:true
+}
+},
+&quot;kind&quot;:&quot;plot&quot;,
+&quot;scales&quot;:[{
+&quot;aesthetic&quot;:&quot;color&quot;,
+&quot;breaks&quot;:[&quot;en-AU&quot;,&quot;en-UK&quot;],
+&quot;values&quot;:[&quot;#2a78d6&quot;,&quot;#eb6834&quot;]
+}],
+&quot;layers&quot;:[{
+&quot;geom&quot;:&quot;vline&quot;,
+&quot;mapping&quot;:{
+},
+&quot;data_meta&quot;:{
+},
+&quot;xintercept&quot;:0.0,
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:0.5,
+&quot;data&quot;:{
+}
+},{
+&quot;geom&quot;:&quot;segment&quot;,
+&quot;mapping&quot;:{
+&quot;y&quot;:&quot;term&quot;,
+&quot;xend&quot;:&quot;z&quot;,
+&quot;yend&quot;:&quot;term&quot;,
+&quot;color&quot;:&quot;variety&quot;
+},
+&quot;data_meta&quot;:{
+&quot;mapping_annotations&quot;:[{
+&quot;parameters&quot;:{
+&quot;label&quot;:&quot;term&quot;,
+&quot;order_by&quot;:&quot;z&quot;,
+&quot;order&quot;:1.0
+},
+&quot;aes&quot;:&quot;y&quot;,
+&quot;annotation&quot;:&quot;as_discrete&quot;
+}]
+},
+&quot;x&quot;:0.0,
+&quot;size&quot;:1.1,
+&quot;data&quot;:{
+}
+},{
+&quot;geom&quot;:&quot;point&quot;,
+&quot;mapping&quot;:{
+&quot;x&quot;:&quot;z&quot;,
+&quot;y&quot;:&quot;term&quot;,
+&quot;color&quot;:&quot;variety&quot;
+},
+&quot;tooltips&quot;:{
+&quot;formats&quot;:[{
+&quot;field&quot;:&quot;@z&quot;,
+&quot;format&quot;:&quot;.1f&quot;
+}],
+&quot;lines&quot;:[&quot;@term&quot;,&quot;z @z&quot;,&quot;docs AU @df_AU / UK @df_UK&quot;]
+},
+&quot;data_meta&quot;:{
+},
+&quot;size&quot;:3.3,
+&quot;data&quot;:{
+}
+}],
+&quot;metainfo_list&quot;:[],
+&quot;spec_id&quot;:&quot;8&quot;
+},{
+&quot;data&quot;:{
+&quot;term&quot;:[&quot;australia&quot;,&quot;labor&quot;,&quot;australian&quot;,&quot;melbourne&quot;,&quot;sydney&quot;,&quot;australians&quot;,&quot;per&quot;,&quot;dutton&quot;,&quot;lnp&quot;,&quot;nuclear&quot;,&quot;coalition&quot;,&quot;australia's&quot;,&quot;also&quot;,&quot;albo&quot;,&quot;early&quot;,&quot;federal&quot;,&quot;supply&quot;,&quot;budget&quot;,&quot;between&quot;,&quot;new&quot;,&quot;uk&quot;,&quot;tories&quot;,&quot;this&quot;,&quot;fuck&quot;,&quot;labour&quot;,&quot;fucking&quot;,&quot;country&quot;,&quot;british&quot;,&quot;tory&quot;,&quot;nhs&quot;,&quot;people&quot;,&quot;who&quot;,&quot;english&quot;,&quot;england&quot;,&quot;the&quot;,&quot;him&quot;,&quot;london&quot;,&quot;eu&quot;,&quot;her&quot;,&quot;white&quot;],
+&quot;z&quot;:[5.675687344048271,4.135753385056725,3.9369334144484887,3.8683986991924613,3.309616816770529,3.143930487764329,3.135459533526256,3.057730738033604,2.9690350914407437,2.8684792606141456,2.584050171440714,2.5318217728082937,2.4384858346944727,2.423996533582264,2.423996533582264,2.423996533582264,2.4137822148044945,2.410733710941145,2.392008431182292,2.3818997225419833,-8.120906703685744,-6.412881221608555,-6.097685091274939,-5.507630759105579,-5.34507126592368,-5.1588515962249435,-5.127240363269385,-5.00597571968311,-4.915686279573738,-4.735356638754621,-4.695478115336859,-4.168413917161704,-4.141533331582287,-3.993700194985746,-3.6758116740718023,-3.3785304690589744,-3.330510897536116,-3.2974179440576017,-3.2856525386901985,-3.259592550417437],
+&quot;df_AU&quot;:[133.0,64.0,58.0,56.0,41.0,37.0,41.0,35.0,33.0,35.0,25.0,24.0,159.0,22.0,22.0,22.0,26.0,30.0,48.0,86.0,3.0,0.0,375.0,30.0,20.0,20.0,69.0,4.0,1.0,0.0,260.0,161.0,5.0,2.0,1296.0,46.0,3.0,1.0,36.0,12.0],
+&quot;df_UK&quot;:[3.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,1.0,0.0,0.0,44.0,0.0,0.0,0.0,1.0,2.0,7.0,19.0,71.0,44.0,305.0,59.0,48.0,46.0,86.0,29.0,26.0,24.0,204.0,134.0,22.0,18.0,731.0,49.0,14.0,12.0,41.0,22.0],
+&quot;variety&quot;:[&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;]
+},
+&quot;mapping&quot;:{
+},
+&quot;data_meta&quot;:{
+&quot;series_annotations&quot;:[{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;term&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;z&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;df_AU&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;df_UK&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;source&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;variety&quot;
+}]
+},
+&quot;ggtitle&quot;:{
+&quot;text&quot;:&quot;reddit&quot;
+},
+&quot;guides&quot;:{
+&quot;x&quot;:{
+&quot;title&quot;:&quot;z (log-odds AU vs UK)&quot;
+}
+},
+&quot;theme&quot;:{
+&quot;name&quot;:&quot;minimal2&quot;,
+&quot;axis_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;axis_text&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:false
+},
+&quot;legend_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:true
+},
+&quot;legend_position&quot;:&quot;bottom&quot;,
+&quot;panel_grid_major&quot;:{
+&quot;color&quot;:&quot;#e6e5e0&quot;,
+&quot;size&quot;:0.4,
+&quot;blank&quot;:false
+},
+&quot;panel_grid_minor&quot;:{
+&quot;blank&quot;:true
+},
+&quot;plot_background&quot;:{
+&quot;fill&quot;:&quot;#fcfcfb&quot;,
+&quot;color&quot;:&quot;#fcfcfb&quot;,
+&quot;blank&quot;:false
+},
+&quot;plot_title&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:15.0,
+&quot;blank&quot;:false
+},
+&quot;plot_subtitle&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;plot_caption&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:9.0,
+&quot;blank&quot;:false
+},
+&quot;strip_text&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;axis_title_y&quot;:{
+&quot;blank&quot;:true
+},
+&quot;panel_grid_major_y&quot;:{
+&quot;blank&quot;:true
+}
+},
+&quot;kind&quot;:&quot;plot&quot;,
+&quot;scales&quot;:[{
+&quot;aesthetic&quot;:&quot;color&quot;,
+&quot;breaks&quot;:[&quot;en-AU&quot;,&quot;en-UK&quot;],
+&quot;values&quot;:[&quot;#2a78d6&quot;,&quot;#eb6834&quot;]
+}],
+&quot;layers&quot;:[{
+&quot;geom&quot;:&quot;vline&quot;,
+&quot;mapping&quot;:{
+},
+&quot;data_meta&quot;:{
+},
+&quot;xintercept&quot;:0.0,
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:0.5,
+&quot;data&quot;:{
+}
+},{
+&quot;geom&quot;:&quot;segment&quot;,
+&quot;mapping&quot;:{
+&quot;y&quot;:&quot;term&quot;,
+&quot;xend&quot;:&quot;z&quot;,
+&quot;yend&quot;:&quot;term&quot;,
+&quot;color&quot;:&quot;variety&quot;
+},
+&quot;data_meta&quot;:{
+&quot;mapping_annotations&quot;:[{
+&quot;parameters&quot;:{
+&quot;label&quot;:&quot;term&quot;,
+&quot;order_by&quot;:&quot;z&quot;,
+&quot;order&quot;:1.0
+},
+&quot;aes&quot;:&quot;y&quot;,
+&quot;annotation&quot;:&quot;as_discrete&quot;
+}]
+},
+&quot;x&quot;:0.0,
+&quot;size&quot;:1.1,
+&quot;data&quot;:{
+}
+},{
+&quot;geom&quot;:&quot;point&quot;,
+&quot;mapping&quot;:{
+&quot;x&quot;:&quot;z&quot;,
+&quot;y&quot;:&quot;term&quot;,
+&quot;color&quot;:&quot;variety&quot;
+},
+&quot;tooltips&quot;:{
+&quot;formats&quot;:[{
+&quot;field&quot;:&quot;@z&quot;,
+&quot;format&quot;:&quot;.1f&quot;
+}],
+&quot;lines&quot;:[&quot;@term&quot;,&quot;z @z&quot;,&quot;docs AU @df_AU / UK @df_UK&quot;]
+},
+&quot;data_meta&quot;:{
+},
+&quot;size&quot;:3.3,
+&quot;data&quot;:{
+}
+}],
+&quot;metainfo_list&quot;:[],
+&quot;spec_id&quot;:&quot;9&quot;
+}]
+};
+           fig = LetsPlot.buildPlotFromProcessedSpecs(plotSpec, containerDiv, sizing);
+       } else {
+           fig.updateView({});
+       }
+   }
+   
+   const renderImmediately = 
+       forceImmediateRender || (
+           sizing.width_mode === 'FIXED' &amp;&amp; 
+           (sizing.height_mode === 'FIXED' || sizing.height_mode === 'SCALED')
+       );
+   
+   if (renderImmediately) {
+       renderPlot();
+   }
+   
+   if (!renderImmediately || responsive) {
+       // Set up observer for initial sizing or continuous monitoring
+       var observer = new ResizeObserver(function(entries) {
+           for (let entry of entries) {
+               if (entry.contentBoxSize &amp;&amp; 
+                   entry.contentBoxSize[0].inlineSize > 0) {
+                   if (!responsive &amp;&amp; observer) {
+                       observer.disconnect();
+                       observer = null;
+                   }
+                   renderPlot();
+                   if (!responsive) {
+                       break;
+                   }
+               }
+           }
+       });
+       
+       observer.observe(containerDiv);
+   }
+   
+   // ----------
+   })();
+   
+   &lt;/script>
+   &lt;/body>
+&lt;/html>"></iframe>    

@@ -1,0 +1,311 @@
+            <iframe src='about:blank' style='border:none !important;' width='600' height='400' srcdoc="&lt;html lang=&quot;en&quot;>
+   &lt;head>
+       &lt;meta charset=&quot;UTF-8&quot;>
+       &lt;style> html, body { margin: 0; padding: 0; overflow: hidden; } &lt;/style>
+       &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;library&quot; src=&quot;https://cdn.jsdelivr.net/gh/JetBrains/lets-plot@v4.11.0/js-package/distr/lets-plot.min.js&quot;>&lt;/script>
+   &lt;/head>
+   &lt;body>
+          &lt;div id=&quot;aVbuxE&quot; >&lt;/div>
+   &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;plot&quot;>
+   
+   (function() {
+   // ----------
+   
+   const forceImmediateRender = false;
+   const responsive = false;
+   
+   let sizing = {
+       width_mode: &quot;FIXED&quot;,
+       height_mode: &quot;FIXED&quot;,
+       width: 600.0, 
+       height: 400.0 
+   };
+   
+   const preferredWidth = document.body.dataset.letsPlotPreferredWidth;
+   if (preferredWidth !== undefined) {
+       sizing = {
+           width_mode: 'FIXED',
+           height_mode: 'SCALED',
+           width: parseFloat(preferredWidth)
+       };
+   }
+   
+   const containerDiv = document.getElementById(&quot;aVbuxE&quot;);
+   let fig = null;
+   
+   function renderPlot() {
+       if (fig === null) {
+           const plotSpec = {
+&quot;data&quot;:{
+&quot;variety&quot;:[&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;],
+&quot;marker&quot;:[&quot;exclamation !&quot;,&quot;multiple !!&quot;,&quot;question ?&quot;,&quot;ellipsis ...&quot;,&quot;ALL-CAPS word (4+)&quot;,&quot;short \&quot;quoted\&quot; span&quot;,&quot;reddit >quote&quot;,&quot;/s tag&quot;,&quot;oh / ah&quot;,&quot;yeah right / sure&quot;,&quot;great&quot;,&quot;lovely / brilliant&quot;,&quot;thanks / cheers&quot;,&quot;what a / how (adj)&quot;,&quot;of course / obviously&quot;,&quot;shocked / surprise&quot;,&quot;intensifier&quot;,&quot;profanity&quot;,&quot;laughter&quot;,&quot;number&quot;,&quot;price ($ £ € quid)&quot;,&quot;1st person sg (I/me/my)&quot;,&quot;1st person pl (we/us/our)&quot;,&quot;2nd person (you/your)&quot;,&quot;negation&quot;,&quot;exclamation !&quot;,&quot;multiple !!&quot;,&quot;question ?&quot;,&quot;ellipsis ...&quot;,&quot;ALL-CAPS word (4+)&quot;,&quot;short \&quot;quoted\&quot; span&quot;,&quot;reddit >quote&quot;,&quot;oh / ah&quot;,&quot;wow&quot;,&quot;yeah right / sure&quot;,&quot;great&quot;,&quot;lovely / brilliant&quot;,&quot;thanks / cheers&quot;,&quot;what a / how (adj)&quot;,&quot;of course / obviously&quot;,&quot;shocked / surprise&quot;,&quot;intensifier&quot;,&quot;profanity&quot;,&quot;laughter&quot;,&quot;number&quot;,&quot;price ($ £ € quid)&quot;,&quot;1st person sg (I/me/my)&quot;,&quot;1st person pl (we/us/our)&quot;,&quot;2nd person (you/your)&quot;,&quot;negation&quot;],
+&quot;n1&quot;:[841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0],
+&quot;n0&quot;:[1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0],
+&quot;k1&quot;:[49.0,0.0,200.0,46.0,47.0,89.0,45.0,3.0,19.0,36.0,17.0,3.0,9.0,4.0,25.0,17.0,218.0,112.0,21.0,193.0,41.0,310.0,190.0,249.0,436.0,27.0,1.0,57.0,22.0,11.0,29.0,10.0,14.0,1.0,10.0,5.0,1.0,7.0,7.0,7.0,8.0,58.0,32.0,1.0,45.0,2.0,78.0,49.0,67.0,99.0],
+&quot;k0&quot;:[90.0,11.0,154.0,38.0,62.0,70.0,33.0,2.0,7.0,61.0,47.0,8.0,36.0,2.0,30.0,12.0,324.0,67.0,19.0,277.0,72.0,557.0,179.0,389.0,558.0,67.0,8.0,157.0,53.0,39.0,78.0,22.0,9.0,6.0,23.0,16.0,9.0,12.0,21.0,23.0,20.0,256.0,194.0,22.0,145.0,6.0,356.0,181.0,207.0,439.0],
+&quot;log2_lift&quot;:[-0.4030532329281963,-4.0561259219816135,0.8434314326259453,0.7398083044885297,0.07150735774426052,0.8117004589408625,0.9091414838163232,0.9528628612456412,1.8459476573291294,-0.285253912383823,-0.9731365573105819,-0.8126718851173358,-1.4744610113610324,1.3154329406303493,0.209124038484009,0.9528628612456415,-0.10314916442314037,1.2044016282416057,0.608298569915249,-0.05271817101765832,-0.33743362459261,-0.37694250251178635,0.5532431877456703,-0.17514747864900937,0.11186040722152463,0.553991696897504,-0.6530527601055082,0.39572961298077125,0.5998336903522028,0.06922878830358506,0.4374698808938892,0.7499119068727605,2.459501062107662,-0.26602963699626114,0.687176151524798,0.26448507970251883,-0.8135174322987542,1.1124819862574689,0.33007342133009576,0.20174932435455634,0.5793584170559307,-0.2830027155999746,-0.7318109515340624,-2.0574430151848437,0.17236687771408743,0.4709359571699453,-0.333689937128586,-0.025021537492466,0.2292956512402189,-0.29364715417608006],
+&quot;lo&quot;:[-0.8862801765559569,-5.0,0.56909971186508,0.13709678140873038,-0.45753984366372513,0.3799831773876716,0.27823912691802755,-1.385181495279288,0.6377377024137887,-0.8620566916910274,-1.7534316725003891,-2.6039891140705356,-2.496395669660591,-0.9113994267221621,-0.5387684801699584,-0.0864595494906516,-0.31495168974234083,0.7882817460980243,-0.26666624358751956,-0.2845835041762035,-0.8727674223245703,-0.5309539782800328,0.28839719677062453,-0.36541457479701717,-0.015656187755260953,-0.05272647565725275,-3.149069685781087,0.010088573961930858,-0.0811341656800858,-0.8563012028121738,-0.13854724758239517,-0.2872798729196734,1.2967498713949244,-2.8193687741763522,-0.3426999245788236,-1.1129282813348915,-3.289619501730534,-0.17773615505994433,-0.8518305338874841,-0.966688155617804,-0.5562533867716679,-0.639019179384423,-1.2278236582542388,-4.433319269364027,-0.26304142437382283,-1.623659674960658,-0.6221005433948901,-0.4305827754005415,-0.11112315083979102,-0.5333292948953143],
+&quot;hi&quot;:[0.0801737106995643,0.026824723842585385,1.1177631533868106,1.3425198275683292,0.6005545591522462,1.2434177404940534,1.5400438407146189,3.2909072177705703,3.0541576122444702,0.29154886692338133,-0.1928414421207746,0.978645343835864,-0.4525263530614736,3.542265307982861,0.9570165571379763,1.9921852719819344,0.10865336089606009,1.620521510385187,1.4832633834180176,0.17914716214088686,0.1979001731393502,-0.2229310267435399,0.8180891787207161,0.015119617498998428,0.2393770021983102,1.1607098694522608,1.8429641655700708,0.7813706519996116,1.2808015463844913,0.9947587794193439,1.0134870093701736,1.7871036866651946,3.6222522528203998,2.28730950018383,1.7170522276284197,1.6418984407399293,1.6625846371330257,2.402700127574882,1.5119773765476756,1.3701868043269165,1.7149702208835294,0.07301374818447381,-0.23579824481388595,0.3184332389943396,0.6077751798019977,2.565531589300549,-0.04527933086228203,0.3805397004156095,0.5697144533202287,-0.05396501345684582],
+&quot;y&quot;:[-0.83,-1.83,-2.83,-3.83,-4.83,-5.83,-6.83,-7.83,-9.63,-11.63,-12.63,-13.63,-14.63,-15.63,-16.63,-17.63,-19.43,-20.43,-21.43,-23.23,-24.23,-26.03,-27.03,-28.03,-29.03,-1.17,-2.17,-3.17,-4.17,-5.17,-6.17,-7.17,-9.97,-10.97,-11.97,-12.97,-13.97,-14.97,-15.97,-16.970000000000002,-17.970000000000002,-19.770000000000003,-20.770000000000003,-21.770000000000003,-23.570000000000004,-24.570000000000004,-26.370000000000005,-27.370000000000005,-28.370000000000005,-29.370000000000005],
+&quot;pct1&quot;:[5.8,0.0,23.8,5.5,5.6,10.6,5.4,0.4,2.3,4.3,2.0,0.4,1.1,0.5,3.0,2.0,25.9,13.3,2.5,22.9,4.9,36.9,22.6,29.6,51.8,10.9,0.4,23.0,8.9,4.4,11.7,4.0,5.6,0.4,4.0,2.0,0.4,2.8,2.8,2.8,3.2,23.4,12.9,0.4,18.1,0.8,31.5,19.8,27.0,39.9],
+&quot;pct0&quot;:[7.7,0.9,13.2,3.3,5.3,6.0,2.8,0.2,0.6,5.2,4.0,0.7,3.1,0.2,2.6,1.0,27.9,5.8,1.6,23.8,6.2,47.9,15.4,33.4,48.0,7.5,0.9,17.5,5.9,4.4,8.7,2.5,1.0,0.7,2.6,1.8,1.0,1.3,2.3,2.6,2.2,28.6,21.7,2.5,16.2,0.7,39.8,20.2,23.1,49.1]
+},
+&quot;mapping&quot;:{
+},
+&quot;data_meta&quot;:{
+&quot;series_annotations&quot;:[{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;task&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;segment&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;source&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;variety&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;marker&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;group&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;n1&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;n0&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;k1&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;k0&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;rate1&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;rate0&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;log2_lift&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;lo&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;hi&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;y&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;pct1&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;pct0&quot;
+}]
+},
+&quot;ggtitle&quot;:{
+&quot;text&quot;:&quot;Stylistic markers: sarcastic vs non-sarcastic reddit&quot;,
+&quot;subtitle&quot;:&quot;log2 lift per variety; right of 0 = more frequent in sarcastic texts&quot;
+},
+&quot;guides&quot;:{
+&quot;x&quot;:{
+&quot;title&quot;:&quot;log2( rate in label=1 / rate in label=0 )  ·  95% CI, clipped at ±5&quot;
+}
+},
+&quot;theme&quot;:{
+&quot;name&quot;:&quot;minimal2&quot;,
+&quot;axis_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;axis_text&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:false
+},
+&quot;legend_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:false
+},
+&quot;legend_position&quot;:&quot;top&quot;,
+&quot;panel_grid_major&quot;:{
+&quot;color&quot;:&quot;#e6e5e0&quot;,
+&quot;size&quot;:0.4,
+&quot;blank&quot;:false
+},
+&quot;panel_grid_minor&quot;:{
+&quot;blank&quot;:true
+},
+&quot;plot_background&quot;:{
+&quot;fill&quot;:&quot;#fcfcfb&quot;,
+&quot;color&quot;:&quot;#fcfcfb&quot;,
+&quot;blank&quot;:false
+},
+&quot;plot_title&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:15.0,
+&quot;blank&quot;:false
+},
+&quot;plot_subtitle&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;plot_caption&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:9.0,
+&quot;blank&quot;:false
+},
+&quot;strip_text&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;axis_title_y&quot;:{
+&quot;blank&quot;:true
+},
+&quot;panel_grid_major_y&quot;:{
+&quot;blank&quot;:true
+}
+},
+&quot;kind&quot;:&quot;plot&quot;,
+&quot;scales&quot;:[{
+&quot;name&quot;:&quot;variety&quot;,
+&quot;aesthetic&quot;:&quot;color&quot;,
+&quot;breaks&quot;:[&quot;en-AU&quot;,&quot;en-UK&quot;],
+&quot;values&quot;:[&quot;#2a78d6&quot;,&quot;#eb6834&quot;]
+},{
+&quot;aesthetic&quot;:&quot;y&quot;,
+&quot;breaks&quot;:[-1.0,-2.0,-3.0,-4.0,-5.0,-6.0,-7.0,-8.0,-9.8,-10.8,-11.8,-12.8,-13.8,-14.8,-15.8,-16.8,-17.8,-19.6,-20.6,-21.6,-23.400000000000002,-24.400000000000002,-26.200000000000003,-27.200000000000003,-28.200000000000003,-29.200000000000003],
+&quot;labels&quot;:[&quot;exclamation !&quot;,&quot;multiple !!&quot;,&quot;question ?&quot;,&quot;ellipsis ...&quot;,&quot;ALL-CAPS word (4+)&quot;,&quot;short \&quot;quoted\&quot; span&quot;,&quot;reddit >quote&quot;,&quot;/s tag&quot;,&quot;oh / ah&quot;,&quot;wow&quot;,&quot;yeah right / sure&quot;,&quot;great&quot;,&quot;lovely / brilliant&quot;,&quot;thanks / cheers&quot;,&quot;what a / how (adj)&quot;,&quot;of course / obviously&quot;,&quot;shocked / surprise&quot;,&quot;intensifier&quot;,&quot;profanity&quot;,&quot;laughter&quot;,&quot;number&quot;,&quot;price ($ £ € quid)&quot;,&quot;1st person sg (I/me/my)&quot;,&quot;1st person pl (we/us/our)&quot;,&quot;2nd person (you/your)&quot;,&quot;negation&quot;]
+},{
+&quot;aesthetic&quot;:&quot;x&quot;,
+&quot;limits&quot;:[-5.0,5.0]
+}],
+&quot;layers&quot;:[{
+&quot;geom&quot;:&quot;vline&quot;,
+&quot;mapping&quot;:{
+},
+&quot;data_meta&quot;:{
+},
+&quot;xintercept&quot;:0.0,
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:0.5,
+&quot;data&quot;:{
+}
+},{
+&quot;geom&quot;:&quot;errorbar&quot;,
+&quot;mapping&quot;:{
+&quot;y&quot;:&quot;y&quot;,
+&quot;xmin&quot;:&quot;lo&quot;,
+&quot;xmax&quot;:&quot;hi&quot;,
+&quot;color&quot;:&quot;variety&quot;
+},
+&quot;data_meta&quot;:{
+},
+&quot;width&quot;:0.0,
+&quot;size&quot;:0.9,
+&quot;alpha&quot;:0.55,
+&quot;orientation&quot;:&quot;y&quot;,
+&quot;data&quot;:{
+}
+},{
+&quot;geom&quot;:&quot;point&quot;,
+&quot;mapping&quot;:{
+&quot;x&quot;:&quot;log2_lift&quot;,
+&quot;y&quot;:&quot;y&quot;,
+&quot;color&quot;:&quot;variety&quot;
+},
+&quot;tooltips&quot;:{
+&quot;formats&quot;:[{
+&quot;field&quot;:&quot;@log2_lift&quot;,
+&quot;format&quot;:&quot;.2f&quot;
+}],
+&quot;lines&quot;:[&quot;@marker · @variety&quot;,&quot;rate label=1: @pct1 % (@k1/@n1)&quot;,&quot;rate label=0: @pct0 % (@k0/@n0)&quot;,&quot;log2 lift @log2_lift&quot;]
+},
+&quot;data_meta&quot;:{
+},
+&quot;size&quot;:3.5,
+&quot;data&quot;:{
+}
+},{
+&quot;geom&quot;:&quot;text&quot;,
+&quot;data&quot;:{
+&quot;group&quot;:[&quot;punctuation&quot;,&quot;interjection&quot;,&quot;intensity&quot;,&quot;entity&quot;,&quot;person&quot;],
+&quot;y&quot;:[-0.25,-9.05,-18.85,-22.650000000000002,-25.450000000000003]
+},
+&quot;mapping&quot;:{
+&quot;y&quot;:&quot;y&quot;,
+&quot;label&quot;:&quot;group&quot;
+},
+&quot;data_meta&quot;:{
+&quot;series_annotations&quot;:[{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;group&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;y&quot;
+}]
+},
+&quot;x&quot;:-5.0,
+&quot;hjust&quot;:0.0,
+&quot;size&quot;:6.0,
+&quot;fontface&quot;:&quot;bold&quot;,
+&quot;color&quot;:&quot;#52514e&quot;
+}],
+&quot;metainfo_list&quot;:[],
+&quot;spec_id&quot;:&quot;3&quot;
+};
+           fig = LetsPlot.buildPlotFromProcessedSpecs(plotSpec, containerDiv, sizing);
+       } else {
+           fig.updateView({});
+       }
+   }
+   
+   const renderImmediately = 
+       forceImmediateRender || (
+           sizing.width_mode === 'FIXED' &amp;&amp; 
+           (sizing.height_mode === 'FIXED' || sizing.height_mode === 'SCALED')
+       );
+   
+   if (renderImmediately) {
+       renderPlot();
+   }
+   
+   if (!renderImmediately || responsive) {
+       // Set up observer for initial sizing or continuous monitoring
+       var observer = new ResizeObserver(function(entries) {
+           for (let entry of entries) {
+               if (entry.contentBoxSize &amp;&amp; 
+                   entry.contentBoxSize[0].inlineSize > 0) {
+                   if (!responsive &amp;&amp; observer) {
+                       observer.disconnect();
+                       observer = null;
+                   }
+                   renderPlot();
+                   if (!responsive) {
+                       break;
+                   }
+               }
+           }
+       });
+       
+       observer.observe(containerDiv);
+   }
+   
+   // ----------
+   })();
+   
+   &lt;/script>
+   &lt;/body>
+&lt;/html>"></iframe>    

@@ -1,0 +1,251 @@
+            <iframe src='about:blank' style='border:none !important;' width='900' height='400' srcdoc="&lt;html lang=&quot;en&quot;>
+   &lt;head>
+       &lt;meta charset=&quot;UTF-8&quot;>
+       &lt;style> html, body { margin: 0; padding: 0; overflow: hidden; } &lt;/style>
+       &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;library&quot; src=&quot;https://cdn.jsdelivr.net/gh/JetBrains/lets-plot@v4.11.0/js-package/distr/lets-plot.min.js&quot;>&lt;/script>
+   &lt;/head>
+   &lt;body>
+          &lt;div id=&quot;1RbdOo&quot; >&lt;/div>
+   &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;plot&quot;>
+   
+   (function() {
+   // ----------
+   
+   const forceImmediateRender = false;
+   const responsive = false;
+   
+   let sizing = {
+       width_mode: &quot;FIXED&quot;,
+       height_mode: &quot;FIXED&quot;,
+       width: 900.0, 
+       height: 400.0 
+   };
+   
+   const preferredWidth = document.body.dataset.letsPlotPreferredWidth;
+   if (preferredWidth !== undefined) {
+       sizing = {
+           width_mode: 'FIXED',
+           height_mode: 'SCALED',
+           width: parseFloat(preferredWidth)
+       };
+   }
+   
+   const containerDiv = document.getElementById(&quot;1RbdOo&quot;);
+   let fig = null;
+   
+   function renderPlot() {
+       if (fig === null) {
+           const plotSpec = {
+&quot;data&quot;:{
+&quot;variety&quot;:[&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;],
+&quot;marker&quot;:[&quot;exclamation !&quot;,&quot;question ?&quot;,&quot;short \&quot;quoted\&quot; span&quot;,&quot;/s tag&quot;,&quot;oh / ah&quot;,&quot;yeah right / sure&quot;,&quot;great&quot;,&quot;lovely / brilliant&quot;,&quot;thanks / cheers&quot;,&quot;what a / how (adj)&quot;,&quot;of course / obviously&quot;,&quot;shocked / surprise&quot;,&quot;profanity&quot;,&quot;1st person sg (I/me/my)&quot;,&quot;1st person pl (we/us/our)&quot;,&quot;2nd person (you/your)&quot;,&quot;exclamation !&quot;,&quot;question ?&quot;,&quot;short \&quot;quoted\&quot; span&quot;,&quot;/s tag&quot;,&quot;oh / ah&quot;,&quot;yeah right / sure&quot;,&quot;great&quot;,&quot;lovely / brilliant&quot;,&quot;thanks / cheers&quot;,&quot;what a / how (adj)&quot;,&quot;of course / obviously&quot;,&quot;shocked / surprise&quot;,&quot;profanity&quot;,&quot;1st person sg (I/me/my)&quot;,&quot;1st person pl (we/us/our)&quot;,&quot;2nd person (you/your)&quot;,&quot;exclamation !&quot;,&quot;question ?&quot;,&quot;short \&quot;quoted\&quot; span&quot;,&quot;/s tag&quot;,&quot;oh / ah&quot;,&quot;yeah right / sure&quot;,&quot;great&quot;,&quot;lovely / brilliant&quot;,&quot;thanks / cheers&quot;,&quot;what a / how (adj)&quot;,&quot;of course / obviously&quot;,&quot;shocked / surprise&quot;,&quot;profanity&quot;,&quot;1st person sg (I/me/my)&quot;,&quot;1st person pl (we/us/our)&quot;,&quot;2nd person (you/your)&quot;,&quot;exclamation !&quot;,&quot;question ?&quot;,&quot;short \&quot;quoted\&quot; span&quot;,&quot;/s tag&quot;,&quot;oh / ah&quot;,&quot;yeah right / sure&quot;,&quot;great&quot;,&quot;lovely / brilliant&quot;,&quot;thanks / cheers&quot;,&quot;what a / how (adj)&quot;,&quot;of course / obviously&quot;,&quot;shocked / surprise&quot;,&quot;profanity&quot;,&quot;1st person sg (I/me/my)&quot;,&quot;1st person pl (we/us/our)&quot;,&quot;2nd person (you/your)&quot;],
+&quot;label&quot;:[&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;,&quot;not sarcastic&quot;],
+&quot;k&quot;:[49.0,200.0,89.0,3.0,19.0,36.0,17.0,3.0,9.0,4.0,25.0,17.0,112.0,310.0,190.0,249.0,27.0,57.0,29.0,3.0,14.0,10.0,5.0,1.0,7.0,7.0,7.0,8.0,32.0,78.0,49.0,67.0,90.0,154.0,70.0,2.0,7.0,61.0,47.0,8.0,36.0,2.0,30.0,12.0,67.0,557.0,179.0,389.0,67.0,157.0,78.0,0.0,9.0,23.0,16.0,9.0,12.0,21.0,23.0,20.0,194.0,356.0,181.0,207.0],
+&quot;n&quot;:[841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,841.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,248.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,1163.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0,895.0],
+&quot;pct&quot;:[5.826397146254459,23.781212841854934,10.582639714625445,0.356718192627824,2.2592152199762188,4.280618311533888,2.0214030915576697,0.356718192627824,1.070154577883472,0.47562425683709864,2.972651605231867,2.0214030915576697,13.317479191438764,36.86087990487515,22.59215219976219,29.607609988109395,10.887096774193548,22.983870967741936,11.693548387096774,1.2096774193548387,5.64516129032258,4.032258064516129,2.0161290322580645,0.4032258064516129,2.82258064516129,2.82258064516129,2.82258064516129,3.225806451612903,12.903225806451612,31.451612903225808,19.758064516129032,27.016129032258064,7.738607050730868,13.241616509028376,6.0189165950128976,0.17196904557179707,0.6018916595012898,5.2450558899398105,4.041272570937231,0.6878761822871883,3.095442820292347,0.17196904557179707,2.5795356835769563,1.0318142734307825,5.760963026655202,47.89337919174548,15.391229578675839,33.44797936371453,7.486033519553073,17.54189944134078,8.715083798882683,0.0,1.005586592178771,2.569832402234637,1.7877094972067038,1.005586592178771,1.3407821229050279,2.346368715083799,2.569832402234637,2.2346368715083798,21.675977653631286,39.77653631284917,20.22346368715084,23.12849162011173],
+&quot;lo&quot;:[4.434991055831351,21.027069283588638,8.679823308445336,0.12138674720673631,1.4510133382538002,3.107803938971951,1.26582593821368,0.12138674720673631,0.5640110575274708,0.18510878833012753,2.021481142167862,1.26582593821368,11.187109293699503,33.666953140018535,19.894087432477775,26.62048447597395,7.590766424514521,18.18335345082928,8.26626888241384,0.4122290881182709,3.392108371520571,2.204721594037865,0.8641570420160681,0.07121292102298671,1.3738318203984392,1.3738318203984392,1.3738318203984392,1.643435656807312,9.290208472217707,25.992852474778584,15.280050304304924,21.871279451226155,6.33826973793795,11.414068362873417,4.7913794734499495,0.04717180225306357,0.2918540421403169,4.104780706728312,3.05256701508655,0.3489586062576335,2.24417552888592,0.04717180225306357,1.8127664869416693,0.591209416351085,4.56175772915642,45.033922816194774,13.431447842551943,30.794754288697597,5.93770965700894,15.190365450557405,7.039157484400067,0.0,0.5299250792106237,1.7184116344711897,1.1033407198864924,0.5299250792106237,0.7686144143453242,1.5397029948795269,1.7184116344711897,1.4511574620550958,19.100601207572097,36.620220913622035,17.721734854176237,20.48436602375608],
+&quot;hi&quot;:[7.619528986742309,26.773796582864907,12.843927415950809,1.0435180112710658,3.5015836929529955,5.869216132009402,3.2133095589019915,1.0435180112710658,2.0212783032237036,1.2165267371932365,4.351500491312306,3.2133095589019915,15.781449072744568,40.17429710144684,25.53947076352015,32.780188975712136,15.376686132966055,28.60859831567792,16.289483622335176,3.4956241021410026,9.251394528715132,7.262181411660956,4.6319960955116475,2.2483403219678455,5.7106212643977186,5.7106212643977186,5.7106212643977186,6.235167401623066,17.647993953433975,37.47624873804727,25.15870167312851,32.86217205162326,9.417219267596307,15.311204373374595,7.536052116236262,0.6248645735497875,1.237196687624546,6.680025045826277,5.332598546374406,1.3514949942996315,4.255558453858609,0.6248645735497875,3.658550271048448,1.7948556673757898,7.251465248152583,50.766706849391376,17.578896663506125,36.210193083764956,9.397762132458746,20.17088173693369,10.743909075937149,0.4273945487169263,1.9000470093086437,3.826681071518386,2.884191677367929,1.9000470093086437,2.3288835207747236,3.5603724800428616,3.826681071518386,3.4264093973336998,24.493464754661954,43.02024076505417,22.979719106121106,26.002311940414693],
+&quot;y&quot;:[-11.16,-10.16,-9.16,-0.16,-1.16,-2.16,-3.16,-5.16,-4.16,-8.16,-6.16,-7.16,-12.16,-13.16,-15.16,-14.16,-11.16,-10.16,-9.16,-0.16,-1.16,-2.16,-3.16,-5.16,-4.16,-8.16,-6.16,-7.16,-12.16,-13.16,-15.16,-14.16,-10.84,-9.84,-8.84,0.16,-0.84,-1.84,-2.84,-4.84,-3.84,-7.84,-5.84,-6.84,-11.84,-12.84,-14.84,-13.84,-10.84,-9.84,-8.84,0.16,-0.84,-1.84,-2.84,-4.84,-3.84,-7.84,-5.84,-6.84,-11.84,-12.84,-14.84,-13.84]
+},
+&quot;mapping&quot;:{
+},
+&quot;data_meta&quot;:{
+&quot;series_annotations&quot;:[{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;variety&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;marker&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;label&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;k&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;n&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;pct&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;lo&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;hi&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;ord&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;y&quot;
+}]
+},
+&quot;facet&quot;:{
+&quot;name&quot;:&quot;wrap&quot;,
+&quot;facets&quot;:&quot;variety&quot;,
+&quot;ncol&quot;:2.0,
+&quot;order&quot;:1.0,
+&quot;dir&quot;:&quot;h&quot;
+},
+&quot;ggtitle&quot;:{
+&quot;text&quot;:&quot;How often each marker appears in reddit texts, by sarcasm label&quot;,
+&quot;subtitle&quot;:&quot;% of texts containing the marker · Wilson 95% CI&quot;
+},
+&quot;guides&quot;:{
+&quot;x&quot;:{
+&quot;title&quot;:&quot;% of texts&quot;
+}
+},
+&quot;theme&quot;:{
+&quot;name&quot;:&quot;minimal2&quot;,
+&quot;axis_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;axis_text&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:false
+},
+&quot;legend_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:true
+},
+&quot;legend_position&quot;:&quot;top&quot;,
+&quot;panel_grid_major&quot;:{
+&quot;color&quot;:&quot;#e6e5e0&quot;,
+&quot;size&quot;:0.4,
+&quot;blank&quot;:false
+},
+&quot;panel_grid_minor&quot;:{
+&quot;blank&quot;:true
+},
+&quot;plot_background&quot;:{
+&quot;fill&quot;:&quot;#fcfcfb&quot;,
+&quot;color&quot;:&quot;#fcfcfb&quot;,
+&quot;blank&quot;:false
+},
+&quot;plot_title&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:15.0,
+&quot;blank&quot;:false
+},
+&quot;plot_subtitle&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;plot_caption&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:9.0,
+&quot;blank&quot;:false
+},
+&quot;strip_text&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;axis_title_y&quot;:{
+&quot;blank&quot;:true
+},
+&quot;panel_grid_major_y&quot;:{
+&quot;blank&quot;:true
+}
+},
+&quot;kind&quot;:&quot;plot&quot;,
+&quot;scales&quot;:[{
+&quot;aesthetic&quot;:&quot;color&quot;,
+&quot;breaks&quot;:[&quot;not sarcastic&quot;,&quot;sarcastic&quot;],
+&quot;values&quot;:[&quot;#8a8984&quot;,&quot;#4a3aa7&quot;]
+},{
+&quot;aesthetic&quot;:&quot;y&quot;,
+&quot;breaks&quot;:[0.0,-1.0,-2.0,-3.0,-4.0,-5.0,-6.0,-7.0,-8.0,-9.0,-10.0,-11.0,-12.0,-13.0,-14.0,-15.0],
+&quot;labels&quot;:[&quot;/s tag&quot;,&quot;oh / ah&quot;,&quot;yeah right / sure&quot;,&quot;great&quot;,&quot;thanks / cheers&quot;,&quot;lovely / brilliant&quot;,&quot;of course / obviously&quot;,&quot;shocked / surprise&quot;,&quot;what a / how (adj)&quot;,&quot;short \&quot;quoted\&quot; span&quot;,&quot;question ?&quot;,&quot;exclamation !&quot;,&quot;profanity&quot;,&quot;1st person sg (I/me/my)&quot;,&quot;2nd person (you/your)&quot;,&quot;1st person pl (we/us/our)&quot;]
+}],
+&quot;layers&quot;:[{
+&quot;geom&quot;:&quot;errorbar&quot;,
+&quot;mapping&quot;:{
+&quot;y&quot;:&quot;y&quot;,
+&quot;xmin&quot;:&quot;lo&quot;,
+&quot;xmax&quot;:&quot;hi&quot;,
+&quot;color&quot;:&quot;label&quot;
+},
+&quot;data_meta&quot;:{
+},
+&quot;width&quot;:0.0,
+&quot;size&quot;:0.9,
+&quot;orientation&quot;:&quot;y&quot;,
+&quot;data&quot;:{
+}
+},{
+&quot;geom&quot;:&quot;point&quot;,
+&quot;mapping&quot;:{
+&quot;x&quot;:&quot;pct&quot;,
+&quot;y&quot;:&quot;y&quot;,
+&quot;color&quot;:&quot;label&quot;
+},
+&quot;tooltips&quot;:{
+&quot;formats&quot;:[{
+&quot;field&quot;:&quot;@pct&quot;,
+&quot;format&quot;:&quot;.1f&quot;
+}],
+&quot;lines&quot;:[&quot;@marker · @label&quot;,&quot;@k / @n = @pct %&quot;]
+},
+&quot;data_meta&quot;:{
+},
+&quot;size&quot;:3.2,
+&quot;data&quot;:{
+}
+}],
+&quot;metainfo_list&quot;:[],
+&quot;spec_id&quot;:&quot;12&quot;
+};
+           fig = LetsPlot.buildPlotFromProcessedSpecs(plotSpec, containerDiv, sizing);
+       } else {
+           fig.updateView({});
+       }
+   }
+   
+   const renderImmediately = 
+       forceImmediateRender || (
+           sizing.width_mode === 'FIXED' &amp;&amp; 
+           (sizing.height_mode === 'FIXED' || sizing.height_mode === 'SCALED')
+       );
+   
+   if (renderImmediately) {
+       renderPlot();
+   }
+   
+   if (!renderImmediately || responsive) {
+       // Set up observer for initial sizing or continuous monitoring
+       var observer = new ResizeObserver(function(entries) {
+           for (let entry of entries) {
+               if (entry.contentBoxSize &amp;&amp; 
+                   entry.contentBoxSize[0].inlineSize > 0) {
+                   if (!responsive &amp;&amp; observer) {
+                       observer.disconnect();
+                       observer = null;
+                   }
+                   renderPlot();
+                   if (!responsive) {
+                       break;
+                   }
+               }
+           }
+       });
+       
+       observer.observe(containerDiv);
+   }
+   
+   // ----------
+   })();
+   
+   &lt;/script>
+   &lt;/body>
+&lt;/html>"></iframe>    

@@ -1,0 +1,281 @@
+            <iframe src='about:blank' style='border:none !important;' width='900' height='400' srcdoc="&lt;html lang=&quot;en&quot;>
+   &lt;head>
+       &lt;meta charset=&quot;UTF-8&quot;>
+       &lt;style> html, body { margin: 0; padding: 0; overflow: hidden; } &lt;/style>
+       &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;library&quot; src=&quot;https://cdn.jsdelivr.net/gh/JetBrains/lets-plot@v4.11.0/js-package/distr/lets-plot.min.js&quot;>&lt;/script>
+   &lt;/head>
+   &lt;body>
+          &lt;div id=&quot;Cl39kq&quot; >&lt;/div>
+   &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;plot&quot;>
+   
+   (function() {
+   // ----------
+   
+   const forceImmediateRender = false;
+   const responsive = false;
+   
+   let sizing = {
+       width_mode: &quot;FIXED&quot;,
+       height_mode: &quot;FIXED&quot;,
+       width: 900.0, 
+       height: 400.0 
+   };
+   
+   const preferredWidth = document.body.dataset.letsPlotPreferredWidth;
+   if (preferredWidth !== undefined) {
+       sizing = {
+           width_mode: 'FIXED',
+           height_mode: 'SCALED',
+           width: parseFloat(preferredWidth)
+       };
+   }
+   
+   const containerDiv = document.getElementById(&quot;Cl39kq&quot;);
+   let fig = null;
+   
+   function renderPlot() {
+       if (fig === null) {
+           const plotSpec = {
+&quot;data&quot;:{
+&quot;source&quot;:[&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;],
+&quot;variety&quot;:[&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;],
+&quot;marker&quot;:[&quot;arvo / servo / bottle-o&quot;,&quot;reckon&quot;,&quot;mate&quot;,&quot;heaps&quot;,&quot;keen / stoked&quot;,&quot;bloody&quot;,&quot;innit / proper / bruv&quot;,&quot;quid / pounds / £&quot;,&quot;$ / dollars&quot;,&quot;cheers / ta&quot;,&quot;lovely / brilliant&quot;,&quot;bloke / wanker / arse&quot;,&quot;Tories / Labour / Reform / NHS&quot;,&quot;Labor / LNP / Dutton / Albo&quot;,&quot;UK places&quot;,&quot;AU places&quot;,&quot;-our spelling (colour…)&quot;,&quot;-ise spelling&quot;,&quot;-or / -ize (US)&quot;,&quot;housing / rent / cost of living&quot;,&quot;immigration / migrants&quot;,&quot;arvo / servo / bottle-o&quot;,&quot;reckon&quot;,&quot;mate&quot;,&quot;heaps&quot;,&quot;keen / stoked&quot;,&quot;bloody&quot;,&quot;innit / proper / bruv&quot;,&quot;quid / pounds / £&quot;,&quot;$ / dollars&quot;,&quot;cheers / ta&quot;,&quot;lovely / brilliant&quot;,&quot;bloke / wanker / arse&quot;,&quot;Tories / Labour / Reform / NHS&quot;,&quot;Labor / LNP / Dutton / Albo&quot;,&quot;UK places&quot;,&quot;AU places&quot;,&quot;-our spelling (colour…)&quot;,&quot;-ise spelling&quot;,&quot;-or / -ize (US)&quot;,&quot;housing / rent / cost of living&quot;,&quot;immigration / migrants&quot;,&quot;arvo / servo / bottle-o&quot;,&quot;reckon&quot;,&quot;mate&quot;,&quot;heaps&quot;,&quot;keen / stoked&quot;,&quot;bloody&quot;,&quot;innit / proper / bruv&quot;,&quot;quid / pounds / £&quot;,&quot;$ / dollars&quot;,&quot;cheers / ta&quot;,&quot;lovely / brilliant&quot;,&quot;bloke / wanker / arse&quot;,&quot;Tories / Labour / Reform / NHS&quot;,&quot;Labor / LNP / Dutton / Albo&quot;,&quot;UK places&quot;,&quot;AU places&quot;,&quot;-our spelling (colour…)&quot;,&quot;-ise spelling&quot;,&quot;-or / -ize (US)&quot;,&quot;housing / rent / cost of living&quot;,&quot;immigration / migrants&quot;,&quot;arvo / servo / bottle-o&quot;,&quot;reckon&quot;,&quot;mate&quot;,&quot;heaps&quot;,&quot;keen / stoked&quot;,&quot;bloody&quot;,&quot;innit / proper / bruv&quot;,&quot;quid / pounds / £&quot;,&quot;$ / dollars&quot;,&quot;cheers / ta&quot;,&quot;lovely / brilliant&quot;,&quot;bloke / wanker / arse&quot;,&quot;Tories / Labour / Reform / NHS&quot;,&quot;Labor / LNP / Dutton / Albo&quot;,&quot;UK places&quot;,&quot;AU places&quot;,&quot;-our spelling (colour…)&quot;,&quot;-ise spelling&quot;,&quot;-or / -ize (US)&quot;,&quot;housing / rent / cost of living&quot;,&quot;immigration / migrants&quot;],
+&quot;k&quot;:[0.0,4.0,16.0,0.0,2.0,6.0,3.0,6.0,4.0,0.0,10.0,18.0,158.0,4.0,133.0,3.0,69.0,101.0,10.0,27.0,49.0,0.0,0.0,7.0,0.0,10.0,2.0,14.0,24.0,0.0,3.0,297.0,1.0,1.0,0.0,67.0,5.0,153.0,199.0,122.0,5.0,4.0,16.0,2.0,6.0,3.0,6.0,3.0,5.0,1.0,4.0,3.0,101.0,0.0,0.0,3.0,1.0,55.0,93.0,88.0,70.0,1.0,2.0,7.0,4.0,23.0,10.0,4.0,5.0,14.0,0.0,122.0,1.0,11.0,13.0,25.0,173.0,13.0,330.0,59.0,184.0,25.0,104.0,75.0],
+&quot;n&quot;:[1143.0,1143.0,1143.0,1143.0,1143.0,1143.0,1143.0,1143.0,1143.0,1143.0,1143.0,1143.0,1143.0,1143.0,1143.0,1143.0,1143.0,1143.0,1143.0,1143.0,1143.0,2065.0,2065.0,2065.0,2065.0,2065.0,2065.0,2065.0,2065.0,2065.0,2065.0,2065.0,2065.0,2065.0,2065.0,2065.0,2065.0,2065.0,2065.0,2065.0,2065.0,2065.0,1076.0,1076.0,1076.0,1076.0,1076.0,1076.0,1076.0,1076.0,1076.0,1076.0,1076.0,1076.0,1076.0,1076.0,1076.0,1076.0,1076.0,1076.0,1076.0,1076.0,1076.0,2004.0,2004.0,2004.0,2004.0,2004.0,2004.0,2004.0,2004.0,2004.0,2004.0,2004.0,2004.0,2004.0,2004.0,2004.0,2004.0,2004.0,2004.0,2004.0,2004.0,2004.0],
+&quot;pct&quot;:[0.0,0.3499562554680665,1.399825021872266,0.0,0.17497812773403326,0.5249343832020997,0.26246719160104987,0.5249343832020997,0.3499562554680665,0.0,0.8748906386701663,1.574803149606299,13.823272090988626,0.3499562554680665,11.63604549431321,0.26246719160104987,6.036745406824147,8.836395450568679,0.8748906386701663,2.3622047244094486,4.286964129483815,0.0,0.0,0.3389830508474576,0.0,0.48426150121065376,0.09685230024213075,0.6779661016949152,1.162227602905569,0.0,0.14527845036319612,14.382566585956416,0.048426150121065374,0.048426150121065374,0.0,3.2445520581113803,0.24213075060532688,7.4092009685230025,9.63680387409201,5.907990314769976,0.24213075060532688,0.1937046004842615,1.486988847583643,0.18587360594795538,0.5576208178438662,0.2788104089219331,0.5576208178438662,0.2788104089219331,0.4646840148698885,0.09293680297397769,0.37174721189591076,0.2788104089219331,9.386617100371748,0.0,0.0,0.2788104089219331,0.09293680297397769,5.111524163568773,8.643122676579926,8.178438661710038,6.5055762081784385,0.09293680297397769,0.18587360594795538,0.34930139720558884,0.19960079840319359,1.1477045908183632,0.499001996007984,0.19960079840319359,0.249500998003992,0.6986027944111777,0.0,6.087824351297405,0.049900199600798396,0.5489021956087825,0.6487025948103792,1.2475049900199602,8.632734530938125,0.6487025948103792,16.46706586826347,2.944111776447106,9.181636726546905,1.2475049900199602,5.189620758483033,3.74251497005988],
+&quot;ord&quot;:[0.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0,16.0,17.0,18.0,19.0,20.0,0.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0,16.0,17.0,18.0,19.0,20.0,0.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0,16.0,17.0,18.0,19.0,20.0,0.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0,16.0,17.0,18.0,19.0,20.0],
+&quot;lab&quot;:[&quot;arvo / servo / bottle-o  [AU]&quot;,&quot;reckon  [AU]&quot;,&quot;mate  [both]&quot;,&quot;heaps  [AU]&quot;,&quot;keen / stoked  [AU]&quot;,&quot;bloody  [both]&quot;,&quot;innit / proper / bruv  [UK]&quot;,&quot;quid / pounds / £  [UK]&quot;,&quot;$ / dollars  [AU]&quot;,&quot;cheers / ta  [UK]&quot;,&quot;lovely / brilliant  [UK]&quot;,&quot;bloke / wanker / arse  [both]&quot;,&quot;Tories / Labour / Reform / NHS  [UK]&quot;,&quot;Labor / LNP / Dutton / Albo  [AU]&quot;,&quot;UK places  [UK]&quot;,&quot;AU places  [AU]&quot;,&quot;-our spelling (colour…)  [both]&quot;,&quot;-ise spelling  [both]&quot;,&quot;-or / -ize (US)  [US]&quot;,&quot;housing / rent / cost of living  [both]&quot;,&quot;immigration / migrants  [both]&quot;,&quot;arvo / servo / bottle-o  [AU]&quot;,&quot;reckon  [AU]&quot;,&quot;mate  [both]&quot;,&quot;heaps  [AU]&quot;,&quot;keen / stoked  [AU]&quot;,&quot;bloody  [both]&quot;,&quot;innit / proper / bruv  [UK]&quot;,&quot;quid / pounds / £  [UK]&quot;,&quot;$ / dollars  [AU]&quot;,&quot;cheers / ta  [UK]&quot;,&quot;lovely / brilliant  [UK]&quot;,&quot;bloke / wanker / arse  [both]&quot;,&quot;Tories / Labour / Reform / NHS  [UK]&quot;,&quot;Labor / LNP / Dutton / Albo  [AU]&quot;,&quot;UK places  [UK]&quot;,&quot;AU places  [AU]&quot;,&quot;-our spelling (colour…)  [both]&quot;,&quot;-ise spelling  [both]&quot;,&quot;-or / -ize (US)  [US]&quot;,&quot;housing / rent / cost of living  [both]&quot;,&quot;immigration / migrants  [both]&quot;,&quot;arvo / servo / bottle-o  [AU]&quot;,&quot;reckon  [AU]&quot;,&quot;mate  [both]&quot;,&quot;heaps  [AU]&quot;,&quot;keen / stoked  [AU]&quot;,&quot;bloody  [both]&quot;,&quot;innit / proper / bruv  [UK]&quot;,&quot;quid / pounds / £  [UK]&quot;,&quot;$ / dollars  [AU]&quot;,&quot;cheers / ta  [UK]&quot;,&quot;lovely / brilliant  [UK]&quot;,&quot;bloke / wanker / arse  [both]&quot;,&quot;Tories / Labour / Reform / NHS  [UK]&quot;,&quot;Labor / LNP / Dutton / Albo  [AU]&quot;,&quot;UK places  [UK]&quot;,&quot;AU places  [AU]&quot;,&quot;-our spelling (colour…)  [both]&quot;,&quot;-ise spelling  [both]&quot;,&quot;-or / -ize (US)  [US]&quot;,&quot;housing / rent / cost of living  [both]&quot;,&quot;immigration / migrants  [both]&quot;,&quot;arvo / servo / bottle-o  [AU]&quot;,&quot;reckon  [AU]&quot;,&quot;mate  [both]&quot;,&quot;heaps  [AU]&quot;,&quot;keen / stoked  [AU]&quot;,&quot;bloody  [both]&quot;,&quot;innit / proper / bruv  [UK]&quot;,&quot;quid / pounds / £  [UK]&quot;,&quot;$ / dollars  [AU]&quot;,&quot;cheers / ta  [UK]&quot;,&quot;lovely / brilliant  [UK]&quot;,&quot;bloke / wanker / arse  [both]&quot;,&quot;Tories / Labour / Reform / NHS  [UK]&quot;,&quot;Labor / LNP / Dutton / Albo  [AU]&quot;,&quot;UK places  [UK]&quot;,&quot;AU places  [AU]&quot;,&quot;-our spelling (colour…)  [both]&quot;,&quot;-ise spelling  [both]&quot;,&quot;-or / -ize (US)  [US]&quot;,&quot;housing / rent / cost of living  [both]&quot;,&quot;immigration / migrants  [both]&quot;]
+},
+&quot;mapping&quot;:{
+&quot;y&quot;:&quot;lab&quot;
+},
+&quot;data_meta&quot;:{
+&quot;series_annotations&quot;:[{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;lab&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;source&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;variety&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;marker&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;expected&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;k&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;n&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;pct&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;lo&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;hi&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;ord&quot;
+}],
+&quot;mapping_annotations&quot;:[{
+&quot;parameters&quot;:{
+&quot;label&quot;:&quot;lab&quot;,
+&quot;order_by&quot;:&quot;ord&quot;,
+&quot;order&quot;:-1.0
+},
+&quot;aes&quot;:&quot;y&quot;,
+&quot;annotation&quot;:&quot;as_discrete&quot;
+}]
+},
+&quot;facet&quot;:{
+&quot;name&quot;:&quot;wrap&quot;,
+&quot;facets&quot;:&quot;source&quot;,
+&quot;ncol&quot;:2.0,
+&quot;order&quot;:1.0,
+&quot;dir&quot;:&quot;h&quot;
+},
+&quot;ggtitle&quot;:{
+&quot;text&quot;:&quot;Dialect and topic markers: en-AU vs en-UK&quot;,
+&quot;subtitle&quot;:&quot;% of texts containing the marker (sqrt scale) · [expected variety] from the marker's origin&quot;
+},
+&quot;guides&quot;:{
+&quot;x&quot;:{
+&quot;title&quot;:&quot;% of texts (sqrt scale)&quot;
+}
+},
+&quot;theme&quot;:{
+&quot;name&quot;:&quot;minimal2&quot;,
+&quot;axis_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;axis_text&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:false
+},
+&quot;legend_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:false
+},
+&quot;legend_position&quot;:&quot;top&quot;,
+&quot;panel_grid_major&quot;:{
+&quot;color&quot;:&quot;#e6e5e0&quot;,
+&quot;size&quot;:0.4,
+&quot;blank&quot;:false
+},
+&quot;panel_grid_minor&quot;:{
+&quot;blank&quot;:true
+},
+&quot;plot_background&quot;:{
+&quot;fill&quot;:&quot;#fcfcfb&quot;,
+&quot;color&quot;:&quot;#fcfcfb&quot;,
+&quot;blank&quot;:false
+},
+&quot;plot_title&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:15.0,
+&quot;blank&quot;:false
+},
+&quot;plot_subtitle&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;plot_caption&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:9.0,
+&quot;blank&quot;:false
+},
+&quot;strip_text&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;axis_title_y&quot;:{
+&quot;blank&quot;:true
+}
+},
+&quot;kind&quot;:&quot;plot&quot;,
+&quot;scales&quot;:[{
+&quot;aesthetic&quot;:&quot;color&quot;,
+&quot;breaks&quot;:[&quot;en-AU&quot;,&quot;en-UK&quot;],
+&quot;values&quot;:[&quot;#2a78d6&quot;,&quot;#eb6834&quot;]
+},{
+&quot;aesthetic&quot;:&quot;x&quot;,
+&quot;breaks&quot;:[0.0,1.0,2.0,5.0,10.0,20.0],
+&quot;trans&quot;:&quot;sqrt&quot;
+}],
+&quot;layers&quot;:[{
+&quot;geom&quot;:&quot;segment&quot;,
+&quot;data&quot;:{
+&quot;source&quot;:[&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;,&quot;google&quot;],
+&quot;lab&quot;:[&quot;arvo / servo / bottle-o  [AU]&quot;,&quot;reckon  [AU]&quot;,&quot;mate  [both]&quot;,&quot;heaps  [AU]&quot;,&quot;keen / stoked  [AU]&quot;,&quot;bloody  [both]&quot;,&quot;innit / proper / bruv  [UK]&quot;,&quot;quid / pounds / £  [UK]&quot;,&quot;$ / dollars  [AU]&quot;,&quot;cheers / ta  [UK]&quot;,&quot;lovely / brilliant  [UK]&quot;,&quot;bloke / wanker / arse  [both]&quot;,&quot;Tories / Labour / Reform / NHS  [UK]&quot;,&quot;Labor / LNP / Dutton / Albo  [AU]&quot;,&quot;UK places  [UK]&quot;,&quot;AU places  [AU]&quot;,&quot;-our spelling (colour…)  [both]&quot;,&quot;-ise spelling  [both]&quot;,&quot;-or / -ize (US)  [US]&quot;,&quot;housing / rent / cost of living  [both]&quot;,&quot;immigration / migrants  [both]&quot;,&quot;arvo / servo / bottle-o  [AU]&quot;,&quot;reckon  [AU]&quot;,&quot;mate  [both]&quot;,&quot;heaps  [AU]&quot;,&quot;keen / stoked  [AU]&quot;,&quot;bloody  [both]&quot;,&quot;innit / proper / bruv  [UK]&quot;,&quot;quid / pounds / £  [UK]&quot;,&quot;$ / dollars  [AU]&quot;,&quot;cheers / ta  [UK]&quot;,&quot;lovely / brilliant  [UK]&quot;,&quot;bloke / wanker / arse  [both]&quot;,&quot;Tories / Labour / Reform / NHS  [UK]&quot;,&quot;Labor / LNP / Dutton / Albo  [AU]&quot;,&quot;UK places  [UK]&quot;,&quot;AU places  [AU]&quot;,&quot;-our spelling (colour…)  [both]&quot;,&quot;-ise spelling  [both]&quot;,&quot;-or / -ize (US)  [US]&quot;,&quot;housing / rent / cost of living  [both]&quot;,&quot;immigration / migrants  [both]&quot;],
+&quot;ord&quot;:[0.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0,16.0,17.0,18.0,19.0,20.0,0.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0,16.0,17.0,18.0,19.0,20.0],
+&quot;en-UK&quot;:[0.0,0.3499562554680665,1.399825021872266,0.0,0.17497812773403326,0.5249343832020997,0.26246719160104987,0.5249343832020997,0.3499562554680665,0.0,0.8748906386701663,1.574803149606299,13.823272090988626,0.3499562554680665,11.63604549431321,0.26246719160104987,6.036745406824147,8.836395450568679,0.8748906386701663,2.3622047244094486,4.286964129483815,0.0,0.0,0.3389830508474576,0.0,0.48426150121065376,0.09685230024213075,0.6779661016949152,1.162227602905569,0.0,0.14527845036319612,14.382566585956416,0.048426150121065374,0.048426150121065374,0.0,3.2445520581113803,0.24213075060532688,7.4092009685230025,9.63680387409201,5.907990314769976,0.24213075060532688,0.1937046004842615],
+&quot;en-AU&quot;:[0.34930139720558884,0.19960079840319359,1.1477045908183632,0.499001996007984,0.19960079840319359,0.249500998003992,0.6986027944111777,0.0,6.087824351297405,0.049900199600798396,0.5489021956087825,0.6487025948103792,1.2475049900199602,8.632734530938125,0.6487025948103792,16.46706586826347,2.944111776447106,9.181636726546905,1.2475049900199602,5.189620758483033,3.74251497005988,1.486988847583643,0.18587360594795538,0.5576208178438662,0.2788104089219331,0.5576208178438662,0.2788104089219331,0.4646840148698885,0.09293680297397769,0.37174721189591076,0.2788104089219331,9.386617100371748,0.0,0.0,0.2788104089219331,0.09293680297397769,5.111524163568773,8.643122676579926,8.178438661710038,6.5055762081784385,0.09293680297397769,0.18587360594795538]
+},
+&quot;mapping&quot;:{
+&quot;x&quot;:&quot;en-AU&quot;,
+&quot;xend&quot;:&quot;en-UK&quot;,
+&quot;yend&quot;:&quot;lab&quot;
+},
+&quot;data_meta&quot;:{
+&quot;series_annotations&quot;:[{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;source&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;marker&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;lab&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;ord&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;en-UK&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;en-AU&quot;
+}]
+},
+&quot;color&quot;:&quot;#cfcdc6&quot;,
+&quot;size&quot;:2.2
+},{
+&quot;geom&quot;:&quot;point&quot;,
+&quot;mapping&quot;:{
+&quot;x&quot;:&quot;pct&quot;,
+&quot;color&quot;:&quot;variety&quot;
+},
+&quot;tooltips&quot;:{
+&quot;formats&quot;:[{
+&quot;field&quot;:&quot;@pct&quot;,
+&quot;format&quot;:&quot;.1f&quot;
+}],
+&quot;lines&quot;:[&quot;@marker · @variety&quot;,&quot;@k / @n texts = @pct %&quot;]
+},
+&quot;data_meta&quot;:{
+},
+&quot;size&quot;:3.8,
+&quot;data&quot;:{
+}
+}],
+&quot;metainfo_list&quot;:[],
+&quot;spec_id&quot;:&quot;3&quot;
+};
+           fig = LetsPlot.buildPlotFromProcessedSpecs(plotSpec, containerDiv, sizing);
+       } else {
+           fig.updateView({});
+       }
+   }
+   
+   const renderImmediately = 
+       forceImmediateRender || (
+           sizing.width_mode === 'FIXED' &amp;&amp; 
+           (sizing.height_mode === 'FIXED' || sizing.height_mode === 'SCALED')
+       );
+   
+   if (renderImmediately) {
+       renderPlot();
+   }
+   
+   if (!renderImmediately || responsive) {
+       // Set up observer for initial sizing or continuous monitoring
+       var observer = new ResizeObserver(function(entries) {
+           for (let entry of entries) {
+               if (entry.contentBoxSize &amp;&amp; 
+                   entry.contentBoxSize[0].inlineSize > 0) {
+                   if (!responsive &amp;&amp; observer) {
+                       observer.disconnect();
+                       observer = null;
+                   }
+                   renderPlot();
+                   if (!responsive) {
+                       break;
+                   }
+               }
+           }
+       });
+       
+       observer.observe(containerDiv);
+   }
+   
+   // ----------
+   })();
+   
+   &lt;/script>
+   &lt;/body>
+&lt;/html>"></iframe>    

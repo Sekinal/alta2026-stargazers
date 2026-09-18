@@ -1,0 +1,19 @@
+variety,marker,has,n,sarc_rate,pos_rate
+en-AU,mate,true,23,0.6956521739130435,0.13043478260869565
+en-AU,Labor / LNP / Dutton / Albo,true,173,0.653179190751445,0.028901734104046242
+en-AU,housing / rent / cost of living,true,104,0.5384615384615384,0.17307692307692307
+en-AU,immigration / migrants,true,75,0.52,0.08
+en-AU,-or / -ize (US),true,25,0.48,0.2
+en-AU,-ise spelling,true,184,0.4673913043478261,0.16304347826086957
+en-AU,AU places,true,330,0.45454545454545453,0.2787878787878788
+en-AU,Tories / Labour / Reform / NHS,true,25,0.44,0.24
+en-AU,$ / dollars,true,122,0.4262295081967213,0.319672131147541
+en-AU,-our spelling (colour…),true,59,0.3389830508474576,0.3389830508474576
+en-UK,immigration / migrants,true,49,0.2653061224489796,0.04081632653061224
+en-UK,Tories / Labour / Reform / NHS,true,158,0.25949367088607594,0.04430379746835443
+en-UK,-our spelling (colour…),true,69,0.2318840579710145,0.043478260869565216
+en-UK,UK places,true,133,0.22556390977443608,0.06766917293233082
+en-UK,housing / rent / cost of living,true,27,0.18518518518518517,0.0
+en-UK,-ise spelling,true,101,0.1485148514851485,0.04950495049504951
+en-UK,mate,true,16,0.0625,0.1875
+en-UK,bloke / wanker / arse,true,18,0.05555555555555555,0.05555555555555555

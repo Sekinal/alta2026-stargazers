@@ -1,0 +1,16 @@
+segment,variety,source,grp,n,k_poslex,k_surfpos,k_mixed,mean_compound,mean_poslex
+google · en-AU,en-AU,google,plain · negative,218,194,114,151,0.06417477064220184,3.123853211009174
+google · en-AU,en-AU,google,plain · positive,785,783,774,244,0.834863821656051,5.021656050955414
+google · en-AU,en-AU,google,sarcastic · negative,67,61,43,54,0.17246268656716418,3.5522388059701493
+google · en-AU,en-AU,google,sarcastic · positive,6,6,6,5,0.8665166666666666,5.833333333333333
+google · en-UK,en-UK,google,plain · negative,519,455,265,387,0.04927687861271676,3.3583815028901736
+google · en-UK,en-UK,google,plain · positive,1545,1526,1500,589,0.8155242718446601,5.253074433656958
+google · en-UK,en-UK,google,sarcastic · negative,1,1,1,0,0.765,2.0
+reddit · en-AU,en-AU,reddit,plain · negative,552,365,213,258,-0.046743297101449276,2.2518115942028984
+reddit · en-AU,en-AU,reddit,plain · positive,611,447,426,160,0.4018162029459902,2.0540098199672667
+reddit · en-AU,en-AU,reddit,sarcastic · negative,812,531,326,369,-0.026035714285714284,1.7881773399014778
+reddit · en-AU,en-AU,reddit,sarcastic · positive,29,23,21,11,0.40250689655172417,1.9310344827586208
+reddit · en-UK,en-UK,reddit,plain · negative,767,500,222,412,-0.21221460234680573,1.5332464146023468
+reddit · en-UK,en-UK,reddit,plain · positive,128,118,113,29,0.55823046875,2.40625
+reddit · en-UK,en-UK,reddit,sarcastic · negative,245,156,120,96,0.09266571428571428,1.4408163265306122
+reddit · en-UK,en-UK,reddit,sarcastic · positive,3,3,2,1,0.2527333333333333,2.3333333333333335

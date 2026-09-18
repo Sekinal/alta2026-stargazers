@@ -1,0 +1,462 @@
+            <iframe src='about:blank' style='border:none !important;' width='600' height='400' srcdoc="&lt;html lang=&quot;en&quot;>
+   &lt;head>
+       &lt;meta charset=&quot;UTF-8&quot;>
+       &lt;style> html, body { margin: 0; padding: 0; overflow: hidden; } &lt;/style>
+       &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;library&quot; src=&quot;https://cdn.jsdelivr.net/gh/JetBrains/lets-plot@v4.11.0/js-package/distr/lets-plot.min.js&quot;>&lt;/script>
+   &lt;/head>
+   &lt;body>
+          &lt;div id=&quot;ppxL9B&quot; >&lt;/div>
+   &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;plot&quot;>
+   
+   (function() {
+   // ----------
+   
+   const forceImmediateRender = false;
+   const responsive = false;
+   
+   let sizing = {
+       width_mode: &quot;FIXED&quot;,
+       height_mode: &quot;FIXED&quot;,
+       width: 600.0, 
+       height: 400.0 
+   };
+   
+   const preferredWidth = document.body.dataset.letsPlotPreferredWidth;
+   if (preferredWidth !== undefined) {
+       sizing = {
+           width_mode: 'FIXED',
+           height_mode: 'SCALED',
+           width: parseFloat(preferredWidth)
+       };
+   }
+   
+   const containerDiv = document.getElementById(&quot;ppxL9B&quot;);
+   let fig = null;
+   
+   function renderPlot() {
+       if (fig === null) {
+           const plotSpec = {
+&quot;ggtitle&quot;:{
+&quot;text&quot;:&quot;Sentiment: most discriminative uni/bigrams (google)&quot;,
+&quot;subtitle&quot;:&quot;Monroe et al. weighted log-odds, informative Dirichlet prior; top 15 each way; document frequencies&quot;
+},
+&quot;theme&quot;:{
+&quot;plot_background&quot;:{
+&quot;fill&quot;:&quot;#fcfcfb&quot;,
+&quot;color&quot;:&quot;#fcfcfb&quot;,
+&quot;blank&quot;:false
+}
+},
+&quot;kind&quot;:&quot;subplots&quot;,
+&quot;layout&quot;:{
+&quot;ncol&quot;:2.0,
+&quot;nrow&quot;:1.0,
+&quot;name&quot;:&quot;grid&quot;
+},
+&quot;figures&quot;:[{
+&quot;data&quot;:{
+&quot;term&quot;:[&quot;great&quot;,&quot;friendly&quot;,&quot;delicious&quot;,&quot;good&quot;,&quot;tasty&quot;,&quot;a little&quot;,&quot;little&quot;,&quot;lovely&quot;,&quot;enjoyed&quot;,&quot;well&quot;,&quot;bit&quot;,&quot;amazing&quot;,&quot;beautiful&quot;,&quot;helpful&quot;,&quot;options&quot;,&quot;not&quot;,&quot;disappointing&quot;,&quot;was not&quot;,&quot;n't&quot;,&quot;minutes&quot;,&quot;no&quot;,&quot;disappointed&quot;,&quot;told&quot;,&quot;rude&quot;,&quot;half&quot;,&quot;at all&quot;,&quot;should&quot;,&quot;poor&quot;,&quot;cold&quot;,&quot;been&quot;],
+&quot;delta&quot;:[0.591759431914137,0.7442833927406234,0.8335540931081775,0.38536451994776666,0.9381351049248439,0.8837045505189174,0.6677684955814955,0.667862826364856,0.8783444754502172,0.572171073759467,0.5322707206982136,0.8632969630314742,0.9976158632107852,0.9137966435583582,0.9137966435583582,-0.5004849603772721,-1.334807393484854,-1.0153887684412144,-0.3869010308381853,-0.9751393082254678,-0.5743431274260988,-0.9551325814948664,-1.1678748498081886,-2.1439576267984792,-1.0291235237787788,-1.0982511280562148,-1.2481680402850657,-1.8487315512355478,-0.9749886471528395,-0.545351533363724],
+&quot;z&quot;:[5.5994968021236025,5.382191653577396,4.410444836237096,4.182603786063813,4.08526188927892,3.889353974607769,3.8743469324618163,3.3995782643612893,3.311924668532244,3.2644523652551065,3.2213517762511037,3.159023742637337,3.1038683592508916,3.04865023062401,3.04865023062401,-5.423033468389546,-4.318525390732563,-4.12318434089581,-4.082274623538116,-4.0204560814082475,-3.919139260347431,-3.905260639210757,-3.7093042337808444,-3.633038453838614,-3.6000766024025648,-3.5826962750290163,-3.571123843051423,-3.5573278122370633,-3.481279153239089,-3.4599952725611756],
+&quot;df_pos&quot;:[282.0,187.0,108.0,314.0,80.0,78.0,113.0,87.0,57.0,101.0,110.0,53.0,43.0,46.0,46.0,160.0,7.0,15.0,165.0,16.0,60.0,16.0,8.0,0.0,11.0,9.0,6.0,1.0,12.0,53.0],
+&quot;df_neg&quot;:[40.0,17.0,7.0,71.0,3.0,4.0,13.0,10.0,3.0,15.0,18.0,3.0,1.0,2.0,2.0,155.0,26.0,32.0,135.0,32.0,65.0,31.0,22.0,14.0,24.0,22.0,19.0,14.0,24.0,55.0],
+&quot;side&quot;:[&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;],
+&quot;lab&quot;:[&quot;great  &quot;,&quot;friendly  &quot;,&quot;delicious  &quot;,&quot;good  &quot;,&quot;tasty  &quot;,&quot;a little  &quot;,&quot;little  &quot;,&quot;lovely  &quot;,&quot;enjoyed  &quot;,&quot;well  &quot;,&quot;bit  &quot;,&quot;amazing  &quot;,&quot;beautiful  &quot;,&quot;helpful  &quot;,&quot;options  &quot;,&quot;not  &quot;,&quot;disappointing  &quot;,&quot;was not  &quot;,&quot;n't  &quot;,&quot;minutes  &quot;,&quot;no  &quot;,&quot;disappointed  &quot;,&quot;told  &quot;,&quot;rude  &quot;,&quot;half  &quot;,&quot;at all  &quot;,&quot;should  &quot;,&quot;poor  &quot;,&quot;cold  &quot;,&quot;been  &quot;]
+},
+&quot;mapping&quot;:{
+},
+&quot;data_meta&quot;:{
+&quot;series_annotations&quot;:[{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;term&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;delta&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;z&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;df_pos&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;df_neg&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;rate_pos&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;rate_neg&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;contrast&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;df_cell&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;side&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;lab&quot;
+}]
+},
+&quot;ggtitle&quot;:{
+&quot;text&quot;:&quot;en-AU · google&quot;
+},
+&quot;guides&quot;:{
+&quot;x&quot;:{
+&quot;title&quot;:&quot;z-score of weighted log-odds&quot;
+}
+},
+&quot;theme&quot;:{
+&quot;name&quot;:&quot;minimal2&quot;,
+&quot;axis_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;axis_text&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:false
+},
+&quot;legend_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:true
+},
+&quot;legend_position&quot;:&quot;bottom&quot;,
+&quot;panel_grid_major&quot;:{
+&quot;color&quot;:&quot;#e6e5e0&quot;,
+&quot;size&quot;:0.4,
+&quot;blank&quot;:false
+},
+&quot;panel_grid_minor&quot;:{
+&quot;blank&quot;:true
+},
+&quot;plot_background&quot;:{
+&quot;fill&quot;:&quot;#fcfcfb&quot;,
+&quot;color&quot;:&quot;#fcfcfb&quot;,
+&quot;blank&quot;:false
+},
+&quot;plot_title&quot;:{
+&quot;color&quot;:&quot;#2a78d6&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:13.0,
+&quot;blank&quot;:false
+},
+&quot;plot_subtitle&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;plot_caption&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:9.0,
+&quot;blank&quot;:false
+},
+&quot;strip_text&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;axis_title_y&quot;:{
+&quot;blank&quot;:true
+},
+&quot;panel_grid_major_y&quot;:{
+&quot;blank&quot;:true
+}
+},
+&quot;kind&quot;:&quot;plot&quot;,
+&quot;scales&quot;:[{
+&quot;aesthetic&quot;:&quot;color&quot;,
+&quot;breaks&quot;:[&quot;positive&quot;,&quot;negative&quot;],
+&quot;values&quot;:[&quot;#1baf7a&quot;,&quot;#e34948&quot;]
+}],
+&quot;layers&quot;:[{
+&quot;geom&quot;:&quot;vline&quot;,
+&quot;mapping&quot;:{
+},
+&quot;data_meta&quot;:{
+},
+&quot;xintercept&quot;:0.0,
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:0.5,
+&quot;data&quot;:{
+}
+},{
+&quot;geom&quot;:&quot;segment&quot;,
+&quot;mapping&quot;:{
+&quot;y&quot;:&quot;lab&quot;,
+&quot;xend&quot;:&quot;z&quot;,
+&quot;yend&quot;:&quot;lab&quot;,
+&quot;color&quot;:&quot;side&quot;
+},
+&quot;data_meta&quot;:{
+&quot;mapping_annotations&quot;:[{
+&quot;parameters&quot;:{
+&quot;label&quot;:&quot;lab&quot;,
+&quot;order_by&quot;:&quot;z&quot;,
+&quot;order&quot;:1.0
+},
+&quot;aes&quot;:&quot;y&quot;,
+&quot;annotation&quot;:&quot;as_discrete&quot;
+}]
+},
+&quot;x&quot;:0.0,
+&quot;size&quot;:1.1,
+&quot;data&quot;:{
+}
+},{
+&quot;geom&quot;:&quot;point&quot;,
+&quot;mapping&quot;:{
+&quot;x&quot;:&quot;z&quot;,
+&quot;y&quot;:&quot;lab&quot;,
+&quot;color&quot;:&quot;side&quot;
+},
+&quot;tooltips&quot;:{
+&quot;formats&quot;:[{
+&quot;field&quot;:&quot;@z&quot;,
+&quot;format&quot;:&quot;.2f&quot;
+},{
+&quot;field&quot;:&quot;@delta&quot;,
+&quot;format&quot;:&quot;.2f&quot;
+}],
+&quot;lines&quot;:[&quot;@term&quot;,&quot;z = @z&quot;,&quot;delta = @delta&quot;,&quot;docs positive: @df_pos&quot;,&quot;docs negative: @df_neg&quot;]
+},
+&quot;data_meta&quot;:{
+},
+&quot;size&quot;:3.6,
+&quot;data&quot;:{
+}
+}],
+&quot;metainfo_list&quot;:[],
+&quot;spec_id&quot;:&quot;17&quot;
+},{
+&quot;data&quot;:{
+&quot;term&quot;:[&quot;friendly&quot;,&quot;great&quot;,&quot;good&quot;,&quot;nice&quot;,&quot;friendly and&quot;,&quot;delicious&quot;,&quot;lovely&quot;,&quot;a great&quot;,&quot;excellent&quot;,&quot;recommend&quot;,&quot;tasty&quot;,&quot;selection&quot;,&quot;atmosphere&quot;,&quot;staff&quot;,&quot;visit&quot;,&quot;told&quot;,&quot;wo&quot;,&quot;wo n't&quot;,&quot;n't be&quot;,&quot;to be&quot;,&quot;poor&quot;,&quot;ordered&quot;,&quot;rude&quot;,&quot;said&quot;,&quot;disappointed&quot;,&quot;n't&quot;,&quot;customer&quot;,&quot;no&quot;,&quot;should&quot;,&quot;gone&quot;],
+&quot;delta&quot;:[1.1610625717314988,0.9081414945554043,0.6034798467408544,0.709457207850285,1.3037399459152095,1.1201995027443257,0.736281117026774,1.167278391161454,1.2322459645845694,0.8101485504550316,0.881009795897687,1.2164183313226635,0.6988212100662032,0.3593751027392136,0.6781818491309703,-1.5055346376722722,-1.5036107758079433,-1.4873230116262395,-1.552093980735135,-0.7072390521889149,-1.8365451560708692,-0.725979813724801,-2.324308459873955,-1.1182935174166762,-1.2617627329523415,-0.3896832062608411,-1.0781443304898692,-0.5518280395468755,-0.9575396374360787,-1.6706016504064856],
+&quot;z&quot;:[8.983768602511068,8.705193538469608,7.719335399351236,7.006800153603567,5.5557285428476995,5.515994214028203,5.361110174849725,5.0189737453466385,4.792956059472289,4.73330110586863,4.662873746008624,4.648626631343213,4.555654814326866,4.54701612434162,4.530524873039474,-6.223995683898709,-6.026976895829798,-5.932250105307583,-5.906948809410524,-5.822897842600547,-5.807850965168827,-5.7555115563615225,-5.671317052839172,-5.570522515579321,-5.520005343589132,-5.4868682099736725,-5.393302040865155,-5.187293146476502,-5.170346873890917,-4.990873969184668],
+&quot;df_pos&quot;:[386.0,476.0,658.0,428.0,133.0,151.0,238.0,120.0,104.0,163.0,142.0,99.0,185.0,531.0,191.0,17.0,16.0,16.0,14.0,108.0,8.0,99.0,3.0,31.0,22.0,386.0,32.0,155.0,40.0,8.0],
+&quot;df_neg&quot;:[23.0,51.0,121.0,66.0,5.0,10.0,35.0,7.0,5.0,21.0,16.0,5.0,29.0,141.0,31.0,49.0,46.0,45.0,43.0,113.0,37.0,106.0,33.0,54.0,46.0,273.0,53.0,134.0,57.0,29.0],
+&quot;side&quot;:[&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;positive&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;,&quot;negative&quot;],
+&quot;lab&quot;:[&quot;friendly  &quot;,&quot;great  &quot;,&quot;good  &quot;,&quot;nice  &quot;,&quot;friendly and  &quot;,&quot;delicious  &quot;,&quot;lovely  &quot;,&quot;a great  &quot;,&quot;excellent  &quot;,&quot;recommend  &quot;,&quot;tasty  &quot;,&quot;selection  &quot;,&quot;atmosphere  &quot;,&quot;staff  &quot;,&quot;visit  &quot;,&quot;told  &quot;,&quot;wo  &quot;,&quot;wo n't  &quot;,&quot;n't be  &quot;,&quot;to be  &quot;,&quot;poor  &quot;,&quot;ordered  &quot;,&quot;rude  &quot;,&quot;said  &quot;,&quot;disappointed  &quot;,&quot;n't  &quot;,&quot;customer  &quot;,&quot;no  &quot;,&quot;should  &quot;,&quot;gone  &quot;]
+},
+&quot;mapping&quot;:{
+},
+&quot;data_meta&quot;:{
+&quot;series_annotations&quot;:[{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;term&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;delta&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;z&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;df_pos&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;df_neg&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;rate_pos&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;rate_neg&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;contrast&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;df_cell&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;side&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;lab&quot;
+}]
+},
+&quot;ggtitle&quot;:{
+&quot;text&quot;:&quot;en-UK · google&quot;
+},
+&quot;guides&quot;:{
+&quot;x&quot;:{
+&quot;title&quot;:&quot;z-score of weighted log-odds&quot;
+}
+},
+&quot;theme&quot;:{
+&quot;name&quot;:&quot;minimal2&quot;,
+&quot;axis_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;axis_text&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:false
+},
+&quot;legend_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:true
+},
+&quot;legend_position&quot;:&quot;bottom&quot;,
+&quot;panel_grid_major&quot;:{
+&quot;color&quot;:&quot;#e6e5e0&quot;,
+&quot;size&quot;:0.4,
+&quot;blank&quot;:false
+},
+&quot;panel_grid_minor&quot;:{
+&quot;blank&quot;:true
+},
+&quot;plot_background&quot;:{
+&quot;fill&quot;:&quot;#fcfcfb&quot;,
+&quot;color&quot;:&quot;#fcfcfb&quot;,
+&quot;blank&quot;:false
+},
+&quot;plot_title&quot;:{
+&quot;color&quot;:&quot;#eb6834&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:13.0,
+&quot;blank&quot;:false
+},
+&quot;plot_subtitle&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;plot_caption&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:9.0,
+&quot;blank&quot;:false
+},
+&quot;strip_text&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;axis_title_y&quot;:{
+&quot;blank&quot;:true
+},
+&quot;panel_grid_major_y&quot;:{
+&quot;blank&quot;:true
+}
+},
+&quot;kind&quot;:&quot;plot&quot;,
+&quot;scales&quot;:[{
+&quot;aesthetic&quot;:&quot;color&quot;,
+&quot;breaks&quot;:[&quot;positive&quot;,&quot;negative&quot;],
+&quot;values&quot;:[&quot;#1baf7a&quot;,&quot;#e34948&quot;]
+}],
+&quot;layers&quot;:[{
+&quot;geom&quot;:&quot;vline&quot;,
+&quot;mapping&quot;:{
+},
+&quot;data_meta&quot;:{
+},
+&quot;xintercept&quot;:0.0,
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:0.5,
+&quot;data&quot;:{
+}
+},{
+&quot;geom&quot;:&quot;segment&quot;,
+&quot;mapping&quot;:{
+&quot;y&quot;:&quot;lab&quot;,
+&quot;xend&quot;:&quot;z&quot;,
+&quot;yend&quot;:&quot;lab&quot;,
+&quot;color&quot;:&quot;side&quot;
+},
+&quot;data_meta&quot;:{
+&quot;mapping_annotations&quot;:[{
+&quot;parameters&quot;:{
+&quot;label&quot;:&quot;lab&quot;,
+&quot;order_by&quot;:&quot;z&quot;,
+&quot;order&quot;:1.0
+},
+&quot;aes&quot;:&quot;y&quot;,
+&quot;annotation&quot;:&quot;as_discrete&quot;
+}]
+},
+&quot;x&quot;:0.0,
+&quot;size&quot;:1.1,
+&quot;data&quot;:{
+}
+},{
+&quot;geom&quot;:&quot;point&quot;,
+&quot;mapping&quot;:{
+&quot;x&quot;:&quot;z&quot;,
+&quot;y&quot;:&quot;lab&quot;,
+&quot;color&quot;:&quot;side&quot;
+},
+&quot;tooltips&quot;:{
+&quot;formats&quot;:[{
+&quot;field&quot;:&quot;@z&quot;,
+&quot;format&quot;:&quot;.2f&quot;
+},{
+&quot;field&quot;:&quot;@delta&quot;,
+&quot;format&quot;:&quot;.2f&quot;
+}],
+&quot;lines&quot;:[&quot;@term&quot;,&quot;z = @z&quot;,&quot;delta = @delta&quot;,&quot;docs positive: @df_pos&quot;,&quot;docs negative: @df_neg&quot;]
+},
+&quot;data_meta&quot;:{
+},
+&quot;size&quot;:3.6,
+&quot;data&quot;:{
+}
+}],
+&quot;metainfo_list&quot;:[],
+&quot;spec_id&quot;:&quot;18&quot;
+}]
+};
+           fig = LetsPlot.buildPlotFromProcessedSpecs(plotSpec, containerDiv, sizing);
+       } else {
+           fig.updateView({});
+       }
+   }
+   
+   const renderImmediately = 
+       forceImmediateRender || (
+           sizing.width_mode === 'FIXED' &amp;&amp; 
+           (sizing.height_mode === 'FIXED' || sizing.height_mode === 'SCALED')
+       );
+   
+   if (renderImmediately) {
+       renderPlot();
+   }
+   
+   if (!renderImmediately || responsive) {
+       // Set up observer for initial sizing or continuous monitoring
+       var observer = new ResizeObserver(function(entries) {
+           for (let entry of entries) {
+               if (entry.contentBoxSize &amp;&amp; 
+                   entry.contentBoxSize[0].inlineSize > 0) {
+                   if (!responsive &amp;&amp; observer) {
+                       observer.disconnect();
+                       observer = null;
+                   }
+                   renderPlot();
+                   if (!responsive) {
+                       break;
+                   }
+               }
+           }
+       });
+       
+       observer.observe(containerDiv);
+   }
+   
+   // ----------
+   })();
+   
+   &lt;/script>
+   &lt;/body>
+&lt;/html>"></iframe>    

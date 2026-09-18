@@ -1,0 +1,5 @@
+source,features,roc_auc_AU_vs_UK
+google,word 1-2g,0.741423710811273
+google,char 2-5g,0.746487753944751
+reddit,word 1-2g,0.8045510029809148
+reddit,char 2-5g,0.8119142292842138

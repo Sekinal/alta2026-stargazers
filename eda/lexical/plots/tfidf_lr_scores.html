@@ -1,0 +1,266 @@
+            <iframe src='about:blank' style='border:none !important;' width='600' height='799' srcdoc="&lt;html lang=&quot;en&quot;>
+   &lt;head>
+       &lt;meta charset=&quot;UTF-8&quot;>
+       &lt;style> html, body { margin: 0; padding: 0; overflow: hidden; } &lt;/style>
+       &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;library&quot; src=&quot;https://cdn.jsdelivr.net/gh/JetBrains/lets-plot@v4.11.0/js-package/distr/lets-plot.min.js&quot;>&lt;/script>
+   &lt;/head>
+   &lt;body>
+          &lt;div id=&quot;jj5ldE&quot; >&lt;/div>
+   &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;plot&quot;>
+   
+   (function() {
+   // ----------
+   
+   const forceImmediateRender = false;
+   const responsive = false;
+   
+   let sizing = {
+       width_mode: &quot;FIXED&quot;,
+       height_mode: &quot;FIXED&quot;,
+       width: 600.0, 
+       height: 799.0 
+   };
+   
+   const preferredWidth = document.body.dataset.letsPlotPreferredWidth;
+   if (preferredWidth !== undefined) {
+       sizing = {
+           width_mode: 'FIXED',
+           height_mode: 'SCALED',
+           width: parseFloat(preferredWidth)
+       };
+   }
+   
+   const containerDiv = document.getElementById(&quot;jj5ldE&quot;);
+   let fig = null;
+   
+   function renderPlot() {
+       if (fig === null) {
+           const plotSpec = {
+&quot;data&quot;:{
+&quot;variant&quot;:[&quot;global&quot;,&quot;global&quot;,&quot;global&quot;,&quot;global+seg&quot;,&quot;global+seg&quot;,&quot;global+seg&quot;,&quot;augment&quot;,&quot;augment&quot;,&quot;augment&quot;,&quot;per-variety&quot;,&quot;per-variety&quot;,&quot;per-variety&quot;,&quot;per-segment&quot;,&quot;per-segment&quot;,&quot;per-segment&quot;,&quot;AU->UK / UK->AU&quot;,&quot;AU->UK / UK->AU&quot;,&quot;AU->UK / UK->AU&quot;,&quot;global&quot;,&quot;global&quot;,&quot;global&quot;,&quot;global+seg&quot;,&quot;global+seg&quot;,&quot;global+seg&quot;,&quot;augment&quot;,&quot;augment&quot;,&quot;augment&quot;,&quot;per-variety&quot;,&quot;per-variety&quot;,&quot;per-variety&quot;,&quot;per-segment&quot;,&quot;per-segment&quot;,&quot;per-segment&quot;,&quot;AU->UK / UK->AU&quot;,&quot;AU->UK / UK->AU&quot;,&quot;AU->UK / UK->AU&quot;,&quot;global&quot;,&quot;global&quot;,&quot;global&quot;,&quot;global+seg&quot;,&quot;global+seg&quot;,&quot;global+seg&quot;,&quot;augment&quot;,&quot;augment&quot;,&quot;augment&quot;,&quot;per-variety&quot;,&quot;per-variety&quot;,&quot;per-variety&quot;,&quot;per-segment&quot;,&quot;per-segment&quot;,&quot;per-segment&quot;,&quot;AU->UK / UK->AU&quot;,&quot;AU->UK / UK->AU&quot;,&quot;AU->UK / UK->AU&quot;,&quot;global&quot;,&quot;global&quot;,&quot;global&quot;,&quot;global+seg&quot;,&quot;global+seg&quot;,&quot;global+seg&quot;,&quot;augment&quot;,&quot;augment&quot;,&quot;augment&quot;,&quot;per-variety&quot;,&quot;per-variety&quot;,&quot;per-variety&quot;,&quot;per-segment&quot;,&quot;per-segment&quot;,&quot;per-segment&quot;,&quot;AU->UK / UK->AU&quot;,&quot;AU->UK / UK->AU&quot;,&quot;AU->UK / UK->AU&quot;],
+&quot;mode&quot;:[&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;],
+&quot;f1&quot;:[0.8411,0.8466,0.8442,0.8449,0.8454,0.8429,0.8385,0.8391,0.835,0.8347,0.8347,0.8316,0.8373,0.8393,0.8308,0.8005,0.8193,0.8137,0.9175,0.9205,0.9161,0.9151,0.9179,0.913,0.9188,0.9202,0.9167,0.9139,0.9145,0.9133,0.9167,0.9186,0.9152,0.8969,0.8986,0.8961,0.6868,0.6883,0.681,0.6672,0.6898,0.686,0.6901,0.6938,0.6854,0.6978,0.7042,0.7016,0.6811,0.7002,0.6978,0.533,0.6362,0.6316,0.614,0.6175,0.6098,0.5824,0.6288,0.6252,0.6007,0.6482,0.6392,0.6335,0.6492,0.6458,0.5837,0.6606,0.6526,0.5978,0.5978,0.5953],
+&quot;task&quot;:[&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;],
+&quot;variety&quot;:[&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;],
+&quot;vo&quot;:[0.0,0.0,0.0,1.0,1.0,1.0,2.0,2.0,2.0,3.0,3.0,3.0,4.0,4.0,4.0,5.0,5.0,5.0,0.0,0.0,0.0,1.0,1.0,1.0,2.0,2.0,2.0,3.0,3.0,3.0,4.0,4.0,4.0,5.0,5.0,5.0,0.0,0.0,0.0,1.0,1.0,1.0,2.0,2.0,2.0,3.0,3.0,3.0,4.0,4.0,4.0,5.0,5.0,5.0,0.0,0.0,0.0,1.0,1.0,1.0,2.0,2.0,2.0,3.0,3.0,3.0,4.0,4.0,4.0,5.0,5.0,5.0]
+},
+&quot;mapping&quot;:{
+&quot;y&quot;:&quot;variant&quot;
+},
+&quot;data_meta&quot;:{
+&quot;series_annotations&quot;:[{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;variant&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;mode&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;component&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;f1&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;task&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;variety&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;vo&quot;
+}],
+&quot;mapping_annotations&quot;:[{
+&quot;parameters&quot;:{
+&quot;label&quot;:&quot;variant&quot;,
+&quot;order_by&quot;:&quot;vo&quot;,
+&quot;order&quot;:-1.0
+},
+&quot;aes&quot;:&quot;y&quot;,
+&quot;annotation&quot;:&quot;as_discrete&quot;
+}]
+},
+&quot;facet&quot;:{
+&quot;name&quot;:&quot;wrap&quot;,
+&quot;facets&quot;:&quot;mode&quot;,
+&quot;ncol&quot;:1.0,
+&quot;order&quot;:1.0,
+&quot;dir&quot;:&quot;h&quot;
+},
+&quot;ggtitle&quot;:{
+&quot;text&quot;:&quot;TF-IDF + LogReg baseline: out-of-fold macro-F1 per component&quot;,
+&quot;subtitle&quot;:&quot;5-fold OOF over train+valid · black dot = official score (min over varieties, averaged over tasks)\ntuned = threshold chosen on the OOF itself (optimistic); cross-fit = tuned on the other 4 folds (honest)&quot;
+},
+&quot;guides&quot;:{
+&quot;x&quot;:{
+&quot;title&quot;:&quot;macro-F1&quot;
+}
+},
+&quot;theme&quot;:{
+&quot;name&quot;:&quot;minimal2&quot;,
+&quot;axis_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;axis_text&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:false
+},
+&quot;legend_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:false
+},
+&quot;legend_position&quot;:&quot;top&quot;,
+&quot;panel_grid_major&quot;:{
+&quot;color&quot;:&quot;#e6e5e0&quot;,
+&quot;size&quot;:0.4,
+&quot;blank&quot;:false
+},
+&quot;panel_grid_minor&quot;:{
+&quot;blank&quot;:true
+},
+&quot;plot_background&quot;:{
+&quot;fill&quot;:&quot;#fcfcfb&quot;,
+&quot;color&quot;:&quot;#fcfcfb&quot;,
+&quot;blank&quot;:false
+},
+&quot;plot_title&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:15.0,
+&quot;blank&quot;:false
+},
+&quot;plot_subtitle&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;plot_caption&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:9.0,
+&quot;blank&quot;:false
+},
+&quot;strip_text&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;axis_title_y&quot;:{
+&quot;blank&quot;:true
+}
+},
+&quot;kind&quot;:&quot;plot&quot;,
+&quot;scales&quot;:[{
+&quot;aesthetic&quot;:&quot;color&quot;,
+&quot;breaks&quot;:[&quot;en-AU&quot;,&quot;en-UK&quot;],
+&quot;values&quot;:[&quot;#2a78d6&quot;,&quot;#eb6834&quot;]
+},{
+&quot;aesthetic&quot;:&quot;shape&quot;,
+&quot;breaks&quot;:[&quot;sentiment&quot;,&quot;sarcasm&quot;],
+&quot;values&quot;:[16.0,17.0]
+}],
+&quot;layers&quot;:[{
+&quot;geom&quot;:&quot;point&quot;,
+&quot;mapping&quot;:{
+&quot;x&quot;:&quot;f1&quot;,
+&quot;color&quot;:&quot;variety&quot;,
+&quot;shape&quot;:&quot;task&quot;
+},
+&quot;tooltips&quot;:{
+&quot;formats&quot;:[{
+&quot;field&quot;:&quot;@f1&quot;,
+&quot;format&quot;:&quot;.3f&quot;
+}],
+&quot;lines&quot;:[&quot;@variant · @mode&quot;,&quot;@task @variety macro-F1 @f1&quot;]
+},
+&quot;data_meta&quot;:{
+},
+&quot;size&quot;:4.2,
+&quot;data&quot;:{
+}
+},{
+&quot;geom&quot;:&quot;point&quot;,
+&quot;data&quot;:{
+&quot;variant&quot;:[&quot;global&quot;,&quot;global&quot;,&quot;global&quot;,&quot;global+seg&quot;,&quot;global+seg&quot;,&quot;global+seg&quot;,&quot;augment&quot;,&quot;augment&quot;,&quot;augment&quot;,&quot;per-variety&quot;,&quot;per-variety&quot;,&quot;per-variety&quot;,&quot;per-segment&quot;,&quot;per-segment&quot;,&quot;per-segment&quot;,&quot;AU->UK / UK->AU&quot;,&quot;AU->UK / UK->AU&quot;,&quot;AU->UK / UK->AU&quot;],
+&quot;mode&quot;:[&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;,&quot;thr=0.5&quot;,&quot;thr=tuned/variety&quot;,&quot;thr=cross-fit/variety&quot;],
+&quot;score&quot;:[0.7276,0.732,0.727,0.7137,0.7371,0.7341,0.7196,0.7436,0.7371,0.7341,0.742,0.7387,0.7105,0.75,0.7417,0.6667,0.7085,0.7045],
+&quot;vo&quot;:[0.0,0.0,0.0,1.0,1.0,1.0,2.0,2.0,2.0,3.0,3.0,3.0,4.0,4.0,4.0,5.0,5.0,5.0]
+},
+&quot;mapping&quot;:{
+&quot;x&quot;:&quot;score&quot;
+},
+&quot;tooltips&quot;:{
+&quot;formats&quot;:[{
+&quot;field&quot;:&quot;@score&quot;,
+&quot;format&quot;:&quot;.3f&quot;
+}],
+&quot;lines&quot;:[&quot;official score @score&quot;]
+},
+&quot;data_meta&quot;:{
+&quot;series_annotations&quot;:[{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;variant&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;mode&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;score&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;vo&quot;
+}]
+},
+&quot;size&quot;:6.0,
+&quot;color&quot;:&quot;#0b0b0b&quot;
+}],
+&quot;metainfo_list&quot;:[],
+&quot;spec_id&quot;:&quot;3&quot;
+};
+           fig = LetsPlot.buildPlotFromProcessedSpecs(plotSpec, containerDiv, sizing);
+       } else {
+           fig.updateView({});
+       }
+   }
+   
+   const renderImmediately = 
+       forceImmediateRender || (
+           sizing.width_mode === 'FIXED' &amp;&amp; 
+           (sizing.height_mode === 'FIXED' || sizing.height_mode === 'SCALED')
+       );
+   
+   if (renderImmediately) {
+       renderPlot();
+   }
+   
+   if (!renderImmediately || responsive) {
+       // Set up observer for initial sizing or continuous monitoring
+       var observer = new ResizeObserver(function(entries) {
+           for (let entry of entries) {
+               if (entry.contentBoxSize &amp;&amp; 
+                   entry.contentBoxSize[0].inlineSize > 0) {
+                   if (!responsive &amp;&amp; observer) {
+                       observer.disconnect();
+                       observer = null;
+                   }
+                   renderPlot();
+                   if (!responsive) {
+                       break;
+                   }
+               }
+           }
+       });
+       
+       observer.observe(containerDiv);
+   }
+   
+   // ----------
+   })();
+   
+   &lt;/script>
+   &lt;/body>
+&lt;/html>"></iframe>    

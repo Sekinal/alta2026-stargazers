@@ -1,0 +1,271 @@
+            <iframe src='about:blank' style='border:none !important;' width='1200' height='799' srcdoc="&lt;html lang=&quot;en&quot;>
+   &lt;head>
+       &lt;meta charset=&quot;UTF-8&quot;>
+       &lt;style> html, body { margin: 0; padding: 0; overflow: hidden; } &lt;/style>
+       &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;library&quot; src=&quot;https://cdn.jsdelivr.net/gh/JetBrains/lets-plot@v4.11.0/js-package/distr/lets-plot.min.js&quot;>&lt;/script>
+   &lt;/head>
+   &lt;body>
+          &lt;div id=&quot;81vSG4&quot; >&lt;/div>
+   &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;plot&quot;>
+   
+   (function() {
+   // ----------
+   
+   const forceImmediateRender = false;
+   const responsive = false;
+   
+   let sizing = {
+       width_mode: &quot;FIXED&quot;,
+       height_mode: &quot;FIXED&quot;,
+       width: 1200.0, 
+       height: 799.0 
+   };
+   
+   const preferredWidth = document.body.dataset.letsPlotPreferredWidth;
+   if (preferredWidth !== undefined) {
+       sizing = {
+           width_mode: 'FIXED',
+           height_mode: 'SCALED',
+           width: parseFloat(preferredWidth)
+       };
+   }
+   
+   const containerDiv = document.getElementById(&quot;81vSG4&quot;);
+   let fig = null;
+   
+   function renderPlot() {
+       if (fig === null) {
+           const plotSpec = {
+&quot;data&quot;:{
+&quot;segment&quot;:[&quot;google · en-AU&quot;,&quot;google · en-AU&quot;,&quot;google · en-AU&quot;,&quot;reddit · en-AU&quot;,&quot;reddit · en-AU&quot;,&quot;reddit · en-AU&quot;,&quot;reddit · en-AU&quot;,&quot;reddit · en-UK&quot;,&quot;reddit · en-UK&quot;,&quot;reddit · en-UK&quot;,&quot;google · en-AU&quot;,&quot;google · en-AU&quot;,&quot;google · en-AU&quot;,&quot;reddit · en-AU&quot;,&quot;reddit · en-AU&quot;,&quot;reddit · en-AU&quot;,&quot;reddit · en-AU&quot;,&quot;reddit · en-UK&quot;,&quot;reddit · en-UK&quot;,&quot;reddit · en-UK&quot;,&quot;google · en-AU&quot;,&quot;google · en-AU&quot;,&quot;google · en-AU&quot;,&quot;reddit · en-AU&quot;,&quot;reddit · en-AU&quot;,&quot;reddit · en-AU&quot;,&quot;reddit · en-AU&quot;,&quot;reddit · en-UK&quot;,&quot;reddit · en-UK&quot;,&quot;reddit · en-UK&quot;],
+&quot;grp&quot;:[&quot;plain · negative&quot;,&quot;plain · positive&quot;,&quot;sarcastic · negative&quot;,&quot;plain · negative&quot;,&quot;plain · positive&quot;,&quot;sarcastic · negative&quot;,&quot;sarcastic · positive&quot;,&quot;plain · negative&quot;,&quot;plain · positive&quot;,&quot;sarcastic · negative&quot;,&quot;plain · negative&quot;,&quot;plain · positive&quot;,&quot;sarcastic · negative&quot;,&quot;plain · negative&quot;,&quot;plain · positive&quot;,&quot;sarcastic · negative&quot;,&quot;sarcastic · positive&quot;,&quot;plain · negative&quot;,&quot;plain · positive&quot;,&quot;sarcastic · negative&quot;,&quot;plain · negative&quot;,&quot;plain · positive&quot;,&quot;sarcastic · negative&quot;,&quot;plain · negative&quot;,&quot;plain · positive&quot;,&quot;sarcastic · negative&quot;,&quot;sarcastic · positive&quot;,&quot;plain · negative&quot;,&quot;plain · positive&quot;,&quot;sarcastic · negative&quot;],
+&quot;n&quot;:[218.0,785.0,67.0,552.0,611.0,812.0,29.0,767.0,128.0,245.0,218.0,785.0,67.0,552.0,611.0,812.0,29.0,767.0,128.0,245.0,218.0,785.0,67.0,552.0,611.0,812.0,29.0,767.0,128.0,245.0],
+&quot;metric&quot;:[&quot;≥1 positive-lexicon word&quot;,&quot;≥1 positive-lexicon word&quot;,&quot;≥1 positive-lexicon word&quot;,&quot;≥1 positive-lexicon word&quot;,&quot;≥1 positive-lexicon word&quot;,&quot;≥1 positive-lexicon word&quot;,&quot;≥1 positive-lexicon word&quot;,&quot;≥1 positive-lexicon word&quot;,&quot;≥1 positive-lexicon word&quot;,&quot;≥1 positive-lexicon word&quot;,&quot;VADER compound > 0.05&quot;,&quot;VADER compound > 0.05&quot;,&quot;VADER compound > 0.05&quot;,&quot;VADER compound > 0.05&quot;,&quot;VADER compound > 0.05&quot;,&quot;VADER compound > 0.05&quot;,&quot;VADER compound > 0.05&quot;,&quot;VADER compound > 0.05&quot;,&quot;VADER compound > 0.05&quot;,&quot;VADER compound > 0.05&quot;,&quot;both positive &amp; negative words&quot;,&quot;both positive &amp; negative words&quot;,&quot;both positive &amp; negative words&quot;,&quot;both positive &amp; negative words&quot;,&quot;both positive &amp; negative words&quot;,&quot;both positive &amp; negative words&quot;,&quot;both positive &amp; negative words&quot;,&quot;both positive &amp; negative words&quot;,&quot;both positive &amp; negative words&quot;,&quot;both positive &amp; negative words&quot;],
+&quot;pct&quot;:[88.9908256880734,99.7452229299363,91.04477611940298,66.12318840579711,73.15875613747954,65.39408866995073,79.3103448275862,65.1890482398957,92.1875,63.6734693877551,52.293577981651374,98.59872611464968,64.17910447761194,38.58695652173913,69.72176759410802,40.14778325123153,72.41379310344827,28.943937418513688,88.28125,48.97959183673469,69.26605504587155,31.0828025477707,80.59701492537313,46.73913043478261,26.186579378068743,45.44334975369458,37.93103448275862,53.71577574967405,22.65625,39.183673469387756],
+&quot;lo&quot;:[84.14172116892908,99.0758302047359,81.80703630060067,62.07550471378017,69.5083218809133,62.05644075341182,61.60955339174228,61.74956232204213,86.21517266143844,57.48299319727891,45.68098943070572,97.50832020790679,52.21828769475225,34.61808650900945,65.96463738090135,36.83010239852899,54.28252365556403,25.845658708907177,81.56324042590187,42.784144728990256,62.85165688884522,27.94374420722905,69.58066237584177,42.61373754257174,22.856971051933638,42.047996710683684,22.687795730867343,50.177223068764235,16.26314704520524,33.28298784869783],
+&quot;hi&quot;:[92.48953284294245,99.93010457355167,95.83096171186658,69.9480070204981,76.519793327947,68.58676253506964,90.15406348441479,68.47714054402012,95.7013089346587,69.4417653639906,58.826731393522,99.21578764847402,74.60211161864552,42.713584959984594,73.2324501291175,43.558247496842846,85.30141866149725,32.25208796174474,92.76838176314924,55.20654493061651,75.01319803466777,34.406111581309496,88.2949361425429,50.909597162855135,29.8137656060934,48.881615115925776,55.99777379071503,57.21729222465014,30.64283710547254,45.41832254313376],
+&quot;gord&quot;:[1.0,0.0,2.0,1.0,0.0,2.0,3.0,1.0,0.0,2.0,1.0,0.0,2.0,1.0,0.0,2.0,3.0,1.0,0.0,2.0,1.0,0.0,2.0,1.0,0.0,2.0,3.0,1.0,0.0,2.0]
+},
+&quot;mapping&quot;:{
+&quot;x&quot;:&quot;grp&quot;,
+&quot;y&quot;:&quot;pct&quot;,
+&quot;fill&quot;:&quot;grp&quot;
+},
+&quot;data_meta&quot;:{
+&quot;series_annotations&quot;:[{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;grp&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;segment&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;n&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;metric&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;pct&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;lo&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;hi&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;gord&quot;
+}],
+&quot;mapping_annotations&quot;:[{
+&quot;parameters&quot;:{
+&quot;label&quot;:&quot;grp&quot;,
+&quot;order_by&quot;:&quot;gord&quot;,
+&quot;order&quot;:1.0
+},
+&quot;aes&quot;:&quot;x&quot;,
+&quot;annotation&quot;:&quot;as_discrete&quot;
+}]
+},
+&quot;facet&quot;:{
+&quot;name&quot;:&quot;grid&quot;,
+&quot;x&quot;:&quot;segment&quot;,
+&quot;y&quot;:&quot;metric&quot;,
+&quot;x_order&quot;:1.0,
+&quot;y_order&quot;:1.0
+},
+&quot;ggtitle&quot;:{
+&quot;text&quot;:&quot;Does sarcasm hide behind positive words?&quot;,
+&quot;subtitle&quot;:&quot;Surface polarity by label group (VADER lexicon) · Wilson 95% CI · groups with n ≥ 20&quot;
+},
+&quot;guides&quot;:{
+&quot;y&quot;:{
+&quot;title&quot;:&quot;% of texts&quot;
+}
+},
+&quot;theme&quot;:{
+&quot;name&quot;:&quot;minimal2&quot;,
+&quot;axis_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;axis_text&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:false
+},
+&quot;legend_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:true
+},
+&quot;legend_position&quot;:&quot;top&quot;,
+&quot;panel_grid_major&quot;:{
+&quot;color&quot;:&quot;#e6e5e0&quot;,
+&quot;size&quot;:0.4,
+&quot;blank&quot;:false
+},
+&quot;panel_grid_minor&quot;:{
+&quot;blank&quot;:true
+},
+&quot;plot_background&quot;:{
+&quot;fill&quot;:&quot;#fcfcfb&quot;,
+&quot;color&quot;:&quot;#fcfcfb&quot;,
+&quot;blank&quot;:false
+},
+&quot;plot_title&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:15.0,
+&quot;blank&quot;:false
+},
+&quot;plot_subtitle&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;plot_caption&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:9.0,
+&quot;blank&quot;:false
+},
+&quot;strip_text&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;axis_title_x&quot;:{
+&quot;blank&quot;:true
+},
+&quot;axis_text_x&quot;:{
+&quot;blank&quot;:true
+},
+&quot;panel_grid_major_x&quot;:{
+&quot;blank&quot;:true
+}
+},
+&quot;kind&quot;:&quot;plot&quot;,
+&quot;scales&quot;:[{
+&quot;aesthetic&quot;:&quot;fill&quot;,
+&quot;breaks&quot;:[&quot;plain · positive&quot;,&quot;plain · negative&quot;,&quot;sarcastic · negative&quot;,&quot;sarcastic · positive&quot;],
+&quot;values&quot;:[&quot;#1baf7a&quot;,&quot;#e34948&quot;,&quot;#4a3aa7&quot;,&quot;#e87ba4&quot;]
+},{
+&quot;aesthetic&quot;:&quot;y&quot;,
+&quot;breaks&quot;:[0.0,25.0,50.0,75.0,100.0],
+&quot;limits&quot;:[0.0,110.0]
+}],
+&quot;layers&quot;:[{
+&quot;geom&quot;:&quot;bar&quot;,
+&quot;stat&quot;:&quot;identity&quot;,
+&quot;mapping&quot;:{
+},
+&quot;tooltips&quot;:{
+&quot;formats&quot;:[{
+&quot;field&quot;:&quot;@pct&quot;,
+&quot;format&quot;:&quot;.1f&quot;
+}],
+&quot;lines&quot;:[&quot;@segment · @grp&quot;,&quot;@metric: @pct % (n=@n)&quot;]
+},
+&quot;data_meta&quot;:{
+},
+&quot;width&quot;:0.72,
+&quot;color&quot;:&quot;#fcfcfb&quot;,
+&quot;size&quot;:0.6,
+&quot;data&quot;:{
+}
+},{
+&quot;geom&quot;:&quot;errorbar&quot;,
+&quot;mapping&quot;:{
+&quot;ymin&quot;:&quot;lo&quot;,
+&quot;ymax&quot;:&quot;hi&quot;
+},
+&quot;data_meta&quot;:{
+},
+&quot;width&quot;:0.18,
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:0.6,
+&quot;data&quot;:{
+}
+},{
+&quot;geom&quot;:&quot;text&quot;,
+&quot;mapping&quot;:{
+&quot;y&quot;:&quot;hi&quot;,
+&quot;label&quot;:&quot;pct&quot;
+},
+&quot;data_meta&quot;:{
+},
+&quot;label_format&quot;:&quot;.0f&quot;,
+&quot;nudge_y&quot;:6.0,
+&quot;size&quot;:7.0,
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;data&quot;:{
+}
+}],
+&quot;metainfo_list&quot;:[],
+&quot;spec_id&quot;:&quot;15&quot;
+};
+           fig = LetsPlot.buildPlotFromProcessedSpecs(plotSpec, containerDiv, sizing);
+       } else {
+           fig.updateView({});
+       }
+   }
+   
+   const renderImmediately = 
+       forceImmediateRender || (
+           sizing.width_mode === 'FIXED' &amp;&amp; 
+           (sizing.height_mode === 'FIXED' || sizing.height_mode === 'SCALED')
+       );
+   
+   if (renderImmediately) {
+       renderPlot();
+   }
+   
+   if (!renderImmediately || responsive) {
+       // Set up observer for initial sizing or continuous monitoring
+       var observer = new ResizeObserver(function(entries) {
+           for (let entry of entries) {
+               if (entry.contentBoxSize &amp;&amp; 
+                   entry.contentBoxSize[0].inlineSize > 0) {
+                   if (!responsive &amp;&amp; observer) {
+                       observer.disconnect();
+                       observer = null;
+                   }
+                   renderPlot();
+                   if (!responsive) {
+                       break;
+                   }
+               }
+           }
+       });
+       
+       observer.observe(containerDiv);
+   }
+   
+   // ----------
+   })();
+   
+   &lt;/script>
+   &lt;/body>
+&lt;/html>"></iframe>    

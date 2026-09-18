@@ -1,0 +1,439 @@
+            <iframe src='about:blank' style='border:none !important;' width='600' height='400' srcdoc="&lt;html lang=&quot;en&quot;>
+   &lt;head>
+       &lt;meta charset=&quot;UTF-8&quot;>
+       &lt;style> html, body { margin: 0; padding: 0; overflow: hidden; } &lt;/style>
+       &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;library&quot; src=&quot;https://cdn.jsdelivr.net/gh/JetBrains/lets-plot@v4.11.0/js-package/distr/lets-plot.min.js&quot;>&lt;/script>
+   &lt;/head>
+   &lt;body>
+          &lt;div id=&quot;X4FbCy&quot; >&lt;/div>
+   &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;plot&quot;>
+   
+   (function() {
+   // ----------
+   
+   const forceImmediateRender = false;
+   const responsive = false;
+   
+   let sizing = {
+       width_mode: &quot;FIXED&quot;,
+       height_mode: &quot;FIXED&quot;,
+       width: 600.0, 
+       height: 400.0 
+   };
+   
+   const preferredWidth = document.body.dataset.letsPlotPreferredWidth;
+   if (preferredWidth !== undefined) {
+       sizing = {
+           width_mode: 'FIXED',
+           height_mode: 'SCALED',
+           width: parseFloat(preferredWidth)
+       };
+   }
+   
+   const containerDiv = document.getElementById(&quot;X4FbCy&quot;);
+   let fig = null;
+   
+   function renderPlot() {
+       if (fig === null) {
+           const plotSpec = {
+&quot;ggtitle&quot;:{
+&quot;text&quot;:&quot;Reddit topics (NMF, k=12, TF-IDF, both varieties) and their sarcasm rates&quot;,
+&quot;subtitle&quot;:&quot;Each text assigned to its dominant topic; bars = topic share per variety&quot;
+},
+&quot;theme&quot;:{
+&quot;plot_background&quot;:{
+&quot;fill&quot;:&quot;#fcfcfb&quot;,
+&quot;color&quot;:&quot;#fcfcfb&quot;,
+&quot;blank&quot;:false
+}
+},
+&quot;kind&quot;:&quot;subplots&quot;,
+&quot;layout&quot;:{
+&quot;ncol&quot;:2.0,
+&quot;nrow&quot;:1.0,
+&quot;widths&quot;:[1.6,1.0],
+&quot;name&quot;:&quot;grid&quot;
+},
+&quot;figures&quot;:[{
+&quot;data&quot;:{
+&quot;variety&quot;:[&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;],
+&quot;n&quot;:[630.0,259.0,192.0,109.0,105.0,46.0,25.0,68.0,67.0,59.0,167.0,125.0,95.0,60.0,49.0,23.0,188.0,115.0,152.0,88.0,163.0,90.0,134.0,84.0],
+&quot;label&quot;:[&quot;T00: government, years, money, make, country, australia, time&quot;,&quot;T00: government, years, money, make, country, australia, time&quot;,&quot;T01: it's, right, lot, time, unless, pretty, clearly&quot;,&quot;T01: it's, right, lot, time, unless, pretty, clearly&quot;,&quot;T02: good, know, luck, fucking, point, thank, you're&quot;,&quot;T02: good, know, luck, fucking, point, thank, you're&quot;,&quot;T03: fuck, israel, fucking, cunt, make, absolute, win&quot;,&quot;T03: fuck, israel, fucking, cunt, make, absolute, win&quot;,&quot;T04: people, really, country, care, uk, white, young&quot;,&quot;T04: people, really, country, care, uk, white, young&quot;,&quot;T05: like, looks, sounds, shit, right, got, they're&quot;,&quot;T05: like, looks, sounds, shit, right, got, they're&quot;,&quot;T06: don't, know, want, need, means, you're, tell&quot;,&quot;T06: don't, know, want, need, means, you're, tell&quot;,&quot;T07: yes, wrong, racist, rude, ah, you're, winter&quot;,&quot;T07: yes, wrong, racist, rude, ah, you're, winter&quot;,&quot;T08: just, can't, say, shit, going, try, course&quot;,&quot;T08: just, can't, say, shit, going, try, course&quot;,&quot;T09: i'm, sure, thanks, going, i'll, fan, point&quot;,&quot;T09: i'm, sure, thanks, going, i'll, fan, point&quot;,&quot;T10: think, didn't, pretty, add, love, day, thing&quot;,&quot;T10: think, didn't, pretty, add, love, day, thing&quot;,&quot;T11: that's, way, actually, yeah, disgusting, sure, look&quot;,&quot;T11: that's, way, actually, yeah, disgusting, sure, look&quot;],
+&quot;share&quot;:[31.437125748502993,22.659667541557305,9.580838323353294,9.53630796150481,5.239520958083832,4.024496937882764,1.2475049900199602,5.94925634295713,3.343313373253493,5.16185476815398,8.333333333333332,10.936132983377078,4.740518962075848,5.2493438320209975,2.4451097804391217,2.012248468941382,9.3812375249501,10.061242344706912,7.584830339321358,7.699037620297462,8.13373253493014,7.874015748031496,6.686626746506986,7.349081364829396],
+&quot;tot&quot;:[889.0,889.0,301.0,301.0,151.0,151.0,93.0,93.0,126.0,126.0,292.0,292.0,155.0,155.0,72.0,72.0,303.0,303.0,240.0,240.0,253.0,253.0,218.0,218.0]
+},
+&quot;mapping&quot;:{
+&quot;x&quot;:&quot;share&quot;,
+&quot;y&quot;:&quot;label&quot;,
+&quot;fill&quot;:&quot;variety&quot;
+},
+&quot;data_meta&quot;:{
+&quot;series_annotations&quot;:[{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;label&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;topic&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;variety&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;n&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;k_sarc&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;k_pos&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;N&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;share&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;sarc_pct&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;pos_pct&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;s_lo&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;s_hi&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;tot&quot;
+}],
+&quot;mapping_annotations&quot;:[{
+&quot;parameters&quot;:{
+&quot;label&quot;:&quot;label&quot;,
+&quot;order_by&quot;:&quot;tot&quot;,
+&quot;order&quot;:1.0
+},
+&quot;aes&quot;:&quot;y&quot;,
+&quot;annotation&quot;:&quot;as_discrete&quot;
+}]
+},
+&quot;ggtitle&quot;:{
+&quot;text&quot;:&quot;Topic share&quot;
+},
+&quot;guides&quot;:{
+&quot;x&quot;:{
+&quot;title&quot;:&quot;% of the variety's reddit texts&quot;
+}
+},
+&quot;theme&quot;:{
+&quot;name&quot;:&quot;minimal2&quot;,
+&quot;axis_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;axis_text&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:false
+},
+&quot;legend_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:true
+},
+&quot;legend_position&quot;:&quot;bottom&quot;,
+&quot;panel_grid_major&quot;:{
+&quot;color&quot;:&quot;#e6e5e0&quot;,
+&quot;size&quot;:0.4,
+&quot;blank&quot;:false
+},
+&quot;panel_grid_minor&quot;:{
+&quot;blank&quot;:true
+},
+&quot;plot_background&quot;:{
+&quot;fill&quot;:&quot;#fcfcfb&quot;,
+&quot;color&quot;:&quot;#fcfcfb&quot;,
+&quot;blank&quot;:false
+},
+&quot;plot_title&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:15.0,
+&quot;blank&quot;:false
+},
+&quot;plot_subtitle&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;plot_caption&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:9.0,
+&quot;blank&quot;:false
+},
+&quot;strip_text&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;axis_title_y&quot;:{
+&quot;blank&quot;:true
+}
+},
+&quot;kind&quot;:&quot;plot&quot;,
+&quot;scales&quot;:[{
+&quot;aesthetic&quot;:&quot;fill&quot;,
+&quot;breaks&quot;:[&quot;en-AU&quot;,&quot;en-UK&quot;],
+&quot;values&quot;:[&quot;#2a78d6&quot;,&quot;#eb6834&quot;]
+}],
+&quot;layers&quot;:[{
+&quot;geom&quot;:&quot;bar&quot;,
+&quot;stat&quot;:&quot;identity&quot;,
+&quot;mapping&quot;:{
+},
+&quot;position&quot;:{
+&quot;name&quot;:&quot;dodge&quot;,
+&quot;width&quot;:0.8
+},
+&quot;tooltips&quot;:{
+&quot;formats&quot;:[{
+&quot;field&quot;:&quot;@share&quot;,
+&quot;format&quot;:&quot;.1f&quot;
+}],
+&quot;lines&quot;:[&quot;@label&quot;,&quot;@variety: @n texts (@share %)&quot;]
+},
+&quot;data_meta&quot;:{
+},
+&quot;width&quot;:0.75,
+&quot;orientation&quot;:&quot;y&quot;,
+&quot;data&quot;:{
+}
+}],
+&quot;metainfo_list&quot;:[],
+&quot;spec_id&quot;:&quot;14&quot;
+},{
+&quot;data&quot;:{
+&quot;variety&quot;:[&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;],
+&quot;n&quot;:[630.0,259.0,192.0,109.0,105.0,46.0,25.0,68.0,67.0,59.0,167.0,125.0,95.0,60.0,49.0,23.0,188.0,115.0,152.0,88.0,163.0,90.0,134.0,84.0],
+&quot;k_sarc&quot;:[272.0,78.0,69.0,19.0,24.0,14.0,14.0,8.0,32.0,4.0,85.0,26.0,36.0,13.0,23.0,8.0,91.0,21.0,47.0,19.0,70.0,18.0,63.0,18.0],
+&quot;label&quot;:[&quot;T00: government, years, money, make, country, australia, time&quot;,&quot;T00: government, years, money, make, country, australia, time&quot;,&quot;T01: it's, right, lot, time, unless, pretty, clearly&quot;,&quot;T01: it's, right, lot, time, unless, pretty, clearly&quot;,&quot;T02: good, know, luck, fucking, point, thank, you're&quot;,&quot;T02: good, know, luck, fucking, point, thank, you're&quot;,&quot;T03: fuck, israel, fucking, cunt, make, absolute, win&quot;,&quot;T03: fuck, israel, fucking, cunt, make, absolute, win&quot;,&quot;T04: people, really, country, care, uk, white, young&quot;,&quot;T04: people, really, country, care, uk, white, young&quot;,&quot;T05: like, looks, sounds, shit, right, got, they're&quot;,&quot;T05: like, looks, sounds, shit, right, got, they're&quot;,&quot;T06: don't, know, want, need, means, you're, tell&quot;,&quot;T06: don't, know, want, need, means, you're, tell&quot;,&quot;T07: yes, wrong, racist, rude, ah, you're, winter&quot;,&quot;T07: yes, wrong, racist, rude, ah, you're, winter&quot;,&quot;T08: just, can't, say, shit, going, try, course&quot;,&quot;T08: just, can't, say, shit, going, try, course&quot;,&quot;T09: i'm, sure, thanks, going, i'll, fan, point&quot;,&quot;T09: i'm, sure, thanks, going, i'll, fan, point&quot;,&quot;T10: think, didn't, pretty, add, love, day, thing&quot;,&quot;T10: think, didn't, pretty, add, love, day, thing&quot;,&quot;T11: that's, way, actually, yeah, disgusting, sure, look&quot;,&quot;T11: that's, way, actually, yeah, disgusting, sure, look&quot;],
+&quot;sarc_pct&quot;:[43.17460317460318,30.115830115830118,35.9375,17.431192660550458,22.857142857142858,30.434782608695656,56.00000000000001,11.76470588235294,47.76119402985074,6.779661016949152,50.898203592814376,20.8,37.89473684210527,21.666666666666668,46.93877551020408,34.78260869565217,48.40425531914894,18.26086956521739,30.92105263157895,21.59090909090909,42.944785276073624,20.0,47.01492537313433,21.428571428571427],
+&quot;pos_pct&quot;:[29.523809523809526,8.108108108108109,36.45833333333333,12.844036697247708,66.66666666666666,30.434782608695656,4.0,4.411764705882353,11.940298507462686,1.694915254237288,25.748502994011975,13.600000000000001,24.210526315789473,3.3333333333333335,36.734693877551024,8.695652173913043,21.808510638297875,9.565217391304348,48.026315789473685,23.863636363636363,33.12883435582822,17.77777777777778,26.865671641791046,7.142857142857142],
+&quot;s_lo&quot;:[39.359623669087725,24.852637057633927,29.487531058452767,11.452781593206733,15.868283892521589,19.079670807448903,37.06701701956444,6.083419938921196,36.25018863524252,2.6678187098391564,43.3814682303871,14.608314206747488,28.789651358466834,13.122921046407015,33.703281897894776,18.811054636982238,41.36428196214922,12.265283002248902,24.119850644698563,14.280713983318927,35.59432203735802,13.0422969625965,38.76548616084964,14.006654921749655],
+&quot;s_hi&quot;:[47.07231768660746,35.960263183423805,42.939164801875165,25.62716055578796,31.76203392713559,44.80591874023817,73.33462505299744,21.535118623694334,59.515011473168336,16.175749881667105,58.374544356711134,28.73296687017176,47.940794121978655,33.62026834734252,60.61937298008014,55.11002309310836,55.508137784141475,26.308415096733274,38.66287232529149,31.277725765117516,50.62014725567202,29.413927142704345,55.430750679117416,31.349531668658532],
+&quot;tot&quot;:[889.0,889.0,301.0,301.0,151.0,151.0,93.0,93.0,126.0,126.0,292.0,292.0,155.0,155.0,72.0,72.0,303.0,303.0,240.0,240.0,253.0,253.0,218.0,218.0]
+},
+&quot;mapping&quot;:{
+&quot;y&quot;:&quot;label&quot;,
+&quot;color&quot;:&quot;variety&quot;
+},
+&quot;data_meta&quot;:{
+&quot;series_annotations&quot;:[{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;label&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;topic&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;variety&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;n&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;k_sarc&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;k_pos&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;N&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;share&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;sarc_pct&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;pos_pct&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;s_lo&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;s_hi&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;tot&quot;
+}],
+&quot;mapping_annotations&quot;:[{
+&quot;parameters&quot;:{
+&quot;label&quot;:&quot;label&quot;,
+&quot;order_by&quot;:&quot;tot&quot;,
+&quot;order&quot;:1.0
+},
+&quot;aes&quot;:&quot;y&quot;,
+&quot;annotation&quot;:&quot;as_discrete&quot;
+}]
+},
+&quot;ggtitle&quot;:{
+&quot;text&quot;:&quot;Sarcasm rate within topic (Wilson 95% CI)&quot;
+},
+&quot;guides&quot;:{
+&quot;x&quot;:{
+&quot;title&quot;:&quot;% sarcastic&quot;
+}
+},
+&quot;theme&quot;:{
+&quot;name&quot;:&quot;minimal2&quot;,
+&quot;axis_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;axis_text&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:false
+},
+&quot;legend_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:true
+},
+&quot;legend_position&quot;:&quot;bottom&quot;,
+&quot;panel_grid_major&quot;:{
+&quot;color&quot;:&quot;#e6e5e0&quot;,
+&quot;size&quot;:0.4,
+&quot;blank&quot;:false
+},
+&quot;panel_grid_minor&quot;:{
+&quot;blank&quot;:true
+},
+&quot;plot_background&quot;:{
+&quot;fill&quot;:&quot;#fcfcfb&quot;,
+&quot;color&quot;:&quot;#fcfcfb&quot;,
+&quot;blank&quot;:false
+},
+&quot;plot_title&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:15.0,
+&quot;blank&quot;:false
+},
+&quot;plot_subtitle&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;plot_caption&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:9.0,
+&quot;blank&quot;:false
+},
+&quot;strip_text&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;axis_title_y&quot;:{
+&quot;blank&quot;:true
+},
+&quot;axis_text_y&quot;:{
+&quot;blank&quot;:true
+}
+},
+&quot;kind&quot;:&quot;plot&quot;,
+&quot;scales&quot;:[{
+&quot;aesthetic&quot;:&quot;color&quot;,
+&quot;breaks&quot;:[&quot;en-AU&quot;,&quot;en-UK&quot;],
+&quot;values&quot;:[&quot;#2a78d6&quot;,&quot;#eb6834&quot;]
+}],
+&quot;layers&quot;:[{
+&quot;geom&quot;:&quot;errorbar&quot;,
+&quot;mapping&quot;:{
+&quot;xmin&quot;:&quot;s_lo&quot;,
+&quot;xmax&quot;:&quot;s_hi&quot;
+},
+&quot;data_meta&quot;:{
+},
+&quot;width&quot;:0.0,
+&quot;size&quot;:0.9,
+&quot;alpha&quot;:0.6,
+&quot;orientation&quot;:&quot;y&quot;,
+&quot;data&quot;:{
+}
+},{
+&quot;geom&quot;:&quot;point&quot;,
+&quot;mapping&quot;:{
+&quot;x&quot;:&quot;sarc_pct&quot;
+},
+&quot;tooltips&quot;:{
+&quot;formats&quot;:[{
+&quot;field&quot;:&quot;@sarc_pct&quot;,
+&quot;format&quot;:&quot;.0f&quot;
+},{
+&quot;field&quot;:&quot;@pos_pct&quot;,
+&quot;format&quot;:&quot;.0f&quot;
+}],
+&quot;lines&quot;:[&quot;@label&quot;,&quot;@variety sarcasm @k_sarc/@n = @sarc_pct %&quot;,&quot;positive @pos_pct %&quot;]
+},
+&quot;data_meta&quot;:{
+},
+&quot;size&quot;:3.5,
+&quot;data&quot;:{
+}
+}],
+&quot;metainfo_list&quot;:[],
+&quot;spec_id&quot;:&quot;15&quot;
+}]
+};
+           fig = LetsPlot.buildPlotFromProcessedSpecs(plotSpec, containerDiv, sizing);
+       } else {
+           fig.updateView({});
+       }
+   }
+   
+   const renderImmediately = 
+       forceImmediateRender || (
+           sizing.width_mode === 'FIXED' &amp;&amp; 
+           (sizing.height_mode === 'FIXED' || sizing.height_mode === 'SCALED')
+       );
+   
+   if (renderImmediately) {
+       renderPlot();
+   }
+   
+   if (!renderImmediately || responsive) {
+       // Set up observer for initial sizing or continuous monitoring
+       var observer = new ResizeObserver(function(entries) {
+           for (let entry of entries) {
+               if (entry.contentBoxSize &amp;&amp; 
+                   entry.contentBoxSize[0].inlineSize > 0) {
+                   if (!responsive &amp;&amp; observer) {
+                       observer.disconnect();
+                       observer = null;
+                   }
+                   renderPlot();
+                   if (!responsive) {
+                       break;
+                   }
+               }
+           }
+       });
+       
+       observer.observe(containerDiv);
+   }
+   
+   // ----------
+   })();
+   
+   &lt;/script>
+   &lt;/body>
+&lt;/html>"></iframe>    
