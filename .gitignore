@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+# competition data is not redistributable
+data/
+baseline/
+scoring/
+# large / generated artefacts
+preds/
+models/
+checkpoints/
+*.zip
+.cache/
