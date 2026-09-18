@@ -1,0 +1,13 @@
+segment,len_band,n,pos_rate,sarc_rate
+en-AU · google,20-49 chars,12,0.917,0.083
+en-AU · google,< 20 chars,1,1.0,0.0
+en-AU · google,≥ 50 chars,1063,0.733,0.068
+en-AU · reddit,20-49 chars,237,0.418,0.38
+en-AU · reddit,< 20 chars,69,0.638,0.246
+en-AU · reddit,≥ 50 chars,1698,0.293,0.432
+en-UK · google,20-49 chars,20,0.85,0.0
+en-UK · google,< 20 chars,2,1.0,0.0
+en-UK · google,≥ 50 chars,2043,0.747,0.0
+en-UK · reddit,20-49 chars,125,0.24,0.248
+en-UK · reddit,< 20 chars,52,0.365,0.058
+en-UK · reddit,≥ 50 chars,966,0.085,0.222

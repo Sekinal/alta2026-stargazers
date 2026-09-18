@@ -1,0 +1,9 @@
+variety,source,origin,n,pos_rate,sarc_rate,n_sarc
+en-AU,google,train,946,0.735,0.07,66
+en-AU,google,valid,130,0.738,0.054,7
+en-AU,reddit,train,1763,0.319,0.419,739
+en-AU,reddit,valid,241,0.32,0.423,102
+en-UK,google,train,1817,0.748,0.001,1
+en-UK,google,valid,248,0.75,0.0,0
+en-UK,reddit,train,1005,0.114,0.217,218
+en-UK,reddit,valid,138,0.116,0.217,30

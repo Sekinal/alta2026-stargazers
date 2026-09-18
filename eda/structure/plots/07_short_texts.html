@@ -1,0 +1,261 @@
+            <iframe src='about:blank' style='border:none !important;' width='1000' height='520' srcdoc="&lt;html lang=&quot;en&quot;>
+   &lt;head>
+       &lt;meta charset=&quot;UTF-8&quot;>
+       &lt;style> html, body { margin: 0; padding: 0; overflow: hidden; } &lt;/style>
+       &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;library&quot; src=&quot;https://cdn.jsdelivr.net/gh/JetBrains/lets-plot@v4.11.0/js-package/distr/lets-plot.min.js&quot;>&lt;/script>
+   &lt;/head>
+   &lt;body>
+          &lt;div id=&quot;JN6ODE&quot; >&lt;/div>
+   &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;plot&quot;>
+   
+   (function() {
+   // ----------
+   
+   const forceImmediateRender = false;
+   const responsive = false;
+   
+   let sizing = {
+       width_mode: &quot;FIXED&quot;,
+       height_mode: &quot;FIXED&quot;,
+       width: 1000.0, 
+       height: 520.0 
+   };
+   
+   const preferredWidth = document.body.dataset.letsPlotPreferredWidth;
+   if (preferredWidth !== undefined) {
+       sizing = {
+           width_mode: 'FIXED',
+           height_mode: 'SCALED',
+           width: parseFloat(preferredWidth)
+       };
+   }
+   
+   const containerDiv = document.getElementById(&quot;JN6ODE&quot;);
+   let fig = null;
+   
+   function renderPlot() {
+       if (fig === null) {
+           const plotSpec = {
+&quot;data&quot;:{
+&quot;len_band&quot;:[&quot;≥ 50 chars&quot;,&quot;≥ 50 chars&quot;,&quot;20-49 chars&quot;,&quot;20-49 chars&quot;,&quot;≥ 50 chars&quot;,&quot;≥ 50 chars&quot;,&quot;&lt; 20 chars&quot;,&quot;&lt; 20 chars&quot;,&quot;≥ 50 chars&quot;,&quot;20-49 chars&quot;,&quot;≥ 50 chars&quot;,&quot;20-49 chars&quot;,&quot;&lt; 20 chars&quot;,&quot;≥ 50 chars&quot;,&quot;20-49 chars&quot;,&quot;20-49 chars&quot;,&quot;≥ 50 chars&quot;,&quot;20-49 chars&quot;,&quot;&lt; 20 chars&quot;],
+&quot;source&quot;:[&quot;reddit&quot;,&quot;google&quot;,&quot;reddit&quot;,&quot;google&quot;,&quot;google&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;google&quot;,&quot;reddit&quot;,&quot;google&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;google&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;google&quot;,&quot;google&quot;,&quot;reddit&quot;],
+&quot;joint&quot;:[&quot;pos · sarcastic&quot;,&quot;pos · not sarcastic&quot;,&quot;pos · not sarcastic&quot;,&quot;neg · sarcastic&quot;,&quot;pos · sarcastic&quot;,&quot;neg · not sarcastic&quot;,&quot;pos · not sarcastic&quot;,&quot;pos · not sarcastic&quot;,&quot;neg · sarcastic&quot;,&quot;pos · not sarcastic&quot;,&quot;pos · not sarcastic&quot;,&quot;neg · sarcastic&quot;,&quot;neg · not sarcastic&quot;,&quot;neg · not sarcastic&quot;,&quot;neg · not sarcastic&quot;,&quot;pos · sarcastic&quot;,&quot;neg · sarcastic&quot;,&quot;neg · not sarcastic&quot;,&quot;neg · sarcastic&quot;],
+&quot;share&quot;:[0.010510510510510511,0.7401802962009015,0.3453038674033149,0.03125,0.0019317450096587251,0.4373123123123123,0.5206611570247934,1.0,0.34534534534534533,0.875,0.20683183183183182,0.32320441988950277,0.3140495867768595,0.23631680618158404,0.32044198895027626,0.011049723756906077,0.021571152607855762,0.09375,0.1652892561983471]
+},
+&quot;mapping&quot;:{
+&quot;x&quot;:&quot;len_band&quot;,
+&quot;y&quot;:&quot;share&quot;,
+&quot;fill&quot;:&quot;joint&quot;
+},
+&quot;data_meta&quot;:{
+&quot;series_annotations&quot;:[{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;len_band&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;source&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;joint&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;len&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;share&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;_k&quot;
+}]
+},
+&quot;facet&quot;:{
+&quot;name&quot;:&quot;wrap&quot;,
+&quot;facets&quot;:&quot;source&quot;,
+&quot;order&quot;:1.0,
+&quot;dir&quot;:&quot;h&quot;
+},
+&quot;ggtitle&quot;:{
+&quot;text&quot;:&quot;Very short texts carry labels too — and they are mostly guessable&quot;,
+&quot;subtitle&quot;:&quot;Label mix by length band; short reddit replies are more often positive ('Thank you!', 'Good point!') and less often sarcastic&quot;
+},
+&quot;guides&quot;:{
+&quot;x&quot;:{
+&quot;title&quot;:&quot;&quot;
+},
+&quot;y&quot;:{
+&quot;title&quot;:&quot;share of rows&quot;
+}
+},
+&quot;theme&quot;:{
+&quot;name&quot;:&quot;minimal2&quot;,
+&quot;axis_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:12.0,
+&quot;blank&quot;:false
+},
+&quot;axis_text&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;legend_text&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;legend_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;legend_position&quot;:&quot;top&quot;,
+&quot;panel_grid_major&quot;:{
+&quot;color&quot;:&quot;#e6e5e0&quot;,
+&quot;size&quot;:0.4,
+&quot;blank&quot;:false
+},
+&quot;panel_grid_minor&quot;:{
+&quot;blank&quot;:true
+},
+&quot;plot_background&quot;:{
+&quot;fill&quot;:&quot;#fcfcfb&quot;,
+&quot;color&quot;:&quot;#fcfcfb&quot;,
+&quot;blank&quot;:false
+},
+&quot;plot_title&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:16.0,
+&quot;blank&quot;:false
+},
+&quot;plot_subtitle&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:12.0,
+&quot;blank&quot;:false
+},
+&quot;plot_caption&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:false
+},
+&quot;strip_text&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:12.0,
+&quot;blank&quot;:false
+}
+},
+&quot;ggsize&quot;:{
+&quot;width&quot;:1000.0,
+&quot;height&quot;:520.0
+},
+&quot;kind&quot;:&quot;plot&quot;,
+&quot;scales&quot;:[{
+&quot;name&quot;:&quot;&quot;,
+&quot;aesthetic&quot;:&quot;fill&quot;,
+&quot;breaks&quot;:[&quot;neg · not sarcastic&quot;,&quot;neg · sarcastic&quot;,&quot;pos · not sarcastic&quot;,&quot;pos · sarcastic&quot;],
+&quot;values&quot;:[&quot;#4a3aa7&quot;,&quot;#e87ba4&quot;,&quot;#1baf7a&quot;,&quot;#eda100&quot;]
+},{
+&quot;aesthetic&quot;:&quot;x&quot;,
+&quot;limits&quot;:[&quot;&lt; 20 chars&quot;,&quot;20-49 chars&quot;,&quot;≥ 50 chars&quot;],
+&quot;discrete&quot;:true,
+&quot;reverse&quot;:false
+},{
+&quot;aesthetic&quot;:&quot;y&quot;,
+&quot;breaks&quot;:[0.0,0.25,0.5,0.75,1.0],
+&quot;format&quot;:&quot;.0%&quot;
+}],
+&quot;layers&quot;:[{
+&quot;geom&quot;:&quot;bar&quot;,
+&quot;stat&quot;:&quot;identity&quot;,
+&quot;mapping&quot;:{
+},
+&quot;position&quot;:{
+&quot;name&quot;:&quot;stack&quot;
+},
+&quot;data_meta&quot;:{
+},
+&quot;width&quot;:0.7,
+&quot;color&quot;:&quot;#fcfcfb&quot;,
+&quot;size&quot;:0.8,
+&quot;data&quot;:{
+}
+},{
+&quot;geom&quot;:&quot;text&quot;,
+&quot;data&quot;:{
+&quot;len_band&quot;:[&quot;≥ 50 chars&quot;,&quot;&lt; 20 chars&quot;,&quot;20-49 chars&quot;,&quot;20-49 chars&quot;,&quot;≥ 50 chars&quot;,&quot;&lt; 20 chars&quot;],
+&quot;source&quot;:[&quot;google&quot;,&quot;reddit&quot;,&quot;google&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;google&quot;],
+&quot;lab&quot;:[&quot;n=3106&quot;,&quot;n=121&quot;,&quot;n=32&quot;,&quot;n=362&quot;,&quot;n=2664&quot;,&quot;n=3&quot;]
+},
+&quot;mapping&quot;:{
+&quot;x&quot;:&quot;len_band&quot;,
+&quot;label&quot;:&quot;lab&quot;
+},
+&quot;inherit_aes&quot;:false,
+&quot;data_meta&quot;:{
+&quot;series_annotations&quot;:[{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;source&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;len&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;len_band&quot;,
+&quot;factor_levels&quot;:[&quot;&lt; 20 chars&quot;,&quot;20-49 chars&quot;,&quot;≥ 50 chars&quot;]
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;lab&quot;,
+&quot;factor_levels&quot;:[&quot;n=3106&quot;,&quot;n=121&quot;,&quot;n=32&quot;,&quot;n=362&quot;,&quot;n=2664&quot;,&quot;n=3&quot;]
+}]
+},
+&quot;y&quot;:1.05,
+&quot;size&quot;:5.0,
+&quot;color&quot;:&quot;#52514e&quot;
+}],
+&quot;metainfo_list&quot;:[],
+&quot;spec_id&quot;:&quot;21&quot;
+};
+           fig = LetsPlot.buildPlotFromProcessedSpecs(plotSpec, containerDiv, sizing);
+       } else {
+           fig.updateView({});
+       }
+   }
+   
+   const renderImmediately = 
+       forceImmediateRender || (
+           sizing.width_mode === 'FIXED' &amp;&amp; 
+           (sizing.height_mode === 'FIXED' || sizing.height_mode === 'SCALED')
+       );
+   
+   if (renderImmediately) {
+       renderPlot();
+   }
+   
+   if (!renderImmediately || responsive) {
+       // Set up observer for initial sizing or continuous monitoring
+       var observer = new ResizeObserver(function(entries) {
+           for (let entry of entries) {
+               if (entry.contentBoxSize &amp;&amp; 
+                   entry.contentBoxSize[0].inlineSize > 0) {
+                   if (!responsive &amp;&amp; observer) {
+                       observer.disconnect();
+                       observer = null;
+                   }
+                   renderPlot();
+                   if (!responsive) {
+                       break;
+                   }
+               }
+           }
+       });
+       
+       observer.observe(containerDiv);
+   }
+   
+   // ----------
+   })();
+   
+   &lt;/script>
+   &lt;/body>
+&lt;/html>"></iframe>    

@@ -1,0 +1,238 @@
+            <iframe src='about:blank' style='border:none !important;' width='1100' height='560' srcdoc="&lt;html lang=&quot;en&quot;>
+   &lt;head>
+       &lt;meta charset=&quot;UTF-8&quot;>
+       &lt;style> html, body { margin: 0; padding: 0; overflow: hidden; } &lt;/style>
+       &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;library&quot; src=&quot;https://cdn.jsdelivr.net/gh/JetBrains/lets-plot@v4.11.0/js-package/distr/lets-plot.min.js&quot;>&lt;/script>
+   &lt;/head>
+   &lt;body>
+          &lt;div id=&quot;UlmOGj&quot; >&lt;/div>
+   &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;plot&quot;>
+   
+   (function() {
+   // ----------
+   
+   const forceImmediateRender = false;
+   const responsive = false;
+   
+   let sizing = {
+       width_mode: &quot;FIXED&quot;,
+       height_mode: &quot;FIXED&quot;,
+       width: 1100.0, 
+       height: 560.0 
+   };
+   
+   const preferredWidth = document.body.dataset.letsPlotPreferredWidth;
+   if (preferredWidth !== undefined) {
+       sizing = {
+           width_mode: 'FIXED',
+           height_mode: 'SCALED',
+           width: parseFloat(preferredWidth)
+       };
+   }
+   
+   const containerDiv = document.getElementById(&quot;UlmOGj&quot;);
+   let fig = null;
+   
+   function renderPlot() {
+       if (fig === null) {
+           const plotSpec = {
+&quot;data&quot;:{
+&quot;predictor&quot;:[&quot;constant: sent=1, sarc=0&quot;,&quot;constant: sent=1, sarc=0&quot;,&quot;constant: sent=1, sarc=0&quot;,&quot;constant: sent=1, sarc=0&quot;,&quot;constant: sent=1, sarc=0&quot;,&quot;random at segment prior&quot;,&quot;random at segment prior&quot;,&quot;random at segment prior&quot;,&quot;random at segment prior&quot;,&quot;random at segment prior&quot;,&quot;source rule: google→pos, reddit→neg &amp; sarcastic&quot;,&quot;source rule: google→pos, reddit→neg &amp; sarcastic&quot;,&quot;source rule: google→pos, reddit→neg &amp; sarcastic&quot;,&quot;source rule: google→pos, reddit→neg &amp; sarcastic&quot;,&quot;source rule: google→pos, reddit→neg &amp; sarcastic&quot;,&quot;tf-idf + LR (OOF, thr 0.5)&quot;,&quot;tf-idf + LR (OOF, thr 0.5)&quot;,&quot;tf-idf + LR (OOF, thr 0.5)&quot;,&quot;tf-idf + LR (OOF, thr 0.5)&quot;,&quot;tf-idf + LR (OOF, thr 0.5)&quot;],
+&quot;component&quot;:[&quot;sent-AU&quot;,&quot;sent-UK&quot;,&quot;sarc-AU&quot;,&quot;sarc-UK&quot;,&quot;score&quot;,&quot;sent-AU&quot;,&quot;sent-UK&quot;,&quot;sarc-AU&quot;,&quot;sarc-UK&quot;,&quot;score&quot;,&quot;sent-AU&quot;,&quot;sent-UK&quot;,&quot;sarc-AU&quot;,&quot;sarc-UK&quot;,&quot;score&quot;,&quot;sent-AU&quot;,&quot;sent-UK&quot;,&quot;sarc-AU&quot;,&quot;sarc-UK&quot;,&quot;score&quot;],
+&quot;macro_f1&quot;:[0.3172,0.3432,0.4129,0.4798,0.3651,0.5792728675067699,0.6854629149128474,0.5671039494036705,0.575367511117506,0.5718503334689106,0.6889,0.7913,0.5976,0.589,0.6389,0.8431165077799694,0.914110884580976,0.6822959467235689,0.5907192634905981,0.7169178856352838],
+&quot;lab&quot;:[&quot;0.32&quot;,&quot;0.34&quot;,&quot;0.41&quot;,&quot;0.48&quot;,&quot;0.37&quot;,&quot;0.58&quot;,&quot;0.69&quot;,&quot;0.57&quot;,&quot;0.58&quot;,&quot;0.57&quot;,&quot;0.69&quot;,&quot;0.79&quot;,&quot;0.6&quot;,&quot;0.59&quot;,&quot;0.64&quot;,&quot;0.84&quot;,&quot;0.91&quot;,&quot;0.68&quot;,&quot;0.59&quot;,&quot;0.72&quot;]
+},
+&quot;mapping&quot;:{
+&quot;x&quot;:&quot;component&quot;,
+&quot;y&quot;:&quot;macro_f1&quot;,
+&quot;fill&quot;:&quot;predictor&quot;
+},
+&quot;data_meta&quot;:{
+&quot;series_annotations&quot;:[{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;predictor&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;component&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;macro_f1&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;lab&quot;
+}]
+},
+&quot;guides&quot;:{
+&quot;fill&quot;:{
+&quot;name&quot;:&quot;legend&quot;,
+&quot;nrow&quot;:2.0
+},
+&quot;x&quot;:{
+&quot;title&quot;:&quot;&quot;
+},
+&quot;y&quot;:{
+&quot;title&quot;:&quot;macro-F1&quot;
+}
+},
+&quot;ggtitle&quot;:{
+&quot;text&quot;:&quot;What source/variety alone buys under the official metric&quot;,
+&quot;subtitle&quot;:&quot;Full pool (train+valid). The source rule alone reaches 0.64 and ties bag-of-words on sarc-UK (0.59): UK sarcasm is barely learned beyond 'is it reddit?'&quot;
+},
+&quot;theme&quot;:{
+&quot;name&quot;:&quot;minimal2&quot;,
+&quot;axis_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:12.0,
+&quot;blank&quot;:false
+},
+&quot;axis_text&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;legend_text&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;legend_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;legend_position&quot;:&quot;top&quot;,
+&quot;panel_grid_major&quot;:{
+&quot;color&quot;:&quot;#e6e5e0&quot;,
+&quot;size&quot;:0.4,
+&quot;blank&quot;:false
+},
+&quot;panel_grid_minor&quot;:{
+&quot;blank&quot;:true
+},
+&quot;plot_background&quot;:{
+&quot;fill&quot;:&quot;#fcfcfb&quot;,
+&quot;color&quot;:&quot;#fcfcfb&quot;,
+&quot;blank&quot;:false
+},
+&quot;plot_title&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:16.0,
+&quot;blank&quot;:false
+},
+&quot;plot_subtitle&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:12.0,
+&quot;blank&quot;:false
+},
+&quot;plot_caption&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:false
+},
+&quot;strip_text&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:12.0,
+&quot;blank&quot;:false
+}
+},
+&quot;ggsize&quot;:{
+&quot;width&quot;:1100.0,
+&quot;height&quot;:560.0
+},
+&quot;kind&quot;:&quot;plot&quot;,
+&quot;scales&quot;:[{
+&quot;name&quot;:&quot;&quot;,
+&quot;aesthetic&quot;:&quot;fill&quot;,
+&quot;limits&quot;:[&quot;constant: sent=1, sarc=0&quot;,&quot;random at segment prior&quot;,&quot;source rule: google→pos, reddit→neg &amp; sarcastic&quot;,&quot;tf-idf + LR (OOF, thr 0.5)&quot;],
+&quot;values&quot;:[&quot;#dcdad3&quot;,&quot;#a9a7a0&quot;,&quot;#63625d&quot;,&quot;#1baf7a&quot;]
+},{
+&quot;aesthetic&quot;:&quot;x&quot;,
+&quot;limits&quot;:[&quot;sent-AU&quot;,&quot;sent-UK&quot;,&quot;sarc-AU&quot;,&quot;sarc-UK&quot;,&quot;score&quot;],
+&quot;discrete&quot;:true,
+&quot;reverse&quot;:false
+},{
+&quot;aesthetic&quot;:&quot;y&quot;,
+&quot;limits&quot;:[0.0,1.0]
+}],
+&quot;layers&quot;:[{
+&quot;geom&quot;:&quot;bar&quot;,
+&quot;stat&quot;:&quot;identity&quot;,
+&quot;mapping&quot;:{
+},
+&quot;position&quot;:{
+&quot;name&quot;:&quot;dodge&quot;,
+&quot;width&quot;:0.84
+},
+&quot;data_meta&quot;:{
+},
+&quot;width&quot;:0.8,
+&quot;color&quot;:&quot;#fcfcfb&quot;,
+&quot;size&quot;:0.6,
+&quot;data&quot;:{
+}
+},{
+&quot;geom&quot;:&quot;text&quot;,
+&quot;mapping&quot;:{
+&quot;label&quot;:&quot;lab&quot;,
+&quot;group&quot;:&quot;predictor&quot;
+},
+&quot;position&quot;:{
+&quot;name&quot;:&quot;dodge&quot;,
+&quot;width&quot;:0.84
+},
+&quot;data_meta&quot;:{
+},
+&quot;vjust&quot;:-0.6,
+&quot;size&quot;:4.2,
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;data&quot;:{
+}
+}],
+&quot;metainfo_list&quot;:[],
+&quot;spec_id&quot;:&quot;27&quot;
+};
+           fig = LetsPlot.buildPlotFromProcessedSpecs(plotSpec, containerDiv, sizing);
+       } else {
+           fig.updateView({});
+       }
+   }
+   
+   const renderImmediately = 
+       forceImmediateRender || (
+           sizing.width_mode === 'FIXED' &amp;&amp; 
+           (sizing.height_mode === 'FIXED' || sizing.height_mode === 'SCALED')
+       );
+   
+   if (renderImmediately) {
+       renderPlot();
+   }
+   
+   if (!renderImmediately || responsive) {
+       // Set up observer for initial sizing or continuous monitoring
+       var observer = new ResizeObserver(function(entries) {
+           for (let entry of entries) {
+               if (entry.contentBoxSize &amp;&amp; 
+                   entry.contentBoxSize[0].inlineSize > 0) {
+                   if (!responsive &amp;&amp; observer) {
+                       observer.disconnect();
+                       observer = null;
+                   }
+                   renderPlot();
+                   if (!responsive) {
+                       break;
+                   }
+               }
+           }
+       });
+       
+       observer.observe(containerDiv);
+   }
+   
+   // ----------
+   })();
+   
+   &lt;/script>
+   &lt;/body>
+&lt;/html>"></iframe>    

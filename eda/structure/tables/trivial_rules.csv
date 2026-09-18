@@ -1,0 +1,31 @@
+eval,sent_rule,sarc_rule,sent-AU,sent-UK,sarc-AU,sarc-UK,score
+pool,"google→1, reddit→0",reddit & gold-neg→1 (oracle),0.6889,0.7913,0.7722,0.6195,0.6542
+pool,"google→1, reddit→0",reddit→1,0.6889,0.7913,0.5976,0.589,0.6389
+pool,"google→1, reddit→0",AU-reddit→1 only,0.6889,0.7913,0.5976,0.4798,0.5844
+pool,"google→1, reddit→0",all 0,0.6889,0.7913,0.4129,0.4798,0.5509
+pool,all 0,reddit & gold-neg→1 (oracle),0.3487,0.3232,0.7722,0.6195,0.4714
+pool,all 1,reddit & gold-neg→1 (oracle),0.3172,0.3432,0.7722,0.6195,0.4684
+pool,all 0,reddit→1,0.3487,0.3232,0.5976,0.589,0.4561
+pool,all 1,reddit→1,0.3172,0.3432,0.5976,0.589,0.4531
+pool,all 0,AU-reddit→1 only,0.3487,0.3232,0.5976,0.4798,0.4015
+pool,all 1,AU-reddit→1 only,0.3172,0.3432,0.5976,0.4798,0.3985
+pool,"google→1, reddit→0",all 1,0.6889,0.7913,0.2288,0.072,0.3805
+pool,all 0,all 0,0.3487,0.3232,0.4129,0.4798,0.368
+pool,all 1,all 0,0.3172,0.3432,0.4129,0.4798,0.3651
+pool,all 0,all 1,0.3487,0.3232,0.2288,0.072,0.1976
+pool,all 1,all 1,0.3172,0.3432,0.2288,0.072,0.1946
+valid,"google→1, reddit→0",reddit & gold-neg→1 (oracle),0.6904,0.7922,0.7827,0.6232,0.6568
+valid,"google→1, reddit→0",reddit→1,0.6904,0.7922,0.6052,0.5892,0.6398
+valid,"google→1, reddit→0",AU-reddit→1 only,0.6904,0.7922,0.6052,0.4798,0.5851
+valid,"google→1, reddit→0",all 0,0.6904,0.7922,0.4139,0.4798,0.5522
+valid,all 0,reddit & gold-neg→1 (oracle),0.348,0.3228,0.7827,0.6232,0.473
+valid,all 1,reddit & gold-neg→1 (oracle),0.318,0.3435,0.7827,0.6232,0.4706
+valid,all 0,reddit→1,0.348,0.3228,0.6052,0.5892,0.456
+valid,all 1,reddit→1,0.318,0.3435,0.6052,0.5892,0.4536
+valid,all 0,AU-reddit→1 only,0.348,0.3228,0.6052,0.4798,0.4013
+valid,all 1,AU-reddit→1 only,0.318,0.3435,0.6052,0.4798,0.3989
+valid,"google→1, reddit→0",all 1,0.6904,0.7922,0.2271,0.0721,0.3813
+valid,all 0,all 0,0.348,0.3228,0.4139,0.4798,0.3684
+valid,all 1,all 0,0.318,0.3435,0.4139,0.4798,0.366
+valid,all 0,all 1,0.348,0.3228,0.2271,0.0721,0.1975
+valid,all 1,all 1,0.318,0.3435,0.2271,0.0721,0.1951

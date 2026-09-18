@@ -11,3 +11,8 @@ models/
 checkpoints/
 *.zip
 .cache/
+# EDA outputs that contain raw competition text (kept locally, never committed)
+eda/*/examples/
+eda/*/output.txt
+eda/structure/tables/dups_text.csv
+eda/structure/tables/near_duplicates.csv

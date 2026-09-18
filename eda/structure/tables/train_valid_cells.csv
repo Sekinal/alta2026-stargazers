@@ -1,0 +1,16 @@
+variety,source,sentiment,sarcasm,train,valid,total,valid_expected_if_proportional
+en-AU,google,0,0,190,28,218,26.2
+en-AU,google,0,1,61,6,67,8.1
+en-AU,google,1,0,690,95,785,94.5
+en-AU,google,1,1,5,1,6,0.7
+en-AU,reddit,0,0,487,65,552,66.5
+en-AU,reddit,0,1,713,99,812,97.8
+en-AU,reddit,1,0,537,74,611,73.6
+en-AU,reddit,1,1,26,3,29,3.5
+en-UK,google,0,0,457,62,519,62.5
+en-UK,google,0,1,1,0,1,0.1
+en-UK,google,1,0,1359,186,1545,186.0
+en-UK,reddit,0,0,675,92,767,92.3
+en-UK,reddit,0,1,215,30,245,29.5
+en-UK,reddit,1,0,112,16,128,15.4
+en-UK,reddit,1,1,3,0,3,0.4

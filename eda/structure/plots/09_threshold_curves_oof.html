@@ -1,0 +1,259 @@
+            <iframe src='about:blank' style='border:none !important;' width='1050' height='500' srcdoc="&lt;html lang=&quot;en&quot;>
+   &lt;head>
+       &lt;meta charset=&quot;UTF-8&quot;>
+       &lt;style> html, body { margin: 0; padding: 0; overflow: hidden; } &lt;/style>
+       &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;library&quot; src=&quot;https://cdn.jsdelivr.net/gh/JetBrains/lets-plot@v4.11.0/js-package/distr/lets-plot.min.js&quot;>&lt;/script>
+   &lt;/head>
+   &lt;body>
+          &lt;div id=&quot;sfFPJh&quot; >&lt;/div>
+   &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;plot&quot;>
+   
+   (function() {
+   // ----------
+   
+   const forceImmediateRender = false;
+   const responsive = false;
+   
+   let sizing = {
+       width_mode: &quot;FIXED&quot;,
+       height_mode: &quot;FIXED&quot;,
+       width: 1050.0, 
+       height: 500.0 
+   };
+   
+   const preferredWidth = document.body.dataset.letsPlotPreferredWidth;
+   if (preferredWidth !== undefined) {
+       sizing = {
+           width_mode: 'FIXED',
+           height_mode: 'SCALED',
+           width: parseFloat(preferredWidth)
+       };
+   }
+   
+   const containerDiv = document.getElementById(&quot;sfFPJh&quot;);
+   let fig = null;
+   
+   function renderPlot() {
+       if (fig === null) {
+           const plotSpec = {
+&quot;data&quot;:{
+&quot;variety&quot;:[&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-UK&quot;],
+&quot;task&quot;:[&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;,&quot;sarcasm&quot;],
+&quot;thr&quot;:[0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09000000000000001,0.1,0.11,0.12000000000000001,0.13,0.13999999999999999,0.15,0.16,0.16999999999999998,0.18,0.19,0.19999999999999998,0.21,0.22,0.22999999999999998,0.24,0.25,0.26,0.27,0.28,0.29000000000000004,0.30000000000000004,0.31,0.32,0.33,0.34,0.35000000000000003,0.36000000000000004,0.37000000000000005,0.38,0.39,0.4,0.41000000000000003,0.42000000000000004,0.43000000000000005,0.44,0.45,0.46,0.47000000000000003,0.48000000000000004,0.49000000000000005,0.5,0.51,0.52,0.53,0.54,0.55,0.56,0.5700000000000001,0.5800000000000001,0.5900000000000001,0.6,0.61,0.62,0.63,0.64,0.65,0.66,0.67,0.68,0.6900000000000001,0.7000000000000001,0.7100000000000001,0.7200000000000001,0.73,0.74,0.75,0.76,0.77,0.78,0.79,0.8,0.81,0.8200000000000001,0.8300000000000001,0.8400000000000001,0.8500000000000001,0.86,0.87,0.88,0.89,0.9,0.91,0.92,0.93,0.9400000000000001,0.9500000000000001,0.9600000000000001,0.9700000000000001,0.98,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09000000000000001,0.1,0.11,0.12000000000000001,0.13,0.13999999999999999,0.15,0.16,0.16999999999999998,0.18,0.19,0.19999999999999998,0.21,0.22,0.22999999999999998,0.24,0.25,0.26,0.27,0.28,0.29000000000000004,0.30000000000000004,0.31,0.32,0.33,0.34,0.35000000000000003,0.36000000000000004,0.37000000000000005,0.38,0.39,0.4,0.41000000000000003,0.42000000000000004,0.43000000000000005,0.44,0.45,0.46,0.47000000000000003,0.48000000000000004,0.49000000000000005,0.5,0.51,0.52,0.53,0.54,0.55,0.56,0.5700000000000001,0.5800000000000001,0.5900000000000001,0.6,0.61,0.62,0.63,0.64,0.65,0.66,0.67,0.68,0.6900000000000001,0.7000000000000001,0.7100000000000001,0.7200000000000001,0.73,0.74,0.75,0.76,0.77,0.78,0.79,0.8,0.81,0.8200000000000001,0.8300000000000001,0.8400000000000001,0.8500000000000001,0.86,0.87,0.88,0.89,0.9,0.91,0.92,0.93,0.9400000000000001,0.9500000000000001,0.9600000000000001,0.9700000000000001,0.98,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09000000000000001,0.1,0.11,0.12000000000000001,0.13,0.13999999999999999,0.15,0.16,0.16999999999999998,0.18,0.19,0.19999999999999998,0.21,0.22,0.22999999999999998,0.24,0.25,0.26,0.27,0.28,0.29000000000000004,0.30000000000000004,0.31,0.32,0.33,0.34,0.35000000000000003,0.36000000000000004,0.37000000000000005,0.38,0.39,0.4,0.41000000000000003,0.42000000000000004,0.43000000000000005,0.44,0.45,0.46,0.47000000000000003,0.48000000000000004,0.49000000000000005,0.5,0.51,0.52,0.53,0.54,0.55,0.56,0.5700000000000001,0.5800000000000001,0.5900000000000001,0.6,0.61,0.62,0.63,0.64,0.65,0.66,0.67,0.68,0.6900000000000001,0.7000000000000001,0.7100000000000001,0.7200000000000001,0.73,0.74,0.75,0.76,0.77,0.78,0.79,0.8,0.81,0.8200000000000001,0.8300000000000001,0.8400000000000001,0.8500000000000001,0.86,0.87,0.88,0.89,0.9,0.91,0.92,0.93,0.9400000000000001,0.9500000000000001,0.9600000000000001,0.9700000000000001,0.98,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09000000000000001,0.1,0.11,0.12000000000000001,0.13,0.13999999999999999,0.15,0.16,0.16999999999999998,0.18,0.19,0.19999999999999998,0.21,0.22,0.22999999999999998,0.24,0.25,0.26,0.27,0.28,0.29000000000000004,0.30000000000000004,0.31,0.32,0.33,0.34,0.35000000000000003,0.36000000000000004,0.37000000000000005,0.38,0.39,0.4,0.41000000000000003,0.42000000000000004,0.43000000000000005,0.44,0.45,0.46,0.47000000000000003,0.48000000000000004,0.49000000000000005,0.5,0.51,0.52,0.53,0.54,0.55,0.56,0.5700000000000001,0.5800000000000001,0.5900000000000001,0.6,0.61,0.62,0.63,0.64,0.65,0.66,0.67,0.68,0.6900000000000001,0.7000000000000001,0.7100000000000001,0.7200000000000001,0.73,0.74,0.75,0.76,0.77,0.78,0.79,0.8,0.81,0.8200000000000001,0.8300000000000001,0.8400000000000001,0.8500000000000001,0.86,0.87,0.88,0.89,0.9,0.91,0.92,0.93,0.9400000000000001,0.9500000000000001,0.9600000000000001,0.9700000000000001,0.98],
+&quot;macro_f1&quot;:[0.39552977441040715,0.44302549810898234,0.486193674391289,0.5216970818265916,0.5450530373247414,0.5726521782421867,0.596205186880244,0.6174298879525353,0.6359225155523074,0.6570306611972467,0.675713517908576,0.6941036696368688,0.7049612631701462,0.7198300787620544,0.72675408774486,0.7377455249153362,0.7474133009923691,0.7563586383591988,0.7695523286524115,0.7781907544216542,0.7854392480258292,0.7922615313347893,0.7970721596061666,0.799217964770696,0.8026072741451491,0.8092633996744958,0.812916016366474,0.8184802980612293,0.8223983850181975,0.8237003880628073,0.8236758530362209,0.8252583625089636,0.8274721132767291,0.8300120122002503,0.8309035216748828,0.8304889051614432,0.8297410697402707,0.8315481865850636,0.8350045883817178,0.836146322935954,0.8363522810174564,0.8371869076976379,0.838013079439784,0.8407766891150176,0.8399789454946383,0.8434505578744158,0.844885211044289,0.8443609363941081,0.8431165077799694,0.842936267315171,0.8417989021402271,0.8402249249503724,0.8393873797273499,0.8408485322410904,0.8383237127987764,0.8370830569833638,0.8334468922704217,0.8329529773478443,0.8315625,0.830032046059421,0.8290024402096385,0.8270545665630034,0.8251378720624123,0.8221328569909846,0.8214011479600924,0.8213801650968161,0.8186382991930956,0.8137308393854477,0.8135148274185707,0.8111394852977637,0.8094326534305316,0.8086331650441316,0.8060327377233538,0.8036748939720504,0.8005552861464567,0.7969074317216912,0.7955029320793271,0.7919441066913708,0.7869020711404182,0.7820538039858842,0.7769121560159484,0.7723493366518932,0.7636750908711059,0.7551552313260144,0.7460101867572156,0.7392101142492606,0.7308915527906896,0.720947492056549,0.713256535875594,0.7051955422734036,0.6939188425939827,0.6798667268914232,0.6614866291833404,0.6406465784696043,0.6210912267167181,0.5876903537181686,0.5371460222945372,0.34904170288549197,0.4083251809143198,0.4445090952188534,0.47331471836188255,0.4934520531179243,0.5127127259418905,0.5262044945552211,0.5345983235326635,0.5464472573839663,0.5583670715249662,0.5646092422026328,0.5726867323810025,0.5800407026570616,0.5885444827555641,0.5947546445539269,0.6025386844358935,0.606818394065999,0.6113151568201731,0.616077985113228,0.6197964734446937,0.6240765217509641,0.6267382298755099,0.6301178646817209,0.6344291761815098,0.6388967495889326,0.6421898925971118,0.6456258731393101,0.6456833873695322,0.6495703583745027,0.6527516272190791,0.6563440748534484,0.6564164173062451,0.6572419049384783,0.6594570688456921,0.6608640655087303,0.6644628099173553,0.6652101132633319,0.6680498480268907,0.6696871238608357,0.6742814289459864,0.6742395984757015,0.6752084881554761,0.6795229957209321,0.6775164671516123,0.6783604622713469,0.6787417318898621,0.6819607529813259,0.6812326010704435,0.6822959467235689,0.6813116929336978,0.6808542879769561,0.679148717810217,0.678580512135503,0.6803927340371669,0.6819948241919632,0.6830634694269966,0.6836891962511705,0.6816941201447764,0.6785714102111309,0.675550742703665,0.6717054263565891,0.6686072548141513,0.6618738676723214,0.6590089727454492,0.6563228359223829,0.651579448130238,0.6437569676700112,0.642882109773205,0.6398904795037845,0.6298205195230343,0.6275070621468927,0.6173855916386711,0.6108538769685844,0.6049932611709052,0.5991718426501036,0.5938857089735587,0.5794341658212969,0.5699177315626827,0.5625406517554922,0.5568883436404821,0.5467955534799627,0.535534810969116,0.5263956086489909,0.5186272271976583,0.5090362943442361,0.494654961422344,0.4823823312326123,0.47418244737095067,0.46720631229720727,0.46074182485290305,0.4486014603621811,0.4428167582709149,0.43269164280648376,0.42400216176315514,0.4174416622599206,0.4174416622599206,0.4151125528330759,0.4919393488543763,0.559066486060559,0.6140132825666172,0.6558263748706378,0.6910811839014892,0.7102263336258865,0.7333790093810277,0.7566178545658122,0.7745656329159971,0.7882667570502422,0.801297630385241,0.8155165287894102,0.8236664484160665,0.8275989285278207,0.8372804080504836,0.8438120609152677,0.848609952988556,0.8544449369496401,0.858234330902016,0.8629942156114925,0.8689698382862627,0.8746282732655646,0.8775773950099577,0.8809420028932224,0.8835838086447511,0.886849588882163,0.8881955730790088,0.8930610200361612,0.8956691077891408,0.8985915183234561,0.9014936779520263,0.9034403308804245,0.9044342540609209,0.9069914318748049,0.9079995712916112,0.9074201521312413,0.908721548450684,0.9100112899327246,0.9103709976097318,0.9104110813226094,0.9095062498053936,0.9095433329245225,0.9111258865248226,0.9111727122297417,0.9121450428184833,0.9130976059707101,0.914060348494931,0.9128419019339933,0.914110884580976,0.9147492772099862,0.9153910873190474,0.9147749615979159,0.9154224320535682,0.9166879922825101,0.9179543072714778,0.9173488394838667,0.9179772789293018,0.9170532785674181,0.9170605021499607,0.9161371497231449,0.9161393012431218,0.915207224240012,0.9155223035060895,0.9149000426479261,0.9139649535216721,0.9136509417232089,0.9136472496327936,0.913640603074343,0.9105135429161204,0.9095734423210908,0.9073785515868675,0.9033064511110697,0.9020391333099934,0.8995120432701662,0.8947799836548747,0.8935090258014241,0.8919019571179257,0.8893687494033133,0.8852491755552058,0.8826888877122021,0.8779156908665106,0.8727988686704534,0.8686352857128197,0.8650738130674092,0.8576671450520414,0.8518403030170209,0.8443630575375227,0.8361419801292065,0.8252402579331009,0.8122572731531668,0.7981040915293585,0.7868801700706872,0.7670911854240694,0.7469102137321317,0.7233879698114147,0.6812085195728688,0.623269156618667,0.41459695707881294,0.4638706767362919,0.4960158861825403,0.5161679536679536,0.5341644885081029,0.5500938114953541,0.5600320375673392,0.56662200785995,0.5730537301921538,0.5796019309105142,0.5856910330613259,0.5895103168495627,0.593775728559667,0.5938700054210395,0.597919503019927,0.5999742007610775,0.5996735362776004,0.6045733902415141,0.6060966078734495,0.6031219887106993,0.6064613919563197,0.6122835520850168,0.6154243902720847,0.6147843300591848,0.6183561619313859,0.6162025661508872,0.614391781425496,0.6154747212464023,0.6169981931306916,0.6171915280682834,0.6189483400206517,0.6169278288238986,0.6151932243313643,0.6147240308174072,0.6170019982804438,0.6193888185811063,0.6180676679538781,0.6142019062501594,0.612918537664775,0.6154348420481304,0.616988119375974,0.6175368910686361,0.6167609778456092,0.6190137929580106,0.615731315910133,0.606748739946508,0.6021627089546704,0.595624364278538,0.5907192634905981,0.5838725350370833,0.5831356388508309,0.574869506423259,0.5744773107369443,0.573392185156891,0.5681912925548184,0.5679795125397387,0.5710811155929122,0.5675197635918509,0.5681600624732348,0.5587646047839679,0.5538632384176716,0.5516911944060493,0.5479321870784248,0.5434199383730778,0.5392927787562661,0.532344417678921,0.5279247182744066,0.5291465710421744,0.5244703695394378,0.5235555115503382,0.5184591197452934,0.512504378918699,0.5069457161543492,0.5076929871047519,0.5055845662895271,0.5066863685029611,0.5076233326256996,0.5080031383695282,0.5081941496504859,0.5050993720697593,0.5050993720697593,0.5019059844733786,0.4982957008314615,0.4949167791273054,0.4950607118870884,0.48747306746103736,0.4835891098157498,0.47964314679643144,0.47964314679643144,0.47964314679643144,0.47972753811222835,0.47981190205934815,0.47981190205934815,0.47981190205934815,0.47981190205934815,0.47981190205934815,0.47981190205934815]
+},
+&quot;mapping&quot;:{
+&quot;x&quot;:&quot;thr&quot;,
+&quot;y&quot;:&quot;macro_f1&quot;,
+&quot;color&quot;:&quot;variety&quot;
+},
+&quot;data_meta&quot;:{
+&quot;series_annotations&quot;:[{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;variety&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;task&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;thr&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;macro_f1&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;pred_rate&quot;
+}]
+},
+&quot;facet&quot;:{
+&quot;name&quot;:&quot;wrap&quot;,
+&quot;facets&quot;:&quot;task&quot;,
+&quot;ncol&quot;:2.0,
+&quot;order&quot;:1.0,
+&quot;dir&quot;:&quot;h&quot;
+},
+&quot;ggtitle&quot;:{
+&quot;text&quot;:&quot;Macro-F1 vs decision threshold (reference tf-idf + LR, out-of-fold)&quot;,
+&quot;subtitle&quot;:&quot;Circles = best threshold per variety. Sarc-UK peaks lowest and at a different threshold than sarc-AU → tune thresholds per variety&quot;
+},
+&quot;guides&quot;:{
+&quot;x&quot;:{
+&quot;title&quot;:&quot;threshold on P(positive class)&quot;
+},
+&quot;y&quot;:{
+&quot;title&quot;:&quot;macro-F1&quot;
+},
+&quot;color&quot;:{
+&quot;title&quot;:&quot;&quot;
+}
+},
+&quot;theme&quot;:{
+&quot;name&quot;:&quot;minimal2&quot;,
+&quot;axis_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:12.0,
+&quot;blank&quot;:false
+},
+&quot;axis_text&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;legend_text&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;legend_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;legend_position&quot;:&quot;top&quot;,
+&quot;panel_grid_major&quot;:{
+&quot;color&quot;:&quot;#e6e5e0&quot;,
+&quot;size&quot;:0.4,
+&quot;blank&quot;:false
+},
+&quot;panel_grid_minor&quot;:{
+&quot;blank&quot;:true
+},
+&quot;plot_background&quot;:{
+&quot;fill&quot;:&quot;#fcfcfb&quot;,
+&quot;color&quot;:&quot;#fcfcfb&quot;,
+&quot;blank&quot;:false
+},
+&quot;plot_title&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:16.0,
+&quot;blank&quot;:false
+},
+&quot;plot_subtitle&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:12.0,
+&quot;blank&quot;:false
+},
+&quot;plot_caption&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:false
+},
+&quot;strip_text&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:12.0,
+&quot;blank&quot;:false
+}
+},
+&quot;ggsize&quot;:{
+&quot;width&quot;:1050.0,
+&quot;height&quot;:500.0
+},
+&quot;kind&quot;:&quot;plot&quot;,
+&quot;scales&quot;:[{
+&quot;aesthetic&quot;:&quot;color&quot;,
+&quot;breaks&quot;:[&quot;en-AU&quot;,&quot;en-UK&quot;],
+&quot;values&quot;:[&quot;#2a78d6&quot;,&quot;#eb6834&quot;]
+}],
+&quot;layers&quot;:[{
+&quot;geom&quot;:&quot;line&quot;,
+&quot;mapping&quot;:{
+},
+&quot;data_meta&quot;:{
+},
+&quot;size&quot;:1.3,
+&quot;data&quot;:{
+}
+},{
+&quot;geom&quot;:&quot;point&quot;,
+&quot;data&quot;:{
+&quot;variety&quot;:[&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;],
+&quot;task&quot;:[&quot;sarcasm&quot;,&quot;sentiment&quot;,&quot;sentiment&quot;,&quot;sarcasm&quot;],
+&quot;thr&quot;:[0.5800000000000001,0.5800000000000001,0.48000000000000004,0.37000000000000005],
+&quot;macro_f1&quot;:[0.6836891962511705,0.9179772789293018,0.844885211044289,0.6193888185811063]
+},
+&quot;mapping&quot;:{
+},
+&quot;data_meta&quot;:{
+&quot;series_annotations&quot;:[{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;task&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;thr&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;macro_f1&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;pred_rate&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;variety&quot;,
+&quot;factor_levels&quot;:[&quot;en-AU&quot;,&quot;en-UK&quot;]
+}]
+},
+&quot;size&quot;:5.0,
+&quot;shape&quot;:21.0,
+&quot;fill&quot;:&quot;#fcfcfb&quot;,
+&quot;stroke&quot;:2.0
+},{
+&quot;geom&quot;:&quot;vline&quot;,
+&quot;mapping&quot;:{
+},
+&quot;data_meta&quot;:{
+},
+&quot;xintercept&quot;:0.5,
+&quot;linetype&quot;:&quot;dashed&quot;,
+&quot;color&quot;:&quot;#9a9994&quot;,
+&quot;size&quot;:0.6,
+&quot;data&quot;:{
+}
+}],
+&quot;metainfo_list&quot;:[],
+&quot;spec_id&quot;:&quot;24&quot;
+};
+           fig = LetsPlot.buildPlotFromProcessedSpecs(plotSpec, containerDiv, sizing);
+       } else {
+           fig.updateView({});
+       }
+   }
+   
+   const renderImmediately = 
+       forceImmediateRender || (
+           sizing.width_mode === 'FIXED' &amp;&amp; 
+           (sizing.height_mode === 'FIXED' || sizing.height_mode === 'SCALED')
+       );
+   
+   if (renderImmediately) {
+       renderPlot();
+   }
+   
+   if (!renderImmediately || responsive) {
+       // Set up observer for initial sizing or continuous monitoring
+       var observer = new ResizeObserver(function(entries) {
+           for (let entry of entries) {
+               if (entry.contentBoxSize &amp;&amp; 
+                   entry.contentBoxSize[0].inlineSize > 0) {
+                   if (!responsive &amp;&amp; observer) {
+                       observer.disconnect();
+                       observer = null;
+                   }
+                   renderPlot();
+                   if (!responsive) {
+                       break;
+                   }
+               }
+           }
+       });
+       
+       observer.observe(containerDiv);
+   }
+   
+   // ----------
+   })();
+   
+   &lt;/script>
+   &lt;/body>
+&lt;/html>"></iframe>    

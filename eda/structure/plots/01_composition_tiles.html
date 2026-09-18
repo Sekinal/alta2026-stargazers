@@ -1,0 +1,231 @@
+            <iframe src='about:blank' style='border:none !important;' width='900' height='420' srcdoc="&lt;html lang=&quot;en&quot;>
+   &lt;head>
+       &lt;meta charset=&quot;UTF-8&quot;>
+       &lt;style> html, body { margin: 0; padding: 0; overflow: hidden; } &lt;/style>
+       &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;library&quot; src=&quot;https://cdn.jsdelivr.net/gh/JetBrains/lets-plot@v4.11.0/js-package/distr/lets-plot.min.js&quot;>&lt;/script>
+   &lt;/head>
+   &lt;body>
+          &lt;div id=&quot;jHtao0&quot; >&lt;/div>
+   &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;plot&quot;>
+   
+   (function() {
+   // ----------
+   
+   const forceImmediateRender = false;
+   const responsive = false;
+   
+   let sizing = {
+       width_mode: &quot;FIXED&quot;,
+       height_mode: &quot;FIXED&quot;,
+       width: 900.0, 
+       height: 420.0 
+   };
+   
+   const preferredWidth = document.body.dataset.letsPlotPreferredWidth;
+   if (preferredWidth !== undefined) {
+       sizing = {
+           width_mode: 'FIXED',
+           height_mode: 'SCALED',
+           width: parseFloat(preferredWidth)
+       };
+   }
+   
+   const containerDiv = document.getElementById(&quot;jHtao0&quot;);
+   let fig = null;
+   
+   function renderPlot() {
+       if (fig === null) {
+           const plotSpec = {
+&quot;data&quot;:{
+&quot;variety&quot;:[&quot;en-UK&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;,&quot;en-AU&quot;,&quot;en-UK&quot;,&quot;en-AU&quot;],
+&quot;source&quot;:[&quot;reddit&quot;,&quot;reddit&quot;,&quot;google&quot;,&quot;google&quot;,&quot;reddit&quot;,&quot;reddit&quot;,&quot;google&quot;,&quot;google&quot;],
+&quot;origin&quot;:[&quot;valid.csv&quot;,&quot;train.csv&quot;,&quot;valid.csv&quot;,&quot;valid.csv&quot;,&quot;valid.csv&quot;,&quot;train.csv&quot;,&quot;train.csv&quot;,&quot;train.csv&quot;],
+&quot;n&quot;:[138.0,1005.0,130.0,248.0,241.0,1763.0,1817.0,946.0],
+&quot;lab&quot;:[&quot;138\n(30 sarcastic)&quot;,&quot;1005\n(218 sarcastic)&quot;,&quot;130\n(7 sarcastic)&quot;,&quot;248\n(0 sarcastic)&quot;,&quot;241\n(102 sarcastic)&quot;,&quot;1763\n(739 sarcastic)&quot;,&quot;1817\n(1 sarcastic)&quot;,&quot;946\n(66 sarcastic)&quot;]
+},
+&quot;mapping&quot;:{
+&quot;x&quot;:&quot;source&quot;,
+&quot;y&quot;:&quot;variety&quot;,
+&quot;fill&quot;:&quot;n&quot;
+},
+&quot;data_meta&quot;:{
+&quot;series_annotations&quot;:[{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;variety&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;source&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;origin&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;n&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;ns&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;lab&quot;
+}]
+},
+&quot;facet&quot;:{
+&quot;name&quot;:&quot;wrap&quot;,
+&quot;facets&quot;:&quot;origin&quot;,
+&quot;order&quot;:1.0,
+&quot;dir&quot;:&quot;h&quot;
+},
+&quot;ggtitle&quot;:{
+&quot;text&quot;:&quot;Where the 6,288 labelled rows live&quot;,
+&quot;subtitle&quot;:&quot;Rows per variety × source; the valid split mirrors train at ~1:7.3 in every cell&quot;
+},
+&quot;guides&quot;:{
+&quot;x&quot;:{
+&quot;title&quot;:&quot;source&quot;
+},
+&quot;y&quot;:{
+&quot;title&quot;:&quot;variety&quot;
+}
+},
+&quot;theme&quot;:{
+&quot;name&quot;:&quot;minimal2&quot;,
+&quot;axis_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:12.0,
+&quot;blank&quot;:false
+},
+&quot;axis_text&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;legend_text&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;legend_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;legend_position&quot;:&quot;none&quot;,
+&quot;panel_grid_major&quot;:{
+&quot;color&quot;:&quot;#e6e5e0&quot;,
+&quot;size&quot;:0.4,
+&quot;blank&quot;:true
+},
+&quot;panel_grid_minor&quot;:{
+&quot;blank&quot;:true
+},
+&quot;plot_background&quot;:{
+&quot;fill&quot;:&quot;#fcfcfb&quot;,
+&quot;color&quot;:&quot;#fcfcfb&quot;,
+&quot;blank&quot;:false
+},
+&quot;plot_title&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:16.0,
+&quot;blank&quot;:false
+},
+&quot;plot_subtitle&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:12.0,
+&quot;blank&quot;:false
+},
+&quot;plot_caption&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:false
+},
+&quot;strip_text&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:12.0,
+&quot;blank&quot;:false
+}
+},
+&quot;ggsize&quot;:{
+&quot;width&quot;:900.0,
+&quot;height&quot;:420.0
+},
+&quot;kind&quot;:&quot;plot&quot;,
+&quot;scales&quot;:[{
+&quot;name&quot;:&quot;rows&quot;,
+&quot;aesthetic&quot;:&quot;fill&quot;,
+&quot;low&quot;:&quot;#dbe8f8&quot;,
+&quot;high&quot;:&quot;#6ea4e6&quot;,
+&quot;scale_mapper_kind&quot;:&quot;color_gradient&quot;
+}],
+&quot;layers&quot;:[{
+&quot;geom&quot;:&quot;tile&quot;,
+&quot;mapping&quot;:{
+},
+&quot;data_meta&quot;:{
+},
+&quot;color&quot;:&quot;#fcfcfb&quot;,
+&quot;size&quot;:2.0,
+&quot;width&quot;:0.96,
+&quot;height&quot;:0.96,
+&quot;data&quot;:{
+}
+},{
+&quot;geom&quot;:&quot;text&quot;,
+&quot;mapping&quot;:{
+&quot;label&quot;:&quot;lab&quot;
+},
+&quot;data_meta&quot;:{
+},
+&quot;size&quot;:7.0,
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;fontface&quot;:&quot;bold&quot;,
+&quot;data&quot;:{
+}
+}],
+&quot;metainfo_list&quot;:[],
+&quot;spec_id&quot;:&quot;3&quot;
+};
+           fig = LetsPlot.buildPlotFromProcessedSpecs(plotSpec, containerDiv, sizing);
+       } else {
+           fig.updateView({});
+       }
+   }
+   
+   const renderImmediately = 
+       forceImmediateRender || (
+           sizing.width_mode === 'FIXED' &amp;&amp; 
+           (sizing.height_mode === 'FIXED' || sizing.height_mode === 'SCALED')
+       );
+   
+   if (renderImmediately) {
+       renderPlot();
+   }
+   
+   if (!renderImmediately || responsive) {
+       // Set up observer for initial sizing or continuous monitoring
+       var observer = new ResizeObserver(function(entries) {
+           for (let entry of entries) {
+               if (entry.contentBoxSize &amp;&amp; 
+                   entry.contentBoxSize[0].inlineSize > 0) {
+                   if (!responsive &amp;&amp; observer) {
+                       observer.disconnect();
+                       observer = null;
+                   }
+                   renderPlot();
+                   if (!responsive) {
+                       break;
+                   }
+               }
+           }
+       });
+       
+       observer.observe(containerDiv);
+   }
+   
+   // ----------
+   })();
+   
+   &lt;/script>
+   &lt;/body>
+&lt;/html>"></iframe>    

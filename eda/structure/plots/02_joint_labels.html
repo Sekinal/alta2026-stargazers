@@ -1,0 +1,239 @@
+            <iframe src='about:blank' style='border:none !important;' width='1000' height='440' srcdoc="&lt;html lang=&quot;en&quot;>
+   &lt;head>
+       &lt;meta charset=&quot;UTF-8&quot;>
+       &lt;style> html, body { margin: 0; padding: 0; overflow: hidden; } &lt;/style>
+       &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;library&quot; src=&quot;https://cdn.jsdelivr.net/gh/JetBrains/lets-plot@v4.11.0/js-package/distr/lets-plot.min.js&quot;>&lt;/script>
+   &lt;/head>
+   &lt;body>
+          &lt;div id=&quot;1xnRYb&quot; >&lt;/div>
+   &lt;script type=&quot;text/javascript&quot; data-lets-plot-script=&quot;plot&quot;>
+   
+   (function() {
+   // ----------
+   
+   const forceImmediateRender = false;
+   const responsive = false;
+   
+   let sizing = {
+       width_mode: &quot;FIXED&quot;,
+       height_mode: &quot;FIXED&quot;,
+       width: 1000.0, 
+       height: 440.0 
+   };
+   
+   const preferredWidth = document.body.dataset.letsPlotPreferredWidth;
+   if (preferredWidth !== undefined) {
+       sizing = {
+           width_mode: 'FIXED',
+           height_mode: 'SCALED',
+           width: parseFloat(preferredWidth)
+       };
+   }
+   
+   const containerDiv = document.getElementById(&quot;1xnRYb&quot;);
+   let fig = null;
+   
+   function renderPlot() {
+       if (fig === null) {
+           const plotSpec = {
+&quot;data&quot;:{
+&quot;segment&quot;:[&quot;en-AU · google&quot;,&quot;en-AU · google&quot;,&quot;en-AU · google&quot;,&quot;en-AU · google&quot;,&quot;en-AU · reddit&quot;,&quot;en-AU · reddit&quot;,&quot;en-AU · reddit&quot;,&quot;en-AU · reddit&quot;,&quot;en-UK · google&quot;,&quot;en-UK · google&quot;,&quot;en-UK · google&quot;,&quot;en-UK · reddit&quot;,&quot;en-UK · reddit&quot;,&quot;en-UK · reddit&quot;,&quot;en-UK · reddit&quot;],
+&quot;joint&quot;:[&quot;neg · not sarcastic&quot;,&quot;neg · sarcastic&quot;,&quot;pos · not sarcastic&quot;,&quot;pos · sarcastic&quot;,&quot;neg · not sarcastic&quot;,&quot;neg · sarcastic&quot;,&quot;pos · not sarcastic&quot;,&quot;pos · sarcastic&quot;,&quot;neg · not sarcastic&quot;,&quot;neg · sarcastic&quot;,&quot;pos · not sarcastic&quot;,&quot;neg · not sarcastic&quot;,&quot;neg · sarcastic&quot;,&quot;pos · not sarcastic&quot;,&quot;pos · sarcastic&quot;],
+&quot;share&quot;:[0.20260223048327136,0.062267657992565055,0.7295539033457249,0.0055762081784386614,0.2754491017964072,0.405189620758483,0.30489021956087825,0.014471057884231538,0.2513317191283293,4.8426150121065375E-4,0.7481840193704601,0.6710411198600175,0.21434820647419073,0.11198600174978128,0.0026246719160104987],
+&quot;lab&quot;:[&quot;218&quot;,&quot;67&quot;,&quot;785&quot;,&quot;&quot;,&quot;552&quot;,&quot;812&quot;,&quot;611&quot;,&quot;&quot;,&quot;519&quot;,&quot;&quot;,&quot;1545&quot;,&quot;767&quot;,&quot;245&quot;,&quot;128&quot;,&quot;&quot;]
+},
+&quot;mapping&quot;:{
+&quot;x&quot;:&quot;segment&quot;,
+&quot;y&quot;:&quot;share&quot;,
+&quot;fill&quot;:&quot;joint&quot;
+},
+&quot;data_meta&quot;:{
+&quot;series_annotations&quot;:[{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;segment&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;joint&quot;
+},{
+&quot;type&quot;:&quot;int&quot;,
+&quot;column&quot;:&quot;n&quot;
+},{
+&quot;type&quot;:&quot;float&quot;,
+&quot;column&quot;:&quot;share&quot;
+},{
+&quot;type&quot;:&quot;str&quot;,
+&quot;column&quot;:&quot;lab&quot;
+}]
+},
+&quot;coord&quot;:{
+&quot;name&quot;:&quot;flip&quot;,
+&quot;flip&quot;:true
+},
+&quot;ggtitle&quot;:{
+&quot;text&quot;:&quot;Joint (sentiment, sarcasm) label mix by segment&quot;,
+&quot;subtitle&quot;:&quot;Sarcasm ≈ negative sentiment and ≈ reddit; en-UK google has 1 sarcastic row in 2,065, en-AU google 73 in 1,076&quot;
+},
+&quot;guides&quot;:{
+&quot;x&quot;:{
+&quot;title&quot;:&quot;&quot;
+},
+&quot;y&quot;:{
+&quot;title&quot;:&quot;share of rows (numbers = row counts)&quot;
+}
+},
+&quot;theme&quot;:{
+&quot;name&quot;:&quot;minimal2&quot;,
+&quot;axis_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:12.0,
+&quot;blank&quot;:false
+},
+&quot;axis_text&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;legend_text&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;legend_title&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:11.0,
+&quot;blank&quot;:false
+},
+&quot;legend_position&quot;:&quot;top&quot;,
+&quot;panel_grid_major&quot;:{
+&quot;color&quot;:&quot;#e6e5e0&quot;,
+&quot;size&quot;:0.4,
+&quot;blank&quot;:false
+},
+&quot;panel_grid_minor&quot;:{
+&quot;blank&quot;:true
+},
+&quot;plot_background&quot;:{
+&quot;fill&quot;:&quot;#fcfcfb&quot;,
+&quot;color&quot;:&quot;#fcfcfb&quot;,
+&quot;blank&quot;:false
+},
+&quot;plot_title&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:16.0,
+&quot;blank&quot;:false
+},
+&quot;plot_subtitle&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:12.0,
+&quot;blank&quot;:false
+},
+&quot;plot_caption&quot;:{
+&quot;color&quot;:&quot;#52514e&quot;,
+&quot;size&quot;:10.0,
+&quot;blank&quot;:false
+},
+&quot;strip_text&quot;:{
+&quot;color&quot;:&quot;#0b0b0b&quot;,
+&quot;face&quot;:&quot;bold&quot;,
+&quot;size&quot;:12.0,
+&quot;blank&quot;:false
+}
+},
+&quot;ggsize&quot;:{
+&quot;width&quot;:1000.0,
+&quot;height&quot;:440.0
+},
+&quot;kind&quot;:&quot;plot&quot;,
+&quot;scales&quot;:[{
+&quot;name&quot;:&quot;&quot;,
+&quot;aesthetic&quot;:&quot;fill&quot;,
+&quot;breaks&quot;:[&quot;neg · not sarcastic&quot;,&quot;neg · sarcastic&quot;,&quot;pos · not sarcastic&quot;,&quot;pos · sarcastic&quot;],
+&quot;values&quot;:[&quot;#4a3aa7&quot;,&quot;#e87ba4&quot;,&quot;#1baf7a&quot;,&quot;#eda100&quot;]
+},{
+&quot;aesthetic&quot;:&quot;y&quot;,
+&quot;format&quot;:&quot;.0%&quot;
+},{
+&quot;aesthetic&quot;:&quot;x&quot;,
+&quot;limits&quot;:[&quot;en-UK · reddit&quot;,&quot;en-UK · google&quot;,&quot;en-AU · reddit&quot;,&quot;en-AU · google&quot;],
+&quot;discrete&quot;:true,
+&quot;reverse&quot;:false
+}],
+&quot;layers&quot;:[{
+&quot;geom&quot;:&quot;bar&quot;,
+&quot;stat&quot;:&quot;identity&quot;,
+&quot;mapping&quot;:{
+},
+&quot;position&quot;:{
+&quot;name&quot;:&quot;stack&quot;
+},
+&quot;data_meta&quot;:{
+},
+&quot;color&quot;:&quot;#fcfcfb&quot;,
+&quot;size&quot;:0.8,
+&quot;width&quot;:0.7,
+&quot;data&quot;:{
+}
+},{
+&quot;geom&quot;:&quot;text&quot;,
+&quot;mapping&quot;:{
+&quot;label&quot;:&quot;lab&quot;
+},
+&quot;position&quot;:{
+&quot;name&quot;:&quot;stack&quot;,
+&quot;vjust&quot;:0.5
+},
+&quot;data_meta&quot;:{
+},
+&quot;color&quot;:&quot;white&quot;,
+&quot;size&quot;:6.0,
+&quot;fontface&quot;:&quot;bold&quot;,
+&quot;data&quot;:{
+}
+}],
+&quot;metainfo_list&quot;:[],
+&quot;spec_id&quot;:&quot;6&quot;
+};
+           fig = LetsPlot.buildPlotFromProcessedSpecs(plotSpec, containerDiv, sizing);
+       } else {
+           fig.updateView({});
+       }
+   }
+   
+   const renderImmediately = 
+       forceImmediateRender || (
+           sizing.width_mode === 'FIXED' &amp;&amp; 
+           (sizing.height_mode === 'FIXED' || sizing.height_mode === 'SCALED')
+       );
+   
+   if (renderImmediately) {
+       renderPlot();
+   }
+   
+   if (!renderImmediately || responsive) {
+       // Set up observer for initial sizing or continuous monitoring
+       var observer = new ResizeObserver(function(entries) {
+           for (let entry of entries) {
+               if (entry.contentBoxSize &amp;&amp; 
+                   entry.contentBoxSize[0].inlineSize > 0) {
+                   if (!responsive &amp;&amp; observer) {
+                       observer.disconnect();
+                       observer = null;
+                   }
+                   renderPlot();
+                   if (!responsive) {
+                       break;
+                   }
+               }
+           }
+       });
+       
+       observer.observe(containerDiv);
+   }
+   
+   // ----------
+   })();
+   
+   &lt;/script>
+   &lt;/body>
+&lt;/html>"></iframe>    

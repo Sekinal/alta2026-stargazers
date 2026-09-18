@@ -1,0 +1,5 @@
+segment,spaced_nt,spaced_paren,newline,url,html_entity,reddit_quote,markdown,caps_word,emoji,ellipsis,question,exclaim,google_translated
+en-AU · google,0.251,0.126,0.0,0.0,0.0,0.0,0.0,0.078,0.0,0.046,0.035,0.186,0.0
+en-AU · reddit,0.0,0.005,0.359,0.0,0.0,0.039,0.008,0.149,0.0,0.042,0.177,0.069,0.0
+en-UK · google,0.296,0.128,0.0,0.0,0.0,0.0,0.0,0.055,0.0,0.047,0.041,0.226,0.0
+en-UK · reddit,0.0,0.003,0.332,0.0,0.0,0.028,0.012,0.106,0.0,0.066,0.187,0.082,0.0

@@ -1,0 +1,8 @@
+segment,label,n_pos,auc_len,p
+en-AU · google,sentiment,791,0.39,3.7e-8
+en-AU · google,sarcasm,73,0.631,0.00019
+en-AU · reddit,sentiment,640,0.412,1.7e-10
+en-AU · reddit,sarcasm,841,0.51,0.44
+en-UK · google,sentiment,1545,0.385,3e-15
+en-UK · reddit,sentiment,131,0.368,9.4e-7
+en-UK · reddit,sarcasm,248,0.42,0.0001

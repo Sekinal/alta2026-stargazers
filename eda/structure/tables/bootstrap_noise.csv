@@ -1,0 +1,11 @@
+bootstrap,component,mean,sd,p05,p95
+stratified (valid-like cells),sent-AU,0.8432,0.0176,0.8137,0.8717
+stratified (valid-like cells),sent-UK,0.914,0.0119,0.8936,0.9326
+stratified (valid-like cells),sarc-AU,0.6885,0.0222,0.6501,0.7239
+stratified (valid-like cells),sarc-UK,0.59,0.0374,0.5283,0.6521
+stratified (valid-like cells),score,0.7165,0.0206,0.6828,0.7504
+iid per variety,sent-AU,0.8425,0.0192,0.8102,0.8729
+iid per variety,sent-UK,0.9141,0.0142,0.8908,0.9374
+iid per variety,sarc-AU,0.6811,0.0249,0.6395,0.7206
+iid per variety,sarc-UK,0.5888,0.0375,0.5269,0.6497
+iid per variety,score,0.7155,0.0201,0.6821,0.7475
