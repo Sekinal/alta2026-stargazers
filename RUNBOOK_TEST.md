@@ -28,7 +28,7 @@ R ctx_test "uv run --with orjson python experiments/data/context_match.py match 
 # needs internet (~1 min). If coverage is low, fetch the missing days: context_match.py fetch --subs ... --start ... --end ...,
 # then index --src data/external/raw/context_days --out data/external/context/index/days, then match again.
 ```
-Keyed by test uid (x00000...). Check the match rate against the pool's (AU ~92%, UK ~56%+); a much lower rate means
+Keyed by test uid (x00000...). Check the match rate against the pool's (AU ~95%, UK ~96%; valid stand-in 94.6% / 94.2%); a much lower rate means
 the test came from a different crawl, in which case the context-aware members fall back to their no-context prompts.
 
 ## 2. Test predictions per member (each saves with `save_preds(..., test_csv=data/test.csv)`)
