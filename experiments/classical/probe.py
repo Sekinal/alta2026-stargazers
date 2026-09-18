@@ -25,7 +25,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.svm import LinearSVC
 
 import embed
-from common import LABEL, fmt, pool, quick
+from common import save_kw, LABEL, fmt, pool, quick
 from alta.common import SEED, save_preds
 
 warnings.filterwarnings("ignore")
@@ -169,7 +169,7 @@ def main() -> None:
     assert all(np.isfinite(v).all() for v in oof.values())
     res = quick(oof["sent"], oof["sarc"])
     print(f"{a.run} {cfg} {time.time() - t0:.0f}s", fmt(res), flush=True)
-    save_preds(a.run, folds_used=df.select("uid", "fold"), oof=pl.DataFrame({"uid": df["uid"], "p_sent": oof["sent"], "p_sarc": oof["sarc"]}),
+    save_preds(save_kw(a.run, df)[0], **save_kw(a.run, df)[1], oof=pl.DataFrame({"uid": df["uid"], "p_sent": oof["sent"], "p_sarc": oof["sarc"]}),
                meta={"kind": "probe", "script": "experiments/classical/probe.py", "config": cfg,
                      "grid": GRID[a.clf], "chosen_inner_cv": log, "test_protocol": "average of the 5 fold models (predict_test.py)",
                      "quick": res})

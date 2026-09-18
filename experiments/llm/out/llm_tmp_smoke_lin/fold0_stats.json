@@ -1,0 +1,54 @@
+{
+  "args": {
+    "run": "llm_tmp_smoke_lin",
+    "model": "qwen3.5-4b",
+    "fold": 0,
+    "tasks": "sarc,sent",
+    "sent_rows": "reddit",
+    "epochs": 1.0,
+    "lr": 0.0001,
+    "r": 16,
+    "bs": 4,
+    "accum": 2,
+    "max_text_tokens": 192,
+    "seed": 0,
+    "limit_train": 64,
+    "test": "",
+    "predict_only": false,
+    "alpha": 32.0,
+    "rslora": false,
+    "init": "gaussian",
+    "eva_rho": 2.0,
+    "eva_tau": 0.99,
+    "eva_batches": 32,
+    "dora": false,
+    "riemannian": false,
+    "targets": "all-linear",
+    "dropout": 0.05,
+    "wd": 0.0,
+    "presft": "",
+    "presft_lr": 0,
+    "presft_limit": 0,
+    "head": "linear",
+    "head_lr": 0.0003,
+    "pseudo": "",
+    "pseudo_n": 60000,
+    "pseudo_lr": 0,
+    "save_run": true
+  },
+  "alpha": 32.0,
+  "init_s": 0.594243049621582,
+  "task": {
+    "minutes": 0.26224618752797446,
+    "steps": 9,
+    "loss_curve": [
+      0.6692422996549046
+    ]
+  },
+  "train_min": 0.26237136920293175,
+  "n_examples": 64,
+  "peak_gib": 9.399183750152588,
+  "loss_curve": [
+    0.6692422996549046
+  ]
+}

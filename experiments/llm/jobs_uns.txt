@@ -1,0 +1,7 @@
+# Unsloth: parity check vs HF R1 s0, then the AstroCLIMB recipe (gold only), then + pseudo-label stage
+R1u 0 0
+A16u 0 0
+A16u 1 0
+PREDTEST llm_ft_A16u_s0 0
+A16psu 0 0
+A16psu 1 0

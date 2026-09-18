@@ -1,0 +1,6 @@
+# AstroCLIMB recipe screen on fold 0 (gold only), 2 seeds each
+A16 0 0
+A16 1 0
+PREDTEST llm_ft_A16_s0 0
+A64 0 0
+A64 1 0

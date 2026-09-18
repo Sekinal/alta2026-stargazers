@@ -26,7 +26,7 @@ import polars as pl
 import torch
 
 sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parent))
-from llm_common import CACHE, ROOT, build_prompts, load_model, verbalizer_ids  # noqa: E402
+from llm_common import CACHE, MODELS, ROOT, build_prompts, load_model, verbalizer_ids  # noqa: E402
 
 sys.path.insert(0, str(ROOT))
 from alta.common import load_pool, load_test, save_preds  # noqa: E402
@@ -56,6 +56,21 @@ class Head(torch.nn.Module):
     def forward(self, h: torch.Tensor, task: str) -> torch.Tensor:
         p, n = self.ids[task]
         return h.float() @ (self.W[p] - self.W[n])
+
+
+class LinearHead(torch.nn.Module):
+    """Trainable linear head on the last-position hidden state, one logit per task
+    (AstroCLIMB-style; zero-initialised, so training starts from p = 0.5)."""
+
+    def __init__(self, hidden: int, tasks=("sarc", "sent")):
+        super().__init__()
+        self.tasks = list(tasks)
+        self.lin = torch.nn.Linear(hidden, len(self.tasks))
+        torch.nn.init.zeros_(self.lin.weight)
+        torch.nn.init.zeros_(self.lin.bias)
+
+    def forward(self, h: torch.Tensor, task: str) -> torch.Tensor:
+        return self.lin(h.float())[:, self.tasks.index(task)]
 
 
 def encode(tok, prompts):
@@ -120,7 +135,11 @@ def train_stage(model, inner, head, tok, batches, params, lr, a) -> dict:
         from peft.optimizers import create_riemannian_optimizer
         opt = create_riemannian_optimizer(model, torch.optim.AdamW, lr=lr, weight_decay=a.wd)
     else:
-        opt = torch.optim.AdamW(params, lr=lr, weight_decay=a.wd)
+        groups = [{"params": params, "lr": lr}]
+        hp = [p for p in head.parameters() if p.requires_grad]
+        if hp:
+            groups.append({"params": hp, "lr": a.head_lr, "weight_decay": 0.0})
+        opt = torch.optim.AdamW(groups, lr=lr, weight_decay=a.wd)
     warm = max(1, int(0.06 * steps))
     sched = torch.optim.lr_scheduler.LambdaLR(
         opt, lambda s: min(1.0, (s + 1) / warm) * max(0.0, (steps - s) / max(1, steps - warm)))
@@ -134,7 +153,7 @@ def train_stage(model, inner, head, tok, batches, params, lr, a) -> dict:
         loss.backward()
         run_loss.append(loss.item() * a.accum)
         if (bi + 1) % a.accum == 0 or bi == len(batches) - 1:
-            torch.nn.utils.clip_grad_norm_(params, 1.0)
+            torch.nn.utils.clip_grad_norm_(params + list(head.parameters()), 1.0)
             opt.step(); sched.step(); opt.zero_grad(set_to_none=True)
         if (bi + 1) % 100 == 0:
             el = time.time() - t1
@@ -179,6 +198,14 @@ def main():
                     "pre-SFT stage on external data before the task stage, same adapter")
     ap.add_argument("--presft-lr", type=float, default=0)
     ap.add_argument("--presft-limit", type=int, default=0)
+    ap.add_argument("--backend", default="hf", choices=["hf", "unsloth"])
+    ap.add_argument("--head", default="verbalizer", choices=["verbalizer", "linear"])
+    ap.add_argument("--head-lr", type=float, default=3e-4)
+    ap.add_argument("--pseudo", default="", help="parquet of soft pseudo-labels (text, variety, source, "
+                    "p_sent, p_sarc): adaptation stage before the gold stage, soft-label BCE")
+    ap.add_argument("--pseudo-n", type=int, default=60000, help="rows sampled from --pseudo")
+    ap.add_argument("--pseudo-lr", type=float, default=0)
+    ap.add_argument("--pseudo-tasks", default="sarc,sent")
     ap.add_argument("--save-run", action="store_true",
                     help="save the held-out fold as a partial run preds/<run>.parquet (screening)")
     a = ap.parse_args()
@@ -198,7 +225,16 @@ def main():
         print(f"fold {a.fold} already done; skipping", flush=True)
         return
 
-    tok, model = load_model(a.model)
+    if a.backend == "unsloth":
+        # Unsloth (isolated venv): bf16 16-bit LoRA, its own gradient checkpointing and kernels
+        from unsloth import FastLanguageModel
+        model, tok = FastLanguageModel.from_pretrained(MODELS.get(a.model, a.model), dtype=torch.bfloat16,
+                                                       load_in_4bit=False, max_seq_length=1024)
+        tok = getattr(tok, "tokenizer", tok)  # Qwen3.5 loads as a VL processor
+        if tok.pad_token is None:
+            tok.pad_token = tok.eos_token
+    else:
+        tok, model = load_model(a.model)
     tok.padding_side = "left"
     ids = {}
     for task in ("sarc", "sent"):
@@ -207,6 +243,12 @@ def main():
     uniq = sorted({i for pn in ids.values() for i in pn})
     W = model.lm_head.weight[uniq].detach().clone()
     head = Head(W, {t: (uniq.index(p), uniq.index(n)) for t, (p, n) in ids.items()}).to(0)
+    if a.predict_only and (adir / "head.pt").exists():
+        a.head = "linear"  # the adapter was trained with a separate linear head
+    if a.head == "linear":
+        head = LinearHead(model.config.get_text_config().hidden_size).to(0)
+        if a.predict_only:
+            head.load_state_dict(torch.load(adir / "head.pt", map_location="cuda:0"))
     model.lm_head = torch.nn.Identity()
     torch.cuda.empty_cache()
     inner = model.model  # LoRA is injected in place, so this stays the adapted backbone
@@ -223,10 +265,19 @@ def main():
                          init_lora_weights=True if a.init == "gaussian" else a.init,
                          eva_config=EvaConfig(rho=a.eva_rho, tau=a.eva_tau, use_label_mask=False)
                          if a.init == "eva" else None)
-        model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
-        model.enable_input_require_grads()
         t_init = time.time()
-        model = get_peft_model(model, cfg)
+        if a.backend == "unsloth":
+            assert a.init == "gaussian" and not a.dora, "unsloth path: plain LoRA only"
+            names = sorted({n.split(".")[-1] for n, m in model.named_modules()
+                            if isinstance(m, torch.nn.Linear)} - {"lm_head"})
+            model = FastLanguageModel.get_peft_model(
+                model, r=a.r, lora_alpha=alpha, lora_dropout=a.dropout, target_modules=names,
+                use_rslora=a.rslora, bias="none", use_gradient_checkpointing="unsloth",
+                random_state=a.seed)
+        else:
+            model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
+            model.enable_input_require_grads()
+            model = get_peft_model(model, cfg)
         train = pool.filter(pl.col("fold") != a.fold)  # training folds only (also for EVA init)
         stats = {"args": vars(a), "alpha": alpha}
         if a.init == "eva":
@@ -308,6 +359,21 @@ def main():
                 encode(tok, build_prompts(tok, d, PROMPTS["sarc"], a.max_text_tokens)), d["sarcasm"].to_numpy())]
             pre_batches = make_batches(pre_ex, 1.0, ["sarc"], a.bs, rng)
             stats["presft_examples"] = len(pre_ex)
+        ps_batches = None
+        if a.pseudo:
+            d = pl.read_parquet(a.pseudo)
+            d = d.sample(min(a.pseudo_n, d.height), seed=a.seed)
+            ps_ex = []
+            for task, col in (("sarc", "p_sarc"), ("sent", "p_sent")):
+                if task not in a.pseudo_tasks.split(","):
+                    continue
+                dt = d.filter(pl.col(col).is_not_null())
+                if task == "sarc":  # same rows as the gold sarcasm task (no UK google)
+                    dt = dt.filter((pl.col("source") == "reddit") | (pl.col("variety") == "en-AU"))
+                ps_ex += [(s_, task, float(y)) for s_, y in zip(
+                    encode(tok, build_prompts(tok, dt, PROMPTS[task], a.max_text_tokens)), dt[col].to_numpy())]
+            ps_batches = make_batches(ps_ex, 1.0, a.pseudo_tasks.split(","), a.bs, rng)
+            stats["pseudo_examples"] = len(ps_ex)
         print(f"fold {a.fold}: {len(examples)} examples, {len(batches)} batches; "
               f"load {time.time() - t0:.0f}s", flush=True)
 
@@ -318,12 +384,18 @@ def main():
             print(f"pre-SFT: {len(pre_batches)} batches", flush=True)
             stats["presft"] = train_stage(model, inner, head, tok, pre_batches, params,
                                           a.presft_lr or a.lr, a)
+        if ps_batches:
+            print(f"pseudo-label adaptation: {len(ps_batches)} batches", flush=True)
+            stats["pseudo"] = train_stage(model, inner, head, tok, ps_batches, params,
+                                          a.pseudo_lr or a.lr, a)
         stats["task"] = train_stage(model, inner, head, tok, batches, params, a.lr, a)
         stats.update(train_min=(time.time() - t1) / 60, n_examples=len(examples),
                      peak_gib=torch.cuda.max_memory_allocated() / 2**30,
                      loss_curve=stats["task"]["loss_curve"])
         print(f"train time {stats['train_min']:.1f} min", flush=True)
         model.save_pretrained(adir)
+        if a.head == "linear":
+            torch.save(head.state_dict(), adir / "head.pt")
         (adir / "train_args.json").write_text(json.dumps(vars(a), indent=2))
 
     # ---------------------------------------------------------------- predictions

@@ -42,6 +42,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--run", required=True)
     ap.add_argument("--test", required=True)
+    ap.add_argument("--context", default="", help="uid-keyed thread context for the test rows "
+                    "(context-aware prompts *_v2c; without it test rows use the plain prompt)")
     ap.add_argument("--force", action="store_true", help="re-score fold adapters even if cached")
     a = ap.parse_args()
     meta = json.loads((PREDS / f"{a.run}.json").read_text())
@@ -51,7 +53,8 @@ def main():
             model = r["model"]
             if ":" in tag:  # another model's cache, e.g. "qwen3.5-9b-nf4:sarc_v2"
                 model, tag = tag.split(":")
-            sh([str(HERE / "score.py"), "--model", model, *split_tag(tag), "--test", a.test])
+            ctx = ["--context", a.context] if a.context and tag.split("_")[1].endswith("c") else []
+            sh([str(HERE / "score.py"), "--model", model, *split_tag(tag), "--test", a.test, *ctx])
         sys.path.insert(0, str(HERE))
         from make_run import build
         keep = {k: v for k, v in meta.items() if k not in ("run", "fold_hash", "git")}

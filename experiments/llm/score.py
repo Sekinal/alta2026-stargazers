@@ -18,7 +18,8 @@ import polars as pl
 import torch
 
 sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parent))
-from llm_common import CACHE, Scorer, Timer, batches_by_budget, build_prompts, load_model  # noqa: E402
+from llm_common import (CACHE, CONTEXT_POOL, Scorer, Timer, add_context, batches_by_budget,  # noqa: E402
+                        build_prompts, load_model)
 from shots import select_shots  # noqa: E402
 
 sys.path.insert(0, str(CACHE.parents[2]))
@@ -40,6 +41,7 @@ def main():
     ap.add_argument("--rows", default="all", choices=["all", "reddit", "uk_reddit"])
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--test", default="")
+    ap.add_argument("--context", default="", help="context parquet (uid-keyed); default: pool context")
     ap.add_argument("--layers", default="", help="default: n/2, 3n/4, n-1")
     ap.add_argument("--max-text-tokens", type=int, default=256)
     ap.add_argument("--max-batch-tokens", type=int, default=24000)
@@ -77,6 +79,9 @@ def main():
           flush=True)
 
     shots = select_shots(a.shots, df, task, tok, a.max_text_tokens, split) if a.shots else None
+    if a.prompt.endswith("c"):  # context-aware prompt: thread title / body / parent for matched rows
+        df = add_context(tok, df, a.context or CONTEXT_POOL)
+        print(f"context for {df['context'].is_not_null().sum()} of {df.height} rows", flush=True)
     prompts = build_prompts(tok, df, a.prompt, a.max_text_tokens, shots)
     lengths = np.array([len(x) for x in tok(prompts, add_special_tokens=False)["input_ids"]])
     print(f"prompt tokens: mean {lengths.mean():.0f} max {lengths.max()}", flush=True)

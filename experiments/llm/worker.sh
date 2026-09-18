@@ -13,7 +13,9 @@ while read -r line; do
   echo "$(date -u +%H:%M) gpu$CUDA_VISIBLE_DEVICES start $line"
   set -- $line
   case $1 in
-    PREDTEST) uv run python experiments/llm/ft.py --run $2 --model qwen3.5-4b --fold $3 --predict-only \
+    PREDTEST) if grep -q '"backend": "unsloth"' models/$2/fold$3/train_args.json 2>/dev/null; then
+                PY="/workspace/venv-unsloth/bin/python"; B="--backend unsloth"; else PY="uv run python"; B=""; fi
+              $PY experiments/llm/ft.py --run $2 --model qwen3.5-4b --fold $3 --predict-only $B \
                 --test $TEST --max-text-tokens 192 >> logs/predtest_$2_$3.log 2>&1 ;;
     ROBUST)   uv run python experiments/llm/robust.py --run $2 >> logs/robust_$2.log 2>&1 ;;
     CANARY)   ALTA_CANARY_SEED=0 experiments/llm/ladder.sh $2 $3 $4 >> logs/canary_$2_s$3_f$4.log 2>&1 ;;

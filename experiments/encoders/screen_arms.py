@@ -49,6 +49,8 @@ def main() -> None:
     ap.add_argument("arms", nargs="+", help="name=run1,run2,...  (first arm = reference)")
     ap.add_argument("--fold", type=int, default=0)
     ap.add_argument("--B", type=int, default=2000)
+    ap.add_argument("--stack_with", default="", help="comma-separated runs: logit-mean each arm with these "
+                    "(e.g. the other stk members) to read the arm's value inside the stack")
     a = ap.parse_args()
     pool = load_pool()
     res = {}
@@ -60,6 +62,13 @@ def main() -> None:
         for d in ds[1:]:
             assert (d.uid == avg.uid).all()
         avg.p = {t: np.mean([d.p[t] for d in ds], axis=0) for t in avg.p}
+        if a.stack_with:
+            others = [load_holdout(r, pool, a.fold) for r in a.stack_with.split(",")]
+            for o in others:
+                assert (o.uid == avg.uid).all()
+            lg = lambda p: np.log(np.clip(p, 1e-6, 1 - 1e-6) / (1 - np.clip(p, 1e-6, 1 - 1e-6)))
+            avg.p = {t: 1 / (1 + np.exp(-np.mean([lg(avg.p[t])] + [lg(o.p[t]) for o in others], axis=0)))
+                     for t in avg.p}
         pred = policies.crossfit(SPEC, avg)[0]
         res[name] = (avg, pred, seed_scores)
     ref = next(iter(res))

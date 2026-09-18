@@ -44,8 +44,49 @@ def frame(df: pl.DataFrame) -> pl.DataFrame:
     )
 
 
+THREAD_ENV = "CLS_THREAD_FOLDS"  # diagnostic: set to 1 to regroup the pool's folds by Reddit thread
+
+
+def thread_folds(df: pl.DataFrame, seed: int = 2026) -> pl.Series:
+    """Folds grouped by thread (Reddit link_id = submission id; unmatched rows and google rows are their own
+    group), stratified roughly by segment: groups are shuffled within segment and each goes to the fold
+    with the fewest rows of that segment so far. Label-free."""
+    import os  # noqa: F401
+    ctx = pl.read_parquet(ROOT / "data" / "external" / "context" / "pool_context.parquet")
+    d = df.select("uid", "seg").join(ctx.select("uid", "matched", "link_id"),
+                                      on="uid", how="left", maintain_order="left")
+    d = d.with_columns(pl.when(pl.col("matched").fill_null(False) & pl.col("link_id").is_not_null())
+                       .then(pl.col("link_id")).otherwise(pl.col("uid")).alias("grp"))
+    g = d.group_by("grp", maintain_order=True).agg(pl.col("seg").mode().first(), pl.len().alias("n"))
+    rng = np.random.default_rng(seed)
+    g = g.with_columns(pl.Series("r", rng.random(g.height))).sort("seg", "r")
+    load = {}
+    fold_of = {}
+    for grp, seg, n in g.select("grp", "seg", "n").iter_rows():
+        counts = [load.get((seg, k), 0) for k in range(5)]
+        k = int(np.argmin(counts))
+        load[(seg, k)] = counts[k] + n
+        fold_of[grp] = k
+    return pl.Series("fold", [fold_of[x] for x in d["grp"].to_list()], dtype=pl.Int8)
+
+
+def thread_mode() -> bool:
+    import os
+    return os.environ.get(THREAD_ENV) == "1"
+
+
 def pool() -> pl.DataFrame:
-    return frame(load_pool())
+    df = frame(load_pool())
+    if thread_mode():
+        df = df.with_columns(thread_folds(df))
+    return df
+
+
+def save_kw(run: str, df: pl.DataFrame) -> tuple[str, dict]:
+    """Run name and folds_used for save_preds: thread-fold diagnostics are saved as RUN__thr, unmeasured."""
+    if thread_mode():
+        return run + "__thr", {}
+    return run, {"folds_used": df.select("uid", "fold")}
 
 
 _EVAL = None

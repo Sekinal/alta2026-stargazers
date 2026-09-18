@@ -86,8 +86,13 @@ def _truncate(tok, text: str, max_tokens: int) -> str:
 
 
 def user_message(prompt: str, variety: str, source: str, text: str,
-                 shots: list[tuple[str, str]] | None = None) -> str:
-    """shots: list of (text, answer) exemplars, already truncated."""
+                 shots: list[tuple[str, str]] | None = None, context: str | None = None) -> str:
+    """shots: list of (text, answer) exemplars, already truncated. Prompt ids ending in "c"
+    (e.g. sarc_v2c) are the base prompt plus the Reddit thread context when one is given."""
+    if prompt.endswith("c"):
+        prompt = prompt[:-1]
+    else:
+        context = None
     desc = SOURCE_DESC[(variety, source)]
     if prompt.startswith("sarc"):
         if prompt == "sarc_v1":
@@ -106,6 +111,8 @@ def user_message(prompt: str, variety: str, source: str, text: str,
     else:
         raise ValueError(prompt)
     parts = [head]
+    if context:
+        parts.append(f"The comment was posted in this Reddit thread:\n{context}")
     if shots:
         parts.append("Examples:")
         for i, (t, a) in enumerate(shots, 1):
@@ -124,14 +131,45 @@ VERBALIZERS = {
 def build_prompts(tok, df: pl.DataFrame, prompt: str, max_text_tokens: int = 256,
                   shots: list[list[tuple[str, str]]] | None = None) -> list[str]:
     out = []
+    ctx = df["context"].to_list() if "context" in df.columns else [None] * df.height
     for i, (src, var, txt) in enumerate(df.select("source", "variety", "text").iter_rows()):
         t = _truncate(tok, normalise(txt, str(src)), max_text_tokens)
-        msg = user_message(prompt, str(var), str(src), t, shots[i] if shots else None)
+        msg = user_message(prompt, str(var), str(src), t, shots[i] if shots else None, ctx[i])
         chat = [{"role": "system", "content": SYSTEM}, {"role": "user", "content": msg}]
         s = tok.apply_chat_template(chat, tokenize=False, add_generation_prompt=True,
                                     enable_thinking=False)
         out.append(s)
     return out
+
+
+CONTEXT_POOL = ROOT / "data" / "external" / "context" / "pool_context.parquet"
+
+
+def add_context(tok, df: pl.DataFrame, path=CONTEXT_POOL, title_tokens: int = 40,
+                body_tokens: int = 120) -> pl.DataFrame:
+    """Adds a "context" column (None when unmatched): subreddit, thread title and either the post
+    body (top-level comments) or the parent comment, each truncated so the text itself keeps its
+    full budget. Context files carry no labels."""
+    if not Path(path).exists():
+        return df.with_columns(pl.lit(None, pl.String).alias("context"))
+    c = pl.read_parquet(path)
+    d = df.select("uid").join(c, on="uid", how="left")
+    out = []
+    for r in d.iter_rows(named=True):
+        if not r.get("matched"):
+            out.append(None)
+            continue
+        parts = []
+        if r.get("subreddit"):
+            parts.append(f"Subreddit: r/{r['subreddit']}.")
+        if r.get("submission_title"):
+            parts.append(f"Thread title: {_truncate(tok, r['submission_title'].strip(), title_tokens)}")
+        if not r.get("is_top_level") and r.get("parent_text"):
+            parts.append(f"Parent comment: {_truncate(tok, r['parent_text'].strip(), body_tokens)}")
+        elif r.get("submission_selftext") and r["submission_selftext"].strip() not in ("", "[deleted]", "[removed]"):
+            parts.append(f"Post body: {_truncate(tok, r['submission_selftext'].strip(), body_tokens)}")
+        out.append("\n".join(parts) if parts else None)
+    return df.with_columns(pl.Series("context", out, dtype=pl.String))
 
 
 def verbalizer_ids(tok, task: str) -> tuple[list[int], list[int]]:

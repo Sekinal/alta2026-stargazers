@@ -49,7 +49,8 @@ def compose(name: str, sent: str, sarc_au: str, sarc_uk: str) -> None:
     test = build("test", load_test(test_csv)) if test_csv else None
     meta = {"model": "compose", "members": runs,
             "description": f"sentiment from {sent}; sarcasm en-AU from {sarc_au}, en-UK from {sarc_uk}"}
-    print(save_preds(name, oof, test, meta=meta, test_csv=test_csv))
+    print(save_preds(name, oof, test, meta=meta, test_csv=test_csv,
+                     folds_used=load_pool().select("uid", "fold")))  # members use the pool folds
 
 
 def main() -> None:

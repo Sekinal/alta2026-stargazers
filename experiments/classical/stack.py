@@ -32,7 +32,7 @@ import polars as pl
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import log_loss
 
-from common import LABEL, ROOT, fmt, pool, quick
+from common import save_kw, LABEL, ROOT, fmt, pool, quick
 from features import handcrafted
 from alta.common import CANARY_ENV, PREDS, fold_hash, save_preds
 
@@ -271,7 +271,7 @@ def main() -> None:
         oof = crossfit(cfg, members, M, y, seg, fold, meta)
     res = quick(oof["sent"], oof["sarc"])
     print(a.run, cfg, fmt(res), flush=True)
-    save_preds(a.run, folds_used=df.select("uid", "fold"), oof=pl.DataFrame({"uid": uids, "p_sent": oof["sent"], "p_sarc": oof["sarc"]}),
+    save_preds(save_kw(a.run, df)[0], **save_kw(a.run, df)[1], oof=pl.DataFrame({"uid": uids, "p_sent": oof["sent"], "p_sarc": oof["sarc"]}),
                meta={"kind": "stack", "script": "experiments/classical/stack.py", "config": cfg,
                      "members": members, **extra, "quick": res,
                      "test_protocol": "average of the 5 fold stackers applied to members' test preds"})

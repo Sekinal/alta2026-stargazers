@@ -130,15 +130,24 @@ def main() -> None:
     ap.add_argument("names", nargs="+")
     ap.add_argument("--test", type=Path)
     ap.add_argument("--force", action="store_true")
+    ap.add_argument("--ctx", type=Path, help="context parquet (uid, parent_text, submission_title, ...): embed "
+                    "the recovered Reddit context instead of the text; saved as emb_<name>_ctx__<tag>.npy")
     a = ap.parse_args()
     df = load_pool() if a.test is None else load_test(a.test)
     texts = df["text"].to_list()
+    suffix = ""
+    if a.ctx is not None:
+        from context import context_text
+        texts = context_text(df, a.ctx)
+        suffix = "_ctx"
     for name in a.names:
-        out = cache_path(name, a.test)
+        out = cache_path(name + suffix, a.test)
         if out.exists() and not a.force:
             print("cached", out)
             continue
         kind, hf_id, max_len, prompt = MODELS[name]
+        if suffix:  # empty context (unmatched rows) -> a single space; the flag lives in the features
+            texts = [t if t.strip() else " " for t in texts]
         e = embed_st(hf_id, max_len, prompt, texts) if kind == "st" else embed_clf(hf_id, max_len, texts)
         assert e.shape[0] == len(texts) and np.isfinite(e).all(), name
         np.save(out, e)
