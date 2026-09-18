@@ -14,7 +14,9 @@ Protocol
 
 from __future__ import annotations
 
+import hashlib
 import json
+import subprocess
 from pathlib import Path
 
 import numpy as np
@@ -45,9 +47,9 @@ def _read(path: Path, origin: str) -> pl.DataFrame:
     )
 
 
-def _assign_folds(df: pl.DataFrame) -> pl.DataFrame:
+def _assign_folds(df: pl.DataFrame, seed: int = SEED) -> pl.DataFrame:
     """Stratified group folds: groups = identical text, strata = source/variety/labels."""
-    rng = np.random.default_rng(SEED)
+    rng = np.random.default_rng(seed)
     groups = (
         df.group_by("text", maintain_order=True)
         .agg(
@@ -82,6 +84,24 @@ def load_pool(refresh: bool = False) -> pl.DataFrame:
     return pool
 
 
+def fold_hash(pool: pl.DataFrame | None = None) -> str:
+    """Fingerprint of the uid -> fold assignment; stored with every run to detect fold drift."""
+    pool = load_pool() if pool is None else pool
+    s = pool.sort("uid").select(pl.concat_str("uid", pl.col("fold").cast(pl.String), separator=":"))
+    return hashlib.sha1("|".join(s.to_series().to_list()).encode()).hexdigest()[:12]
+
+
+def git_commit() -> str:
+    try:
+        out = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT,
+                             capture_output=True, text=True, check=True).stdout.strip()
+        dirty = subprocess.run(["git", "status", "--porcelain", "--untracked-files=no"], cwd=ROOT,
+                               capture_output=True, text=True).stdout.strip()
+        return out + ("-dirty" if dirty else "")
+    except (OSError, subprocess.CalledProcessError):
+        return "unknown"
+
+
 def load_test(path: str | Path) -> pl.DataFrame:
     """Unlabelled test CSV, row order preserved (the scorer relies on it)."""
     return _read(Path(path), "test").drop("row")
@@ -114,8 +134,8 @@ def save_preds(run: str, oof: pl.DataFrame, test: pl.DataFrame | None = None,
     out = pl.concat(parts).with_columns(pl.col("p_sent", "p_sarc").cast(pl.Float64))
     path = PREDS / f"{run}.parquet"
     out.write_parquet(path)
-    if meta is not None:
-        (PREDS / f"{run}.json").write_text(json.dumps(meta, indent=2))
+    meta = {**(meta or {}), "run": run, "fold_hash": fold_hash(), "git": git_commit()}
+    (PREDS / f"{run}.json").write_text(json.dumps(meta, indent=2))
     return path
 
 

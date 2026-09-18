@@ -16,3 +16,5 @@ eda/*/examples/
 eda/*/output.txt
 eda/structure/tables/dups_text.csv
 eda/structure/tables/near_duplicates.csv
+# submission answer.csv files contain raw test text
+submissions/
