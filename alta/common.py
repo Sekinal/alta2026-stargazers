@@ -36,17 +36,47 @@ VARIETIES = ("en-AU", "en-UK")
 CACHE = DATA / "pool.parquet"
 
 
+SOURCES = ("google", "reddit")
+
+
 def _read(path: Path, origin: str) -> pl.DataFrame:
-    """uid = origin initial + zero-padded row number, e.g. t00042 / v00007 / x00123."""
+    """uid = origin initial + zero-padded row number, e.g. t00042 / v00007 / x00123.
+
+    Labels are read as nullable Int64 so a test file with empty label columns parses; unknown
+    source/variety values raise instead of silently mapping to a default segment.
+    """
     tag = {"train": "t", "valid": "v", "test": "x"}[origin]
-    return (
-        pl.read_csv(path)
-        .with_row_index("row")
-        .with_columns(
-            pl.lit(origin).alias("origin"),
-            (pl.lit(tag) + pl.col("row").cast(pl.String).str.zfill(5)).alias("uid"),
-        )
+    df = pl.read_csv(path, schema_overrides={"source": pl.String, "variety": pl.String, "text": pl.String,
+                                             "sentiment": pl.Int64, "sarcasm": pl.Int64})
+    missing = {"source", "variety", "text"} - set(df.columns)
+    if missing:
+        raise ValueError(f"{path}: missing columns {sorted(missing)}")
+    if df.height >= 100_000:
+        raise ValueError(f"{path}: {df.height} rows exceeds 5-digit uids")
+    bad_src = set(df["source"].unique().to_list()) - set(SOURCES)
+    bad_var = set(df["variety"].unique().to_list()) - set(VARIETIES)
+    if bad_src or bad_var:
+        raise ValueError(f"{path}: unknown source {bad_src or '-'} / variety {bad_var or '-'}")
+    if df["text"].null_count():
+        df = df.with_columns(pl.col("text").fill_null(""))
+    return df.with_row_index("row").with_columns(
+        pl.lit(origin).alias("origin"),
+        (pl.lit(tag) + pl.col("row").cast(pl.String).str.zfill(5)).alias("uid"),
     )
+
+
+def frame_fingerprint(df: pl.DataFrame) -> str:
+    """Order-sensitive hash of (source, variety, text) rows: binds predictions to one exact file."""
+    rows = df.select(pl.concat_str(pl.col("source").cast(pl.String), pl.col("variety").cast(pl.String),
+                                   pl.col("text"), separator="\x1f")).to_series().to_list()
+    return hashlib.sha1("\x1e".join(rows).encode()).hexdigest()[:16]
+
+
+def _csv_sha(*paths: Path) -> str:
+    h = hashlib.sha1()
+    for p in paths:
+        h.update(Path(p).read_bytes())
+    return h.hexdigest()[:16]
 
 
 def _assign_folds(df: pl.DataFrame, seed: int = SEED) -> pl.DataFrame:
@@ -75,7 +105,9 @@ def _assign_folds(df: pl.DataFrame, seed: int = SEED) -> pl.DataFrame:
 
 def load_pool(refresh: bool = False) -> pl.DataFrame:
     """train + valid with uid, origin ('train'|'valid') and fold columns (parquet-cached)."""
-    if CACHE.exists() and not refresh:
+    src_sha = _csv_sha(DATA / "train.csv", DATA / "valid.csv")
+    stamp = CACHE.with_suffix(".sha")
+    if CACHE.exists() and not refresh and stamp.exists() and stamp.read_text() == src_sha:
         return pl.read_parquet(CACHE)
     pool = pl.concat([_read(DATA / "train.csv", "train"), _read(DATA / "valid.csv", "valid")])
     pool = _assign_folds(pool).drop("row").with_columns(
@@ -83,6 +115,7 @@ def load_pool(refresh: bool = False) -> pl.DataFrame:
         pl.col("sentiment", "sarcasm", "fold").cast(pl.Int8),
     )
     pool.write_parquet(CACHE)
+    stamp.write_text(src_sha)
     return pool
 
 
@@ -125,18 +158,40 @@ def score(df: pl.DataFrame, sent: str = "sentiment_pred", sarc: str = "sarcasm_p
     return out
 
 
+def _validate_probs(df: pl.DataFrame, what: str) -> None:
+    if df["uid"].n_unique() != df.height:
+        raise ValueError(f"{what}: duplicated uids")
+    for c in ("p_sent", "p_sarc"):
+        x = df[c].cast(pl.Float64).to_numpy()
+        if df[c].null_count() or not np.isfinite(x).all() or x.min() < 0 or x.max() > 1:
+            raise ValueError(f"{what}.{c}: probabilities must be finite and in [0, 1]")
+
+
 def save_preds(run: str, oof: pl.DataFrame, test: pl.DataFrame | None = None,
-               meta: dict | None = None) -> Path:
-    """oof/test: frames with uid, p_sent, p_sarc (probability of the positive class)."""
+               meta: dict | None = None, test_csv: str | Path | None = None) -> Path:
+    """oof/test: frames with uid, p_sent, p_sarc (probability of the positive class).
+
+    Test predictions must name the file they were made for (``test_csv``): its fingerprint and
+    row count are stored so a submission can never pair them with a different/reordered file.
+    """
     PREDS.mkdir(exist_ok=True)
     cols = ["uid", "p_sent", "p_sarc"]
+    _validate_probs(oof.select(cols), f"{run} oof")
     parts = [oof.select(cols).with_columns(pl.lit("oof").alias("split"))]
+    test_meta = {}
     if test is not None:
+        if test_csv is None:
+            raise ValueError("save_preds: pass test_csv=<path of the test CSV> with test predictions")
+        tframe = load_test(test_csv)
+        _validate_probs(test.select(cols), f"{run} test")
+        if set(test["uid"].to_list()) != set(tframe["uid"].to_list()):
+            raise ValueError(f"{run}: test uids do not match the {tframe.height} rows of {test_csv}")
+        test_meta = {"test_csv": str(test_csv), "test_sha": frame_fingerprint(tframe), "n_test": tframe.height}
         parts.append(test.select(cols).with_columns(pl.lit("test").alias("split")))
     out = pl.concat(parts).with_columns(pl.col("p_sent", "p_sarc").cast(pl.Float64))
     path = PREDS / f"{run}.parquet"
     out.write_parquet(path)
-    meta = {**(meta or {}), "run": run, "fold_hash": fold_hash(), "git": git_commit()}
+    meta = {**(meta or {}), **test_meta, "run": run, "fold_hash": fold_hash(), "git": git_commit()}
     (PREDS / f"{run}.json").write_text(json.dumps(meta, indent=2))
     return path
 

@@ -21,7 +21,7 @@ from pathlib import Path
 import numpy as np
 import polars as pl
 
-from alta.common import DATA, ROOT, load_pool, load_test
+from alta.common import DATA, ROOT, frame_fingerprint, load_pool, load_test
 from alta.validation import policies
 from alta.validation.data import load_oof, load_test_preds
 
@@ -45,8 +45,16 @@ def _write(frame: pl.DataFrame, pred: dict, name: str, info: dict) -> Path:
     return out_dir / "answer.zip"
 
 
+def _require_clean(run: str, pool) -> None:
+    from alta.validation.checks import FAIL, check_run
+    fails = [m for level, m in check_run(run, pool) if level == FAIL]
+    if fails:
+        raise ValueError(f"run '{run}' failed integrity checks, refusing to build a submission: {fails}")
+
+
 def make_dev_submission(run: str, spec: str, name: str | None = None) -> Path:
     pool = load_pool()
+    _require_clean(run, pool)
     d = load_oof(run, pool)
     pred, _ = policies.crossfit(spec, d)
     valid = d.origin == "valid"
@@ -60,11 +68,13 @@ def make_dev_submission(run: str, spec: str, name: str | None = None) -> Path:
 
 def make_test_submission(run: str, spec: str, test_csv: Path, name: str | None = None) -> Path:
     pool = load_pool()
+    _require_clean(run, pool)
     test = load_test(test_csv)
     params = policies.fit(spec, load_oof(run, pool))
     pred = policies.apply(params, load_test_preds(run, test))
     return _write(test, pred, name or f"test_{run}_{spec}",
                   {"run": run, "policy": spec, "phase": "test", "test_csv": str(test_csv),
+                   "test_sha": frame_fingerprint(test),
                    "params": json.loads(json.dumps(params, default=str))})
 
 

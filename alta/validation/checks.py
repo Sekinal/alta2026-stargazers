@@ -48,6 +48,20 @@ def check_run(run: str, pool: pl.DataFrame | None = None) -> list[tuple[str, str
             elif len(np.unique(x)) < 20:
                 out.append((WARN, f"{split}.{c}: only {len(np.unique(x))} distinct values (hard labels?)"))
 
+    # --- test split integrity
+    test_part = preds.filter(pl.col("split") == "test")
+    if test_part.height:
+        tu = test_part["uid"].to_list()
+        if len(tu) != len(set(tu)):
+            out.append((FAIL, f"{len(tu) - len(set(tu))} duplicated test uids"))
+        if not test_part["uid"].str.contains(r"^x\d{5}$").all():
+            out.append((FAIL, "test uids must look like x00000 (from alta.common.load_test)"))
+        if "test_sha" not in meta or meta.get("n_test") != test_part.height:
+            out.append((FAIL, "test split lacks a fingerprint of its test file or has the wrong row count "
+                              "(save it with save_preds(..., test_csv=PATH))"))
+        else:
+            out.append((OK, f"test split: {test_part.height} rows bound to {meta.get('test_csv')} ({meta['test_sha']})"))
+
     # --- provenance
     if "fold_hash" not in meta:
         out.append((WARN, "no fold_hash in meta (saved before provenance tracking); cannot prove fold match"))

@@ -25,9 +25,21 @@ def _logit(p):
     return np.log(p / (1 - p))
 
 
+def _member_test_csv(runs: list[str]) -> str | None:
+    """The one test file all members' test predictions are bound to (None if any lacks them)."""
+    metas = [read_run(r)[1] for r in runs]
+    if any("test_sha" not in m for m in metas):
+        return None
+    shas = {m["test_sha"] for m in metas}
+    if len(shas) != 1:
+        raise ValueError(f"members' test predictions were made for different test files: "
+                         f"{ {r: m['test_sha'] for r, m in zip(runs, metas)} }")
+    return metas[0]["test_csv"]
+
+
 def _member_frames(runs: list[str]) -> tuple[pl.DataFrame, pl.DataFrame | None]:
     """Wide frames uid -> p_sent_<run>, p_sarc_<run> for oof and (if all have it) test."""
-    oof, test, have_test = None, None, True
+    oof, test, have_test = None, None, _member_test_csv(runs) is not None
     for r in runs:
         preds, _ = read_run(r)
         for split in ("oof", "test"):
@@ -54,7 +66,8 @@ def blend(runs: list[str], name: str, method: str = "mean") -> str:
         return out
 
     save_preds(name, combine(oof), None if test is None else combine(test),
-               meta={"kind": "blend", "method": method, "members": runs})
+               meta={"kind": "blend", "method": method, "members": runs},
+               test_csv=_member_test_csv(runs) if test is not None else None)
     return name
 
 
@@ -69,9 +82,10 @@ def stack(runs: list[str], name: str, C: float = 1.0) -> str:
 
     oof_p = {t: np.zeros(len(base)) for t in TASKS}
     test_p = None
+    test_csv = _member_test_csv(runs) if test is not None else None
     if test is not None:
         test_seg = pl.DataFrame({"uid": test["uid"]}).join(
-            _test_segments(), on="uid", how="left")
+            _test_segments(test_csv), on="uid", how="left")
         test_p = {t: np.zeros(test.height) for t in TASKS}
     for t in TASKS:
         for v in (0, 1):
@@ -94,12 +108,12 @@ def stack(runs: list[str], name: str, C: float = 1.0) -> str:
     oof = pl.DataFrame({"uid": base.uid, "p_sent": oof_p["sent"], "p_sarc": oof_p["sarc"]})
     tst = None if test_p is None else pl.DataFrame(
         {"uid": test["uid"], "p_sent": test_p["sent"], "p_sarc": test_p["sarc"]})
-    save_preds(name, oof, tst, meta={"kind": "stack", "members": runs, "C": C})
+    save_preds(name, oof, tst, meta={"kind": "stack", "members": runs, "C": C}, test_csv=test_csv)
     return name
 
 
-def _test_segments() -> pl.DataFrame:
-    from alta.common import DATA, load_test
-    t = load_test(DATA / "test.csv")
+def _test_segments(test_csv: str) -> pl.DataFrame:
+    from alta.common import load_test
+    t = load_test(test_csv)
     return t.select("uid", (pl.col("variety") == "en-UK").cast(pl.Int8).alias("variety"),
                     (pl.col("source") == "reddit").cast(pl.Int8).alias("source"))

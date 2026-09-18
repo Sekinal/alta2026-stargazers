@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 import polars as pl
 
-from alta.common import PREDS, VARIETIES, load_pool
+from alta.common import PREDS, VARIETIES, _validate_probs, frame_fingerprint, load_pool
 
 TASKS = ("sent", "sarc")
 SOURCES = ("google", "reddit")
@@ -91,6 +91,7 @@ def load_oof(run: str, pool: pl.DataFrame | None = None) -> EvalData:
     pool = load_pool() if pool is None else pool
     preds, meta = read_run(run)
     oof = preds.filter(pl.col("split") == "oof").select("uid", "p_sent", "p_sarc")
+    _validate_probs(oof, f"{run} oof")
     df = pool.join(oof, on="uid", how="left", maintain_order="left")
     missing = df["p_sent"].null_count() + df["p_sarc"].null_count()
     if missing:
@@ -102,9 +103,17 @@ def load_test_preds(run: str, test: pl.DataFrame) -> EvalData:
     """Test predictions of a run joined to the test frame, in test (submission) order."""
     preds, meta = read_run(run)
     tp = preds.filter(pl.col("split") == "test").select("uid", "p_sent", "p_sarc")
+    if tp.height == 0:
+        raise ValueError(f"run '{run}' has no test predictions")
+    _validate_probs(tp, f"{run} test")
+    want = frame_fingerprint(test)
+    if meta.get("test_sha") != want or meta.get("n_test") != test.height:
+        raise ValueError(f"run '{run}' test predictions were made for a different test file "
+                         f"(sha {meta.get('test_sha')}, n {meta.get('n_test')}) than this one "
+                         f"(sha {want}, n {test.height}); re-run its predict_test")
+    if set(tp["uid"].to_list()) != set(test["uid"].to_list()):
+        raise ValueError(f"run '{run}' test uids do not match the test file")
     df = test.join(tp, on="uid", how="left", maintain_order="left")
-    if df["p_sent"].null_count() or df["p_sarc"].null_count():
-        raise ValueError(f"run '{run}' has no/partial test predictions for {test.height} test rows")
     return _frame_to_eval(df, labelled=False, meta={**meta, "run": run})
 
 
