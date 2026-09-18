@@ -24,7 +24,9 @@ Any model trained on external data before this step must be retrained if its cor
 
 ## 1b. Recover Reddit context for the test rows (only if a context-aware member is in the lead)
 ```
-R ctx_test "uv run python experiments/data/context_match.py --input data/test.csv --out data/external/context/test_context.parquet"
+R ctx_test "uv run --with orjson python experiments/data/context_match.py match --input data/test.csv --out data/external/context/test_context.parquet"
+# needs internet (~1 min). If coverage is low, fetch the missing days: context_match.py fetch --subs ... --start ... --end ...,
+# then index --src data/external/raw/context_days --out data/external/context/index/days, then match again.
 ```
 Keyed by test uid (x00000...). Check the match rate against the pool's (AU ~92%, UK ~56%+); a much lower rate means
 the test came from a different crawl, in which case the context-aware members fall back to their no-context prompts.
