@@ -19,3 +19,10 @@ once averaged (0.881, p 0.43) and is not part of the recipe.
 ## Success criterion (fold 4)
 p_a_better(R_deb vs stk_v5) >= 0.8 on the fold-4 holdout (n_test = fold size) AND sarc-AU not lower than stk_v5's.
 No changes to the recipe after seeing fold 4. If it fails, stk_v5 remains the lead.
+
+## Clarifications (added 2026-09-18 ~17:00 CST, before any fold-4 result)
+- "Arithmetic mean of probabilities of (enc_deb_l_x5, pseudo-sarc student x3)" means TWO EQUAL ARMS:
+  0.5 x (enc_deb_l_x5 probability, itself the mean of 5 seeds) + 0.5 x (mean of the 3 student seeds).
+  This is exactly what was computed on fold 0.
+- The pseudo-sarc arm is ONE stage-1 student (seed 13) followed by three gold fine-tune seeds (13/14/15) started from
+  it, exactly as screened on fold 0.
