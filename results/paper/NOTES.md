@@ -78,12 +78,12 @@ Tables in this folder contain no raw text.
   sent-AU .934 -> .927, sarc-AU .799 -> .804, sarc-UK .805 -> .808; fold SD .010 vs .015.
 - Annotation: the strongest text-only members show no thread-memorisation advantage; only the frozen e5 probe loses
   ~0.008. The benchmark's comment-level split does not materially inflate CV for fine-tuned / LLM models.
-- Full lead (3-member logit blend, deberta x3; `thread_gap.csv`): 0.871 standard -> 0.868 thread (-0.003);
-  sent-AU .936 -> .932, sarc-AU .805 -> .803, sarc-UK .833 -> .829. Member gaps: deberta -0.005, e5 -0.008, 9B probe
-  +0.007; all within ~1 fold SD (.007-.011). (Encoders' own deberta thread mean .865 vs .861 here: prob-mean vs
-  logit-mean averaging; within noise.)
-- Annotation: thread memorisation explains at most ~0.003-0.008; the lead's performance is not a thread artefact.
-  Headline stays the standard-fold 0.871 (official split is by comment); 0.868 is the thread-disjoint estimate.
+- Full lead (3-member logit blend; deberta x3 seeds averaged by probability mean, as in the lead; `thread_gap.csv`):
+  0.871 standard -> 0.869 thread (-0.001); thread components sent-AU .931, sent-UK .978, sarc-AU .808, sarc-UK .839;
+  fold SD .008. Member gaps: deberta x3 0.866 -> 0.865 (-0.001), e5 -0.008, 9B probe +0.007.
+  (Corrected: an earlier version averaged the thread seeds in logit space, mixing methods, and gave 0.868.)
+- Annotation: the lead has essentially no thread-memorisation gap; only the frozen e5 probe shows one (-0.008).
+  Headline stays the standard-fold 0.871 (official split is by comment); 0.869 is the thread-disjoint estimate.
 - Recovered context does not help: context e5 probe 0.839 vs 0.847 (std) / 0.827 vs 0.838 (thread); context 9B probe
   0.854 vs 0.853; context features in the stacker 0.871 vs 0.872.
 
