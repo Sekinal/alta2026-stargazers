@@ -1,0 +1,29 @@
+model,task,variety,n,kappa,ci_lo,ci_hi,human_kappa(n=50)
+stk_v5 (lead),sent,AU,3080,0.878,0.859,0.893,0.61
+stk_v5 (lead),sent,UK,3208,0.95,0.938,0.961,0.79
+stk_v5 (lead),sarc,AU,2004,0.562,0.527,0.598,0.47
+stk_v5 (lead),sarc,UK,1143,0.609,0.55,0.662,0.63
+deberta x5,sent,AU,3080,0.862,0.844,0.879,0.61
+deberta x5,sent,UK,3208,0.943,0.93,0.954,0.79
+deberta x5,sarc,AU,2004,0.536,0.502,0.572,0.47
+deberta x5,sarc,UK,1143,0.599,0.53,0.651,0.63
+e5+me5 LR,sent,AU,3080,0.835,0.813,0.853,0.61
+e5+me5 LR,sent,UK,3208,0.939,0.927,0.951,0.79
+e5+me5 LR,sarc,AU,2004,0.476,0.44,0.513,0.47
+e5+me5 LR,sarc,UK,1143,0.493,0.435,0.546,0.63
+9B probe,sent,AU,3080,0.833,0.813,0.851,0.61
+9B probe,sent,UK,3208,0.945,0.934,0.955,0.79
+9B probe,sarc,AU,2004,0.513,0.473,0.553,0.47
+9B probe,sarc,UK,1143,0.536,0.48,0.588,0.63
+zero-shot 4B (label-free),sent,AU,3080,0.8,0.779,0.82,0.61
+zero-shot 4B (label-free),sent,UK,3208,0.923,0.909,0.937,0.79
+zero-shot 4B (label-free),sarc,AU,2004,0.406,0.364,0.446,0.47
+zero-shot 4B (label-free),sarc,UK,1143,0.358,0.294,0.419,0.63
+zero-shot 9B (label-free),sent,AU,3080,0.777,0.755,0.799,0.61
+zero-shot 9B (label-free),sent,UK,3208,0.928,0.914,0.942,0.79
+zero-shot 9B (label-free),sarc,AU,2004,0.354,0.31,0.391,0.47
+zero-shot 9B (label-free),sarc,UK,1143,0.364,0.309,0.414,0.63
+TF-IDF LR,sent,AU,3080,0.7,0.676,0.726,0.61
+TF-IDF LR,sent,UK,3208,0.841,0.822,0.86,0.79
+TF-IDF LR,sarc,AU,2004,0.249,0.208,0.286,0.47
+TF-IDF LR,sarc,UK,1143,0.14,0.094,0.188,0.63
