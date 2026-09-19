@@ -1,0 +1,5 @@
+task,variety,human_kappa,prevalence,analytic_95ci,bootstrap_95ci
+sent,en-AU,0.61,0.465,"[0.39, 0.83]","[0.37, 0.80]"
+sent,en-UK,0.79,0.522,"[0.62, 0.96]","[0.60, 0.95]"
+sarc,en-AU,0.47,0.297,"[0.19, 0.75]","[0.19, 0.72]"
+sarc,en-UK,0.63,0.078,"[0.20, 1.00]","[-0.03, 1.00]"
