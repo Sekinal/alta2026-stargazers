@@ -26,3 +26,9 @@ No changes to the recipe after seeing fold 4. If it fails, stk_v5 remains the le
   This is exactly what was computed on fold 0.
 - The pseudo-sarc arm is ONE stage-1 student (seed 13) followed by three gold fine-tune seeds (13/14/15) started from
   it, exactly as screened on fold 0.
+
+## Outcome (2026-09-18 ~19:05 CST): FAILED
+Evaluated unchanged (experiments/encoders/eval_prereg_f4.py, which reproduced the fold-0 figures) on fold 4 (1,253 rows):
+R_deb 0.8589 vs stk_v5 0.8650, p_a_better 0.051; sarc-AU .7912 vs .8035 (p 0.042); sarc-UK .7946 vs .8189 (p 0.072).
+Both criteria fail. The fold-0 gain (0.886 vs 0.881, p 0.90) was selection on fold 0. stk_v5 remains the lead.
+Descriptive only: the fold-4 student alone ties base deberta (0.859 vs 0.857); its UK-reddit sarcasm AUC is lower (.833 vs .864).

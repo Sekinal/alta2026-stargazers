@@ -40,7 +40,8 @@ def sample(n_reddit: int, n_reviews: int, seed: int) -> pl.DataFrame:
                                ("reviews_au", "en-AU", "google", n_reviews // 2),
                                ("reviews_uk", "en-UK", "google", n_reviews - n_reviews // 2)):
         d = pl.read_parquet(EXT / f"{fname}.parquet", columns=["text", "community"])
-        d = d.filter(pl.col("text").str.len_chars().is_between(20, 3000)).unique("text", keep="first")
+        d = d.filter(pl.col("text").str.len_chars().is_between(20, 3000)).unique("text", keep="first",
+                                                                              maintain_order=True)
         w = np.ones(d.height)
         if fname == "reddit_uk":
             w[d["community"].is_in(list(UK_POLITICS)).to_numpy()] = 1.5
@@ -61,12 +62,19 @@ def main() -> None:
     ap.add_argument("--part", default=None, help="label with a subset of the teachers (e.g. one per GPU) into "
                     "fold<k>.part-<part>.parquet; combine with --merge")
     ap.add_argument("--merge", nargs="+", default=None, help="part names to average (weighted by #teachers)")
+    ap.add_argument("--texts_from", default="fold0.parquet",
+                    help="label exactly the texts of this existing pseudo file (same sample for every fold); "
+                         "'' = draw a new sample")
     a = ap.parse_args()
     if a.merge:
         merge(a.fold, a.merge)
         return
 
-    df = sample(a.n_reddit, a.n_reviews, a.seed)
+    if a.texts_from and (OUT / a.texts_from).exists():
+        df = pl.read_parquet(OUT / a.texts_from, columns=["text", "variety", "source", "community"])
+        print(f"labelling the {df.height} texts of {a.texts_from}", flush=True)
+    else:
+        df = sample(a.n_reddit, a.n_reviews, a.seed)
     ps, pc = np.zeros(df.height), np.zeros(df.height)
     for run in a.runs:
         t0 = time.time()
