@@ -57,7 +57,9 @@ Tables in this folder contain no raw text.
 - AU sarcasm rate by subreddit: AustralianPolitics 61%, AskAnAustralian 35%, melbourne 31%.
 - Text-only e5+me5 probe: 0.847 standard folds -> 0.838 link_id-grouped folds (sarc-UK .788 -> .764; all 5 folds).
 - 9B probe: 0.853 standard -> 0.859 thread folds (sarc-UK .806 -> .797, UK-reddit AUC .878 -> .875): no thread inflation
-  (`thread_folds_llm_probe.csv`). deberta and lead: pending (`thread_gap.csv`).
+  (`thread_folds_llm_probe.csv`).
+- Logit-mean blend of e5+me5 probe and 9B probe: 0.862 standard -> 0.862 thread (-0.001): thread-neutral
+  (`thread_gap_partial_e5_llm.csv`). deberta and the full lead: pending (`thread_gap.csv`).
 - Recovered context does not help: context e5 probe 0.839 vs 0.847 (std) / 0.827 vs 0.838 (thread); context 9B probe
   0.854 vs 0.853; context features in the stacker 0.871 vs 0.872.
 
