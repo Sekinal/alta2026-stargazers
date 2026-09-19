@@ -20,6 +20,20 @@ Tables in this folder contain no raw text.
   (UK .683 -> .644 with AU data; embedding probes). Fine-tuned deberta: AU-only sarcasm training is WORSE for AU
   (.789 vs .798), i.e. for fine-tuning UK data helps AU (opposite of the probe result).
 
+### R2b. Transfer with LLM features (9B probe, standard folds; `transfer_llm_probe.csv`)
+- Sarcasm (Reddit), AUC / cross-fitted macro-F1: AU->AU .851/.751, AU->UK .709/.601, UK->UK .878/.767, UK->AU .656/.627.
+  Sentiment (all rows) AUC: AU->AU .979, AU->UK .995, UK->UK .995, UK->AU .970.
+- Annotation: sarcasm does not transfer even with LLM representations (-.14 to -.20 AUC); sentiment transfers ~fully.
+
+### R2c. Label-free LLM as an independent annotator (Qwen3.5-4B zero-shot, t=0.5; `zs_disagreement.csv`)
+- AU Reddit sarcasm: agreement .709, kappa .385, AUC .781; predicts 34% sarcastic vs gold 42%; errors mostly
+  gold-yes/model-no (18.6% of rows vs 10.5%), worst in AustralianPolitics (22.5%) and on replies (23.1% vs 17.0% top-level).
+- UK Reddit sarcasm: agreement .621, kappa .269, AUC .786; predicts 53% vs gold 22%; errors mostly model-yes/gold-no
+  (34.7% vs 3.1%), worst in GreatBritishMemes (39.6%; AUC .713); replies AUC .747 vs top-level .806.
+- Annotation: identical ranking quality in both varieties (AUC ~.78) but the label-free decision boundary sits between
+  the two annotators: stricter than AU (which also labels cynical political complaints sarcastic) and much looser than UK.
+  Consistent with R2a: the AU and UK labels apply different thresholds / constructs of "sarcasm".
+
 ### R2a. Annotator surrogate: what each annotator labels sarcastic  (`surrogate_*.csv`, experiments/classical/surrogate.py)
 - Reddit rows, interpretable L2-LR per variety, 5-fold AUC (fold SD):
   thread block (subreddit/top-level) AU .620 (.011) / UK .580 (.034); topic+polarity AU .629 / UK .623;
@@ -42,6 +56,8 @@ Tables in this folder contain no raw text.
   rows share a submission with another pool row (1,221 distinct submissions); 111 are direct replies to another row.
 - AU sarcasm rate by subreddit: AustralianPolitics 61%, AskAnAustralian 35%, melbourne 31%.
 - Text-only e5+me5 probe: 0.847 standard folds -> 0.838 link_id-grouped folds (sarc-UK .788 -> .764; all 5 folds).
+- 9B probe: 0.853 standard -> 0.859 thread folds (sarc-UK .806 -> .797, UK-reddit AUC .878 -> .875): no thread inflation
+  (`thread_folds_llm_probe.csv`). deberta and lead: pending (`thread_gap.csv`).
 - Recovered context does not help: context e5 probe 0.839 vs 0.847 (std) / 0.827 vs 0.838 (thread); context 9B probe
   0.854 vs 0.853; context features in the stacker 0.871 vs 0.872.
 
