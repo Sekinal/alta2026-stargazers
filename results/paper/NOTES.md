@@ -84,6 +84,9 @@ Tables in this folder contain no raw text.
   (Corrected: an earlier version averaged the thread seeds in logit space, mixing methods, and gave 0.868.)
 - Annotation: the lead has essentially no thread-memorisation gap; only the frozen e5 probe shows one (-0.008).
   Headline stays the standard-fold 0.871 (official split is by comment); 0.869 is the thread-disjoint estimate.
+- Method note: `validate report` fits thresholds over the STANDARD folds; thread-fold numbers must use the fold override
+  in experiments/encoders/thread_compare.py / experiments/classical/thread_gap.py.
+
 - Recovered context does not help: context e5 probe 0.839 vs 0.847 (std) / 0.827 vs 0.838 (thread); context 9B probe
   0.854 vs 0.853; context features in the stacker 0.871 vs 0.872.
 
