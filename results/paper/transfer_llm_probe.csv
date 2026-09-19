@@ -1,0 +1,13 @@
+task,eval_rows,train,eval,n,n_pos,auc,macro_f1_crossfit_thr,macro_f1_at_0.5
+sarc,reddit,en-AU,en-AU,2004,841,0.8508,0.7514,0.7594
+sarc,reddit,en-AU,en-UK,1143,248,0.7092,0.6014,0.4848
+sarc,reddit,en-UK,en-AU,2004,841,0.6564,0.627,0.577
+sarc,reddit,en-UK,en-UK,1143,248,0.8779,0.767,0.7622
+sarc,reddit,both,en-AU,2004,841,0.8508,0.7514,0.7594
+sarc,reddit,both,en-UK,1143,248,0.8779,0.767,0.7622
+sent,all,en-AU,en-AU,3080,1431,0.9788,0.9222,0.9193
+sent,all,en-AU,en-UK,3208,1676,0.9946,0.97,0.9697
+sent,all,en-UK,en-AU,3080,1431,0.9703,0.9088,0.9046
+sent,all,en-UK,en-UK,3208,1676,0.995,0.9707,0.9725
+sent,all,both,en-AU,3080,1431,0.9794,0.9164,0.9199
+sent,all,both,en-UK,3208,1676,0.9954,0.9722,0.9744

@@ -20,6 +20,20 @@ Tables in this folder contain no raw text.
   (UK .683 -> .644 with AU data; embedding probes). Fine-tuned deberta: AU-only sarcasm training is WORSE for AU
   (.789 vs .798), i.e. for fine-tuning UK data helps AU (opposite of the probe result).
 
+### R2a. Annotator surrogate: what each annotator labels sarcastic  (`surrogate_*.csv`, experiments/classical/surrogate.py)
+- Reddit rows, interpretable L2-LR per variety, 5-fold AUC (fold SD):
+  thread block (subreddit/top-level) AU .620 (.011) / UK .580 (.034); topic+polarity AU .629 / UK .623;
+  pragmatic cues AU .604 / UK .574; ALL AU .692 (.016) / UK .637 (.054). Gold NEGATIVE sentiment alone: AU .745, UK .565.
+  Reference: lead stk_v5 UK-reddit sarcasm AUC ~.90.
+- Transfer (train one variety, AUC on the other): ALL AU->UK .466, UK->AU .462 (below chance);
+  topic+polarity block anti-transfers (.393 / .402) because signs flip.
+- Sign flips: VADER compound -.22 [-.35,-.11] AU vs +.33 [.17,.52] UK; laughter +.14 AU vs -.18 UK.
+  Shared cues (same sign, CI excl. 0 in both): interjection-initial, question share, pos-lexicon rate (negative).
+- Annotation: AU sarcasm ~ "political / negative" (AustralianPolitics +.30, negative tone, short texts; gold negativity
+  alone beats the surrogate). UK sarcasm is mostly NOT captured by interpretable cues (.637 vs ~.90 for the lead); its best
+  interpretable signal is polarity incongruity (positive overall tone with fewer explicit sentiment words).
+  The two varieties' labels anti-transfer at the interpretable level: they encode different constructs.
+
 ## R3. Benchmark audit: Reddit provenance and thread overlap (pending: thread_gap.csv)
 - 95% of Reddit rows recovered (AU 95.0%, UK 95.9%) from 7 subreddits, 2024-02-18 .. 2024-06-02 (latest comments per
   subreddit): AustralianPolitics 662, melbourne 636, AskAnAustralian 605, unitedkingdom 358, england 285,

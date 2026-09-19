@@ -1,0 +1,9 @@
+train,test,block,transfer_auc
+en-AU,en-UK,A_thread,0.5169535051360605
+en-AU,en-UK,B_topic_polarity,0.39321048837628403
+en-AU,en-UK,C_pragmatic,0.5183907010272121
+en-AU,en-UK,ALL,0.46598486213732204
+en-UK,en-AU,A_thread,0.547612523681528
+en-UK,en-AU,B_topic_polarity,0.4016612087113261
+en-UK,en-AU,C_pragmatic,0.5320703866645264
+en-UK,en-AU,ALL,0.4618427066005646
