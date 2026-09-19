@@ -32,6 +32,7 @@ from sklearn.metrics import roc_auc_score
 from transformers import AutoTokenizer, get_linear_schedule_with_warmup
 
 from alta.common import CANARY_ENV, N_FOLDS, load_pool, save_preds, score
+from alta.common import PREDS as PREDS_DIR
 from experiments.encoders.common import (CACHE, MODELS, build, collate, encode, model_inputs,
                                          predict, robustness_preds, save_fold)
 
@@ -66,6 +67,10 @@ def run_fold(a, pool: pl.DataFrame, k: int) -> None:
     seed_all(a.seed + k)
     dev = "cuda"
     tr, te = pool.filter(pl.col("fold") != k), pool.filter(pl.col("fold") == k)
+    sarc_head_idx = None
+    if a.train_variety:  # transfer runs: train on one variety's rows, predict ALL held-out rows with its heads
+        tr = tr.filter(pl.col("variety").cast(pl.String) == a.train_variety)
+        sarc_head_idx = int(a.train_variety == "en-UK")
     tok = AutoTokenizer.from_pretrained(a.model)
     ids = encode(tok, model_inputs(tr, not a.no_prefix), a.max_len)
     y_sent = tr["sentiment"].to_numpy().astype(np.float32)
@@ -120,11 +125,11 @@ def run_fold(a, pool: pl.DataFrame, k: int) -> None:
                 opt.step(); sched.step(); opt.zero_grad(set_to_none=True)
         msg = f"fold {k} epoch {ep + 1}/{a.epochs} loss={run_loss / n:.4f} t={time.time() - t0:.0f}s"
         if a.pilot:
-            ps, pc = predict(model, tok, te, a.max_len, not a.no_prefix)
+            ps, pc = predict(model, tok, te, a.max_len, not a.no_prefix, sarc_head=sarc_head_idx)
             msg += " | " + diagnostics(te, ps, pc)
         print(msg, flush=True)
 
-    ps, pc = predict(model, tok, te, a.max_len, not a.no_prefix)
+    ps, pc = predict(model, tok, te, a.max_len, not a.no_prefix, sarc_head=sarc_head_idx)
     out_dir = CACHE / out_name(a.run)
     out_dir.mkdir(parents=True, exist_ok=True)
     te.select("uid").with_columns(pl.Series("p_sent", ps), pl.Series("p_sarc", pc)) \
@@ -132,7 +137,7 @@ def run_fold(a, pool: pl.DataFrame, k: int) -> None:
     cfg = {k2: v2 for k2, v2 in vars(a).items() if k2 not in ("folds", "collect")}
     (out_dir / "config.json").write_text(json.dumps(cfg, indent=2))
     print(f"fold {k} done in {time.time() - t0:.0f}s | " + diagnostics(te, ps, pc), flush=True)
-    if not a.no_robust and os.environ.get(CANARY_ENV) is None:
+    if not a.no_robust and os.environ.get(CANARY_ENV) is None and not a.folds_file and not a.train_variety:
         n = robustness_preds(model, tok, a.run, k, a.max_len, not a.no_prefix)
         if n:
             print(f"fold {k}: perturbation suite, {n} kinds scored with the fold-{k} model", flush=True)
@@ -158,8 +163,15 @@ def collect(run: str, folds: list[int]) -> None:
     if os.environ.get(CANARY_ENV) is not None:
         meta["canary_config"] = f"{CANARY_ENV}={os.environ[CANARY_ENV]}, same code path, " \
             f"epochs={cfg['epochs']}, lr={cfg['lr']}, bs={cfg['bs']}, seed={cfg['seed']}"
-    full = sorted(folds) == list(range(N_FOLDS))
+    full = sorted(folds) == list(range(N_FOLDS)) and not cfg.get("folds_file")
     meta["holdout_folds"] = sorted(folds)
+    if cfg.get("folds_file"):
+        meta["folds"] = (f"NON-STANDARD folds from {cfg['folds_file']} (column {cfg['folds_col']}), NOT the project "
+                         "folds: fold_hash below refers to the project folds and does not describe this run; "
+                         "folds_used holds the thread folds actually used")
+        fu = PREDS_DIR / f"{run}.folds_used.parquet"
+        oof.select("uid", "fold").sort("uid").write_parquet(fu)
+        meta["folds_used_file"] = str(fu)
     print(save_preds(run, oof, meta=meta, folds_used=oof.select("uid", "fold") if full else None))
 
 
@@ -190,11 +202,20 @@ def main() -> None:
     ap.add_argument("--save", action="store_true")
     ap.add_argument("--collect", action="store_true")
     ap.add_argument("--desc", default="")
+    ap.add_argument("--train_variety", default=None, choices=["en-AU", "en-UK"],
+                    help="transfer runs: train on this variety's rows only (both tasks), predict all held-out rows")
+    ap.add_argument("--folds_file", default=None, help="parquet with uid + --folds_col replacing the project folds")
+    ap.add_argument("--folds_col", default="thread_fold")
     a = ap.parse_args()
     if a.collect:
         collect(a.run, list(map(int, a.folds.split(","))))
         return
     pool = load_pool()
+    if a.folds_file:
+        f = pl.read_parquet(a.folds_file).select("uid", pl.col(a.folds_col).cast(pl.Int8).alias("fold"))
+        pool = pool.drop("fold").join(f, on="uid", how="left")
+        assert pool["fold"].null_count() == 0, "folds_file lacks some pool uids"
+        print(pool.group_by("fold").len().sort("fold"), flush=True)
     for k in map(int, a.folds.split(",")):
         run_fold(a, pool, k)
 

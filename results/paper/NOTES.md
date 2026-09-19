@@ -20,6 +20,20 @@ Tables in this folder contain no raw text.
   (UK .683 -> .644 with AU data; embedding probes). Fine-tuned deberta: AU-only sarcasm training is WORSE for AU
   (.789 vs .798), i.e. for fine-tuning UK data helps AU (opposite of the probe result).
 
+### R2d. Transfer with fine-tuned deberta-v3-large (3 seeds, standard folds; `transfer_matrix.csv`)
+| train -> eval | sent F1 | sent AUC | sarc F1 (reddit) | sarc AUC (reddit) |
+| AU -> AU | .917 +- .005 | .971 | .758 +- .003 | .840 |
+| AU -> UK | .963 +- .002 | .992 | .638 +- .005 | .715 |
+| UK -> AU | .916 +- .003 | .960 | .605 +- .021 | .678 |
+| UK -> UK | .970 +- .003 | .992 | .778 +- .014 | .859 |
+| both -> AU | .928 +- .004 | .977 | .765 +- .006 | .845 |
+| both -> UK | .970 +- .001 | .994 | .776 +- .001 | .861 |
+- Annotation: sentiment transfers fully (UK->AU .916 = AU->AU .917). Sarcasm does not (-0.12 to -0.17 F1, -0.14 to -0.16
+  AUC), consistently across three model families (fine-tuned encoder R2d, LLM probe R2b, interpretable surrogate R2a).
+  Yet joint training >= in-variety for a fine-tuned encoder (AU .765 vs .758; UK tie) - unlike frozen-embedding probes,
+  where pooling hurt UK sarcasm (.683 -> .644): a fine-tuned model conditioned on the variety tag can hold two different
+  sarcasm constructs; a single linear probe over fixed embeddings cannot.
+
 ### R2b. Transfer with LLM features (9B probe, standard folds; `transfer_llm_probe.csv`)
 - Sarcasm (Reddit), AUC / cross-fitted macro-F1: AU->AU .851/.751, AU->UK .709/.601, UK->UK .878/.767, UK->AU .656/.627.
   Sentiment (all rows) AUC: AU->AU .979, AU->UK .995, UK->UK .995, UK->AU .970.
@@ -59,7 +73,12 @@ Tables in this folder contain no raw text.
 - 9B probe: 0.853 standard -> 0.859 thread folds (sarc-UK .806 -> .797, UK-reddit AUC .878 -> .875): no thread inflation
   (`thread_folds_llm_probe.csv`).
 - Logit-mean blend of e5+me5 probe and 9B probe: 0.862 standard -> 0.862 thread (-0.001): thread-neutral
-  (`thread_gap_partial_e5_llm.csv`). deberta and the full lead: pending (`thread_gap.csv`).
+  (`thread_gap_partial_e5_llm.csv`).
+- deberta-v3-large x3 (`thread_folds.csv`): 0.866 standard vs 0.865 thread folds (paired p(std better) 0.57: tie);
+  sent-AU .934 -> .927, sarc-AU .799 -> .804, sarc-UK .805 -> .808; fold SD .010 vs .015.
+- Annotation: the strongest text-only members show no thread-memorisation advantage; only the frozen e5 probe loses
+  ~0.008. The benchmark's comment-level split does not materially inflate CV for fine-tuned / LLM models.
+  Full lead (stk_v5) on thread folds: pending (`thread_gap.csv`, model-classical).
 - Recovered context does not help: context e5 probe 0.839 vs 0.847 (std) / 0.827 vs 0.838 (thread); context 9B probe
   0.854 vs 0.853; context features in the stacker 0.871 vs 0.872.
 

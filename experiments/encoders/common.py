@@ -109,10 +109,14 @@ def load_fold(path: Path, device="cuda") -> tuple[MultiTask, object, dict]:
 
 @torch.no_grad()
 def predict(model: MultiTask, tok, df: pl.DataFrame, max_len: int, prefix: bool = True,
-            bs: int = 32, device="cuda") -> tuple[np.ndarray, np.ndarray]:
+            bs: int = 32, device="cuda", sarc_head: int | None = None) -> tuple[np.ndarray, np.ndarray]:
+    """sarc_head: force this sarcasm head (0 = en-AU, 1 = en-UK) for every row, e.g. for a model
+    trained on one variety only (the other head is untrained); the prefix keeps the row's variety."""
     model.eval()
     ids = encode(tok, model_inputs(df, prefix), max_len)
     var = (df["variety"].cast(pl.String) == "en-UK").cast(pl.Int64).to_numpy()
+    if sarc_head is not None:
+        var = np.full_like(var, sarc_head)
     order = np.argsort([len(x) for x in ids])
     ps, pc = np.zeros(len(ids)), np.zeros(len(ids))
     for s in range(0, len(ids), bs):
