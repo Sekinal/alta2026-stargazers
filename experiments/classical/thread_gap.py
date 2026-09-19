@@ -5,7 +5,10 @@ For the same member set, the weight-free logit mean is built from (a) the member
 (standard `fold` vs `thread_fold` from data/external/context/thread_folds.parquet). Reports score,
 components, per-fold scores, and the gap; also each member alone. Writes results/paper/thread_gap.csv.
 
-  uv run python experiments/classical/thread_gap.py enc_deb_l_x3 cls_e5me5_lr llm_q35_9b_probe
+  uv run python experiments/classical/thread_gap.py enc_deb_l_x3:enc_deb_l_thr_s13,enc_deb_l_thr_s14,enc_deb_l_thr_s15 \
+      cls_e5me5_lr llm_q35_9b_probe:llm_q35_9b_probe_thr
+Each argument is STD[:THR1,THR2,...]; the thread-fold OOF of a member is the logit mean of its THR runs
+(default STD__thr). Seed averaging uses the same rule as the lead's blends.
 """
 
 from __future__ import annotations
@@ -47,9 +50,16 @@ def main(members: list[str]) -> None:
     tf = pool.select("uid").join(pl.read_parquet(ROOT / "data/external/context/thread_folds.parquet"), on="uid",
                                  how="left", maintain_order="left")["thread_fold"].to_numpy()
     std = pool["fold"].to_numpy()
+    spec = [(m.split(":")[0], m.split(":")[1].split(",") if ":" in m else [m.split(":")[0] + "__thr"]) for m in members]
+    members = [a for a, _ in spec]
+
+    def mean_run(runs):
+        ds = [load_oof(r, pool) for r in runs]
+        return ds[0].with_p({t: 1 / (1 + np.exp(-np.mean([logit(d.p[t]) for d in ds], 0))) for t in ("sent", "sarc")})
+
     rows = []
-    for scheme, suffix, folds in (("standard", "", std), ("thread", "__thr", tf)):
-        ds = [load_oof(m + suffix, pool) for m in members]
+    for scheme, folds in (("standard", std), ("thread", tf)):
+        ds = [load_oof(a, pool) if scheme == "standard" else mean_run(b) for a, b in spec]
         blend = ds[0].with_p({t: 1 / (1 + np.exp(-np.mean([logit(d.p[t]) for d in ds], 0))) for t in ("sent", "sarc")})
         for name, d in [("blend(" + "+".join(members) + ")", blend)] + list(zip(members, ds)):
             comp, per = evaluate(d, folds)
