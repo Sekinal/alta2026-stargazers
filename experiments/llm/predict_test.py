@@ -18,7 +18,7 @@ import subprocess
 import sys
 
 sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parent))
-from llm_common import HERE, ROOT  # noqa: E402
+from llm_common import HERE, ROOT, test_split  # noqa: E402
 
 sys.path.insert(0, str(ROOT))
 from alta.common import N_FOLDS, PREDS  # noqa: E402
@@ -63,7 +63,7 @@ def main():
         from ft_collect import fold_dir
         for m in r["members"]:
             for k in range(N_FOLDS):
-                if (fold_dir(m, k) / f"fold{k}_test.parquet").exists() and not a.force:
+                if (fold_dir(m, k) / f"fold{k}_{test_split(a.test)}.parquet").exists() and not a.force:
                     continue
                 run_k = fold_dir(m, k).name
                 sh([str(HERE / "ft.py"), "--run", run_k, "--model", "qwen3.5-4b", "--fold", str(k),

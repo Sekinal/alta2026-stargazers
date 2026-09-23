@@ -270,3 +270,10 @@ class Timer:
 
     def __call__(self) -> float:
         return time.time() - self.t0
+
+
+def test_split(test_path: str) -> str:
+    """Cache split name for a test CSV, keyed by its content: test uids (x00000..) repeat across test
+    files, so an unkeyed "test" cache would silently serve one file's scores for another's rows."""
+    from alta.common import frame_fingerprint, load_test
+    return f"test-{frame_fingerprint(load_test(test_path))[:10]}"

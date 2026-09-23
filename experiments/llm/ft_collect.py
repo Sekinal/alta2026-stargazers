@@ -20,7 +20,7 @@ import numpy as np
 import polars as pl
 
 sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parent))
-from llm_common import ROOT  # noqa: E402
+from llm_common import ROOT, test_split  # noqa: E402
 
 sys.path.insert(0, str(ROOT))
 from alta.common import N_FOLDS, load_pool, load_test, save_preds  # noqa: E402
@@ -54,7 +54,7 @@ def collect(run: str, members: list[str], test_path: str = "", desc: str = ""):
     test_df = None
     if test_path:
         test = load_test(test_path)
-        tp = [pl.read_parquet(fold_dir(m, k) / f"fold{k}_test.parquet")
+        tp = [pl.read_parquet(fold_dir(m, k) / f"fold{k}_{test_split(test_path)}.parquet")
               for m in members for k in range(N_FOLDS)]
         for p in tp:
             assert p["uid"].to_list() == test["uid"].to_list()

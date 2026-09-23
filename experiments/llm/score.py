@@ -18,7 +18,7 @@ import polars as pl
 import torch
 
 sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parent))
-from llm_common import (CACHE, CONTEXT_POOL, Scorer, Timer, add_context, batches_by_budget,  # noqa: E402
+from llm_common import (CACHE, CONTEXT_POOL, Scorer, Timer, add_context, batches_by_budget, test_split,  # noqa: E402
                         build_prompts, load_model)
 from shots import select_shots  # noqa: E402
 
@@ -51,7 +51,7 @@ def main():
     a = ap.parse_args()
 
     task = "sarc" if a.prompt.startswith("sarc") else "sent"
-    split = "test" if a.test else "pool"
+    split = test_split(a.test) if a.test else "pool"
     df = load_test(a.test) if a.test else load_pool()
     if a.rows == "reddit":
         df = df.filter(pl.col("source") == "reddit")

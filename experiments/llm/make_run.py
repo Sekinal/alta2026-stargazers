@@ -26,7 +26,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 
 sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parent))
-from llm_common import CACHE, ROOT  # noqa: E402
+from llm_common import CACHE, ROOT, test_split  # noqa: E402
 
 sys.path.insert(0, str(ROOT))
 from alta.common import N_FOLDS, load_pool, load_test, save_preds  # noqa: E402
@@ -99,7 +99,7 @@ def build(run: str, kind: str, model: str, sarc: str, sent: str, layer: int, C: 
         # "a+b" concatenates the features of several cached prompts (prob/margin of the first)
         prob, margin, hid = load_multi(model, tag, "pool", pool["uid"].to_list(), layer)
         if test is not None:
-            prob_t, margin_t, hid_t = load_multi(model, tag, "test", test["uid"].to_list(), layer)
+            prob_t, margin_t, hid_t = load_multi(model, tag, test_split(test_path), test["uid"].to_list(), layer)
         if kind == "zs":
             out[task] = (prob, prob_t if test is not None else None)
             continue

@@ -26,7 +26,7 @@ import polars as pl
 import torch
 
 sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parent))
-from llm_common import CACHE, MODELS, ROOT, build_prompts, load_model, verbalizer_ids  # noqa: E402
+from llm_common import CACHE, MODELS, ROOT, build_prompts, load_model, test_split, verbalizer_ids  # noqa: E402
 
 sys.path.insert(0, str(ROOT))
 from alta.common import load_pool, load_test, save_preds  # noqa: E402
@@ -221,7 +221,7 @@ def main():
     out_dir.mkdir(parents=True, exist_ok=True)
     adir = MODEL_DIR / a.run / f"fold{a.fold}"
     if not a.predict_only and (out_dir / f"fold{a.fold}.parquet").exists() and (
-            not a.test or (out_dir / f"fold{a.fold}_test.parquet").exists()):
+            not a.test or (out_dir / f"fold{a.fold}_{test_split(a.test)}.parquet").exists()):
         print(f"fold {a.fold} already done; skipping", flush=True)
         return
 
@@ -410,7 +410,7 @@ def main():
         res = {"uid": df["uid"].to_list()}
         for task in ("sarc", "sent"):
             res[f"m_{task}"] = predict(inner, head, tok, df, task, a.max_text_tokens)
-        name = f"fold{a.fold}.parquet" if split == "pool" else f"fold{a.fold}_test.parquet"
+        name = f"fold{a.fold}.parquet" if split == "pool" else f"fold{a.fold}_{test_split(a.test)}.parquet"
         pl.DataFrame(res).write_parquet(out_dir / name)
         if split == "pool" and a.save_run:
             sig = lambda x: 1 / (1 + np.exp(-x))  # noqa: E731
