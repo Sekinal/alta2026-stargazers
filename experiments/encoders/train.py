@@ -22,6 +22,7 @@ import json
 import math
 import os
 import random
+import re
 import time
 
 import bitsandbytes as bnb
@@ -57,6 +58,53 @@ def diagnostics(df: pl.DataFrame, ps, pc) -> str:
     return " ".join(out)
 
 
+_LAYER = re.compile(r"(?:^|\.)layers?\.(\d+)\.")
+
+
+def encoder_groups(enc, lr: float, wd: float, llrd: float) -> list[dict]:
+    """Optimiser groups for the encoder. llrd < 1: layer-wise LR decay, top layer at lr, layer i at
+    lr * llrd**(L - i), embeddings (and anything below layer 0) at lr * llrd**(L + 1); the rest at lr."""
+    named = list(enc.named_parameters())
+    depth = {n: int(m.group(1)) for n, _ in named if (m := _LAYER.search(n))}
+    L = max(depth.values(), default=0) + 1
+    groups: dict = {}
+    for n, p in named:
+        if llrd >= 1:
+            scale = 1.0
+        elif n in depth:
+            scale = llrd ** (L - 1 - depth[n])
+        elif "embed" in n:
+            scale = llrd ** L
+        else:  # final norms / poolers above the stack
+            scale = 1.0
+        key = (scale, p.ndim > 1)
+        groups.setdefault(key, []).append(p)
+    return [{"params": ps, "lr": lr * sc, "weight_decay": wd if dec else 0.0} for (sc, dec), ps in groups.items()]
+
+
+class EMA:
+    """Exponential moving average of the trainable weights (fp32 shadow on the same device)."""
+
+    def __init__(self, model: torch.nn.Module, decay: float):
+        self.decay = decay
+        self.shadow = {n: p.detach().float().clone() for n, p in model.named_parameters() if p.requires_grad}
+        self.n = 0
+
+    @torch.no_grad()
+    def update(self, model: torch.nn.Module) -> None:
+        self.n += 1
+        d = min(self.decay, (1 + self.n) / (10 + self.n))  # warm start: early steps track the model
+        for n, p in model.named_parameters():
+            if n in self.shadow:
+                self.shadow[n].mul_(d).add_(p.detach().float(), alpha=1 - d)
+
+    @torch.no_grad()
+    def copy_to(self, model: torch.nn.Module) -> None:
+        for n, p in model.named_parameters():
+            if n in self.shadow:
+                p.copy_(self.shadow[n].to(p.dtype))
+
+
 def out_name(run: str) -> str:
     """Cache dir name; a permutation-canary run never shares fold files with the real run."""
     c = os.environ.get(CANARY_ENV)
@@ -82,14 +130,10 @@ def run_fold(a, pool: pl.DataFrame, k: int) -> None:
     if a.grad_ckpt:
         model.encoder.gradient_checkpointing_enable()
     head = [p for n, p in model.named_parameters() if not n.startswith("encoder.")]
-    enc_decay = [p for n, p in model.encoder.named_parameters() if p.ndim > 1]
-    enc_nodecay = [p for n, p in model.encoder.named_parameters() if p.ndim <= 1]
     opt_cls = bnb.optim.AdamW8bit if a.optim == "adamw8bit" else torch.optim.AdamW
-    opt = opt_cls([
-        {"params": enc_decay, "lr": a.lr, "weight_decay": a.wd},
-        {"params": enc_nodecay, "lr": a.lr, "weight_decay": 0.0},
-        {"params": head, "lr": a.head_lr, "weight_decay": 0.0},
-    ], betas=(0.9, 0.98), eps=1e-6)
+    opt = opt_cls(encoder_groups(model.encoder, a.lr, a.wd, a.llrd)
+                  + [{"params": head, "lr": a.head_lr, "weight_decay": 0.0}], betas=(0.9, 0.98), eps=1e-6)
+    ema = EMA(model, a.ema) if a.ema > 0 else None
     steps_per_epoch = math.ceil(len(ids) / (a.bs * a.accum))
     total = steps_per_epoch * a.epochs
     sched = get_linear_schedule_with_warmup(opt, int(a.warmup * total), total)
@@ -123,12 +167,17 @@ def run_fold(a, pool: pl.DataFrame, k: int) -> None:
             if (bi + 1) % a.accum == 0 or bi == len(batches) - 1:
                 torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
                 opt.step(); sched.step(); opt.zero_grad(set_to_none=True)
+                if ema is not None:
+                    ema.update(model)
         msg = f"fold {k} epoch {ep + 1}/{a.epochs} loss={run_loss / n:.4f} t={time.time() - t0:.0f}s"
         if a.pilot:
             ps, pc = predict(model, tok, te, a.max_len, not a.no_prefix, sarc_head=sarc_head_idx)
             msg += " | " + diagnostics(te, ps, pc)
         print(msg, flush=True)
 
+    if ema is not None:
+        ema.copy_to(model)  # predict and save with the averaged weights
+        del ema
     ps, pc = predict(model, tok, te, a.max_len, not a.no_prefix, sarc_head=sarc_head_idx)
     out_dir = CACHE / out_name(a.run)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -195,6 +244,8 @@ def main() -> None:
     ap.add_argument("--no_prefix", action="store_true")
     ap.add_argument("--sarc_only", default=None, choices=["en-AU", "en-UK"],
                     help="sarcasm loss only on this variety's rows")
+    ap.add_argument("--llrd", type=float, default=1.0, help="layer-wise LR decay factor (1 = off)")
+    ap.add_argument("--ema", type=float, default=0.0, help="EMA decay of the weights used to predict/save (0 = off)")
     ap.add_argument("--grad_ckpt", action="store_true")
     ap.add_argument("--optim", default="adamw8bit", choices=["adamw8bit", "adamw"])
     ap.add_argument("--pilot", action="store_true")
