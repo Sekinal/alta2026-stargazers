@@ -99,3 +99,18 @@ Tables in this folder contain no raw text.
 - Pseudo-label adaptation: fold-0 recipe 0.886 vs 0.881 (p .90, best of 4) FAILED its pre-registered fold-4
   confirmation (0.859 vs 0.865, p .05). See experiments/prereg/fold4_pseudo_sarc.md.
 - Single-seed trap: Qwen sarcasm pre-SFT seed 0 .870, seed 1 .854.
+
+## R5. Post-plateau screens (2026-09-23; fold 0, seeds 13-15 paired with enc_deb_l_s13..15; segment+ukg in-holdout)
+| arm | 3-seed blend | seed mean +- SD | P(base better) |
+| base deberta-v3-large | .8711 | .8639 +- .0086 | - |
+| + weight EMA (.999) | .8716 | .8652 +- .0054 | .43 |
+| + LLRD .9, lr 1.5e-5, EMA | .8754 | .8659 +- .0054 | .36 |
+| NLI deberta-v3-large (MoritzLaurer mnli-fever-anli-ling-wanli) | .8548 | .8456 +- .0125 | .90 |
+| ELECTRA-large | .8622 | .8467 +- .0059 | .90 |
+| ModernBERT-large (lr 2e-5) | .8593 | .8533 +- .0032 | .82 |
+- Inside the lead (fold 0, lead .881): adding any arm as a 4th logit-mean member .874-.883 (ties); swapping the lead's
+  deberta for a 3-seed arm: base x3 .884, EMA x3 .879, LLRD+EMA x3 .877. EMA/LLRD lower seed variance ~35% but the
+  standalone gain does not survive the ensemble.
+- Transductive same-thread label features over the lead (nested cross-fit, experiments/classical/thread_labels.py):
+  .8742 vs .8737, unstable coefficients -> noise. Cross-fitted kNN (e5+me5, K=30) as a 4th member: .869 vs .874 (lead wins 5/5 folds).
+- Annotation: the ensemble is saturated at ~.874 OOF; backbone/recipe diversity and label-propagation signals add nothing.
