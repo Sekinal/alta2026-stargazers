@@ -140,3 +140,12 @@ Mean over up to 30 random n-subsets (probability mean), official score: deberta 
 5 .8638, 10 .8637; inside the lead (logit mean with e5+me5 and 9B probe) n=1 .8669, 3 .8700, 5 .8705, 10 .8695.
 - Annotation: seed averaging saturates by ~3 seeds (+.003); model-family diversity adds +.006 on top. Retrained
   seeds r13-17 (.867 x5) vs originals s13-17 (.863 x5): seed-draw noise ~.004 even for 5-seed blends.
+
+## R8. LLM-reader sarcasm label as a feature for UK Reddit (pre-registered: experiments/prereg/reader_feature.md)
+One Claude reader labelled all 1,143 UK Reddit pool rows (and 286 test rows) blind; cross-fitted LR on [lead logit, reader label].
+- Pre-registered criterion FAILED: sarc-UK .843 vs .841 (p .52); score higher on 1/5 folds (0 change elsewhere: sarcasm is
+  bound by AU in most folds). stk_v5r stays the lead.
+- Descriptive: the reader label is heavily weighted (coef 1.5-1.7 vs lead logit .8) and improves UK-reddit sarcasm ranking
+  AUC .906 -> .920, AP .761 -> .794 (4/5 folds), but the gains fall away from the F1 operating point.
+- Annotation: a strong generic reader carries UK-sarcasm information the fine-tuned models lack (consistent with R6),
+  but under the official min-over-varieties metric and F1 decisions it does not move the score.

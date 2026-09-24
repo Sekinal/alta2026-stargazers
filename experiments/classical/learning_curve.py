@@ -111,7 +111,8 @@ def main() -> None:
         old = pl.read_csv(OUT)
         out = pl.concat([old.filter(~pl.col("member").is_in(out["member"].unique().to_list())), out], how="diagonal")
     out.write_csv(OUT)
-    print(out.group_by("member", "frac").agg(pl.col("score").mean().round(4), pl.col("score").std().round(4),
+    print(out.group_by("member", "frac").agg(pl.col("score").mean().round(4).alias("score_mean"),
+                                             pl.col("score").std().round(4).alias("score_sd"),
                                              pl.col("auc_sarc_AUr").mean().round(4), pl.col("auc_sarc_UKr").mean().round(4))
           .sort("member", "frac"))
 
