@@ -173,7 +173,11 @@ saturates after about three seeds: .860 for one seed, .863 for three, .864 for t
 another +.006, so the gain of the ensemble comes from model-family diversity rather than seed averaging. Two sets of five
 seeds of the same recipe still differ by .004 in OOF score, which is the scale of noise below which no change in
 Table~\ref{tab:negative} can be read.
-\todo{ablations: variety/source prefix, single-task training, shared vs per-variety sarcasm head (GPU queue running)}
+\paragraph{Architecture.} Averaging two seeds per arm (baseline .865): removing the \texttt{[variety] [source]} prefix
+costs .008 (.857; $p=.84$, 4/5 folds), the only design choice with clear evidence. Replacing the multi-task model with two
+single-task models is neutral (.865), despite the coupling between the labels. Sharing one sarcasm head across varieties
+leaves the overall score within noise (.863) but lowers en-UK sarcasm from .824 to .803: per-variety heads let the model
+keep the two varieties' different notions of sarcasm apart (Section~\ref{sec:two}).
 
 \subsection{Are the labels the ceiling?}
 \label{sec:labels}
@@ -208,6 +212,7 @@ as a feature, it moved the official score by only +.001, because the gain falls 
 en-UK rarely binds.
 
 \subsection{Two sarcasms}
+\label{sec:two}
 In both varieties virtually every sarcastic comment is negative (97\% AU, 99\% UK), but the en-AU annotator labels
 60\% of \emph{all} negative Reddit comments sarcastic, against 24\% in en-UK. The en-AU task therefore reduces to deciding
 which negative comments the annotator called sarcastic, and that is exactly where our ensemble is weak: its sarcasm AUC

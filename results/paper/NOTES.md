@@ -188,3 +188,13 @@ AU Reddit sentiment AUC .929/.945/.946/.950.
 - Annotation: the two strong members plateau from ~50% of the data (2.5k rows); the binding AU sarcasm component is flat
   from 75% in both families, while UK sarcasm (248 Reddit positives) is still rising in both. AU sarcasm is construct-limited
   (R6, R9), UK sarcasm data-limited. At 25% the frozen 9B probe beats fine-tuned DeBERTa.
+
+## R12. DeBERTa architecture ablations (5-fold OOF, seeds 13+14 averaged, vs enc_deb_l_s13+s14 = .865; `validate compare`)
+| ablation | score | sarc-UK | p(base better) | folds base wins |
+| no [variety] [source] prefix (per-variety heads kept) | .857 | .811 | .84 | 4/5 |
+| two single-task models (sentonly + sarconly) | .865 | .810 | .63 | 3/5 |
+| one sarcasm head shared by both varieties | .863 | .803 | .74 (sarc-UK .78) | 4/5 |
+- Single-seed reads were misleading (no-prefix looked like a tie at one seed: .860 vs .862).
+- Annotation: the segment prefix is the one design choice with evidence (+.008); multi-task sharing is neutral despite the
+  label coupling (R10); separate per-variety sarcasm heads mainly protect UK sarcasm (.824 vs .803), consistent with the
+  two constructs (R9).
