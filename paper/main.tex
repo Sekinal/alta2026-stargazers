@@ -11,6 +11,7 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{xcolor}
+\usepackage{url}
 \newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
 
 \title{Two Annotators, Two Sarcasms: A Validation-First Ensemble for Sentiment and Sarcasm in Australian and British English}
@@ -65,12 +66,12 @@ With a small, noisy dataset and a min-over-varieties metric, most apparent gains
 selection charter before modelling:
 \begin{itemize}
 \item \textbf{Pooled 5-fold CV.} Train and development rows are pooled and split into five folds stratified by segment and
-labels; every candidate produces out-of-fold (OOF) predictions for all 6,288 rows. The official development file is used
+labels, with identical texts kept in one fold; every candidate produces out-of-fold (OOF) predictions for all 6,288 rows. The official development file is used
 only as a diagnostic.
 \item \textbf{Cross-fitted decisions.} Decision thresholds (one per task and segment) are fitted on four folds and applied
 to the fifth, so reported scores include threshold-selection noise. En-UK Google sarcasm is always predicted negative.
 \item \textbf{Paired, test-sized resampling.} Candidates are compared with a paired bootstrap over test-sized replicates;
-we treat $p<0.8$ as no evidence, a calibration obtained by comparing pairs of identical recipes that differ only in seed.
+we treat $p<0.8$ as no evidence: two runs of the same recipe that differ only in seed reach $p\geq0.9$ in 18\% of pairs.
 \item \textbf{Leak canaries.} Each trained member is re-run with shuffled labels and must score at the no-information floor.
 \item \textbf{Pre-registration.} Promising fold-0 screens are confirmed on an untouched fold with the success criterion
 written down beforehand (Section~\ref{sec:negative}).
@@ -114,7 +115,7 @@ cross-fitted thresholds. \todo{add rank}}
 \label{tab:main}
 \end{table}
 Table~\ref{tab:main} gives the main results. The test score (0.8668) lies inside the 90\% interval we predicted before
-submission (0.845--0.895) and within 0.002 of the OOF point estimate; the binding components were en-AU for both tasks.
+submission (0.844--0.895) and within 0.002 of the OOF point estimate; the binding components were en-AU for both tasks.
 We also submitted DeBERTa $\times$5 alone as an ablation: it scored .854 on test against .867 for the ensemble
 (+.013; the paired OOF expectation was +.005, 90\% band $-$.010 to +.023). The ensemble's test score tracked its OOF
 estimate, whereas DeBERTa alone fell by .013, mostly on the two binding en-AU components (sentiment .931 $\to$ .916,
@@ -138,8 +139,8 @@ Intervention (protocol) & $\Delta$ \\
 \quad ELECTRA-large & $-$.009 \\
 \quad ModernBERT-large & $-$.012 \\
 \quad any of the above inside the ensemble & $-$.007 to +.002 \\
-\quad domain-adaptive pre-training (43M tokens) & tie \\
-\quad \texttt{/s}-labelled sarcasm pre-training & $-$.004 \\
+\quad domain-adaptive pre-training (43M tokens) & $-$.004 \\
+\quad \texttt{/s}-labelled sarcasm pre-training & $-$.011 \\
 \midrule
 \multicolumn{2}{l}{\emph{LLMs}} \\
 \quad Qwen3.5-4B LoRA (fold 0), alone vs DeBERTa\,$\times$3 / in ensemble & $-$.018 / .000 \\
@@ -154,8 +155,8 @@ Intervention (protocol) & $\Delta$ \\
 \bottomrule
 \end{tabular}
 \caption{Changes relative to the matching baseline (official score). Fold-0 rows compare 3-seed averages on one held-out
-fold; all are inside the paired-resampling noise ($p<0.8$) except the negative backbone rows. \todo{double-check each entry
-against NOTES R4/R5/R8}}
+fold (3-seed probability means); the other rows use all five folds. Rows outside the paired-resampling noise ($p\geq0.8$) are all
+negative: the three alternative backbones, \texttt{/s} pre-training and the LoRA variants; everything else is a tie.}
 \label{tab:negative}
 \end{table}
 
@@ -203,7 +204,7 @@ sent AU & .74 & .60--.65 & .60--.65 & .29 / .33 / .27 \\
 sent UK & .85 & .81--.83 & .67--.69 & .17 / .15 / .22 \\
 \bottomrule
 \end{tabular}
-\caption{Cohen's $\kappa$ on 150 random Reddit comments per variety (ranges over the two readers; the readers agree with each
+\caption{Cohen's $\kappa$ \citep{cohen1960kappa} on 150 random Reddit comments per variety (ranges over the two readers; the readers agree with each
 other at $\kappa=.90$--.98). Positive rate: gold / ours / readers.}
 \label{tab:reannot}
 \end{table}
@@ -222,7 +223,7 @@ In both varieties virtually every sarcastic comment is negative (97\% AU, 99\% U
 60\% of \emph{all} negative Reddit comments sarcastic, against 24\% in en-UK. The en-AU task therefore reduces to deciding
 which negative comments the annotator called sarcastic, and that is exactly where our ensemble is weak: its sarcasm AUC
 within negative comments is .77 in en-AU but .91 in en-UK. To see what the annotators respond to, we scored every comment
-with label-free zero-shot NLI hypotheses (a DeBERTa-v3-large zero-shot classifier) and measured, within negative comments,
+with label-free zero-shot NLI hypotheses (a DeBERTa-v3-large zero-shot classifier; \citealp{laurer2023zeroshot}) and measured, within negative comments,
 how well each predicts the gold sarcasm label (Table~\ref{tab:cues}).
 \begin{table}[t]
 \centering\small
