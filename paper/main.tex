@@ -1,0 +1,150 @@
+% ALTA 2026 Shared Task system description (draft). Build: latexmk -pdf main.tex
+\documentclass[11pt]{article}
+\usepackage[final]{acl}
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{inconsolata}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+
+\title{Two Annotators, Two Sarcasms: A Validation-First Ensemble for Sentiment and Sarcasm in Australian and British English}
+
+\author{\todo{author names and affiliations} \\
+  Team \texttt{thermostatic} \\
+  \texttt{\todo{email}}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We describe our system for the ALTA 2026 shared task on sentiment and sarcasm classification in Australian (en-AU) and
+British (en-UK) English, scored by the weaker variety of each task. Our submission is a weight-free logit average of a
+multi-task DeBERTa-v3-large ensemble, a linear probe over frozen sentence embeddings and a linear probe over the hidden
+states of a 9B instruction-tuned LLM, with decision thresholds cross-fitted per data segment. Every design choice was made
+on pooled 5-fold cross-validation under a pre-committed selection charter; the system scored 0.8668 on the official test
+set against a cross-validated estimate of 0.869, with all four component scores within 0.004 of their estimates.
+Beyond the system, we ask why dozens of architectures, recipes and data interventions converge on the same score. Learning
+curves, ensemble-size curves and a blind re-annotation study point to the labels: the en-AU annotator's ``sarcasm'' tracks
+derision (mocking, contempt, anger) among negative comments, whereas the en-UK annotator's tracks playful irony with a
+positive surface, and the cues that predict one predict the absence of the other. In confident disagreements, independent
+readers side with our model two times out of three.
+\end{abstract}
+
+\section{Introduction}
+Sentiment and sarcasm classification are textbook sequence-classification problems, yet both are sensitive to the language
+variety of the text and to how the labels were produced. The ALTA 2026 shared task uses the en-AU and en-UK portions of
+BESSTIE \citep{srirag-etal-2025-besstie}: Google Places reviews and Reddit comments, each labelled for binary sentiment and
+binary sarcasm. The official score averages, over the two tasks, the macro-F1 of the \emph{weaker} variety, which rewards
+systems that are robust across varieties.
+
+Our contributions are:
+(i) a simple, well-validated ensemble that placed \todo{final rank} on the test leaderboard (0.8668), whose test score matched
+its cross-validated estimate component by component;
+(ii) a catalogue of interventions that did \emph{not} help under a strict protocol (Section~\ref{sec:negative});
+(iii) evidence that the remaining error is dominated by the labels, and that the two varieties' sarcasm labels encode
+different constructs (Section~\ref{sec:labels}).
+
+\section{Task and Data}
+\label{sec:data}
+The training and development files together (the \emph{pool}) contain 6,288 rows: en-AU 3,080 (1,076 Google, 2,004 Reddit)
+and en-UK 3,208 (2,065 Google, 1,143 Reddit). Sarcasm is concentrated on Reddit: 42\% of en-AU and 22\% of en-UK Reddit
+comments are labelled sarcastic, against 6.8\% of en-AU and a single en-UK Google review. The test set has 1,573 rows with
+the same segment proportions as the development set.
+\todo{one line on the official split being by comment, and the thread overlap audit (Sec. 6.5)}
+
+\section{Validation Protocol}
+\label{sec:protocol}
+With a small, noisy dataset and a min-over-varieties metric, most apparent gains are selection noise. We therefore fixed a
+selection charter before modelling:
+\begin{itemize}
+\item \textbf{Pooled 5-fold CV.} Train and development rows are pooled and split into five folds stratified by segment and
+labels; every candidate produces out-of-fold (OOF) predictions for all 6,288 rows. The official development file is used
+only as a diagnostic.
+\item \textbf{Cross-fitted decisions.} Decision thresholds (one per task and segment) are fitted on four folds and applied
+to the fifth, so reported scores include threshold-selection noise. En-UK Google sarcasm is always predicted negative.
+\item \textbf{Paired, test-sized resampling.} Candidates are compared with a paired bootstrap over test-sized replicates;
+we treat $p<0.8$ as no evidence, a calibration obtained by comparing pairs of identical recipes that differ only in seed.
+\item \textbf{Leak canaries.} Each trained member is re-run with shuffled labels and must score at the no-information floor.
+\item \textbf{Pre-registration.} Promising fold-0 screens are confirmed on an untouched fold with the success criterion
+written down beforehand (Section~\ref{sec:negative}).
+\end{itemize}
+
+\section{System}
+\label{sec:system}
+\paragraph{DeBERTa ensemble.} DeBERTa-v3-large \citep{he2023debertav} fine-tuned for four epochs (lr $10^{-5}$, batch 16) with
+a first-token representation feeding one sentiment logit and one sarcasm logit \emph{per variety}; the input is prefixed with
+its variety and source (e.g.\ \texttt{[en-UK] [reddit]}). Five seeds, each trained on the five CV folds; test predictions
+average the 25 fold models.
+\paragraph{Embedding probe.} L2-regularised logistic regression over concatenated frozen embeddings of e5-large-v2
+\citep{wang2022e5} and multilingual-e5-large-instruct \citep{wang2024me5}, with the regularisation strength chosen by inner CV.
+\paragraph{LLM probe.} Qwen3.5-9B \citep{qwen35} in 4-bit NF4 reads each text inside a zero-shot sarcasm (or sentiment) prompt;
+a logistic regression is fitted on the layer-24 last-token hidden state plus the verbalizer margin, separately per variety
+for sarcasm.
+\paragraph{Combination.} The three members' probabilities are averaged in logit space with equal weights; weight fitting and
+stacked generalisation did not beat this (Section~\ref{sec:negative}).
+
+\section{Results}
+\label{sec:results}
+\begin{table}[t]
+\centering\small
+\begin{tabular}{lccccc}
+\toprule
+ & sent-AU & sent-UK & sarc-AU & sarc-UK & score \\
+\midrule
+DeBERTa $\times$5 (OOF) & .931 & .972 & .803 & .816 & .867 \\
+e5+me5 probe (OOF) & .917 & .969 & .777 & .788 & .847 \\
+9B LLM probe (OOF) & .916 & .973 & .789 & .806 & .853 \\
+\midrule
+Ensemble (OOF) & .934 & .976 & .805 & .841 & .869 \\
+Ensemble (\textbf{test}) & .932 & .976 & .801 & .837 & \textbf{.867} \\
+\midrule
+Organisers' baseline (test) & .866 & .931 & .680 & .696 & .773 \\
+\bottomrule
+\end{tabular}
+\caption{Macro-F1 per component; score $=\frac12[\min(\text{sent})+\min(\text{sarc})]$. OOF rows: pooled 5-fold CV with
+cross-fitted thresholds. \todo{add rank}}
+\label{tab:main}
+\end{table}
+Table~\ref{tab:main} gives the main results. The test score (0.8668) lies inside the 90\% interval we predicted before
+submission (0.845--0.895) and within 0.002 of the OOF point estimate; the binding components were en-AU for both tasks.
+\todo{leaderboard context: top-2 separated by 0.0007, well inside test-sampling SD $\approx$0.013}
+
+\section{Analysis}
+\subsection{What did not help}
+\label{sec:negative}
+\todo{table: EMA / LLRD / NLI-DeBERTa / ELECTRA / ModernBERT screens (R5); in-ensemble swaps; thread-label features; kNN;
+pseudo-labelling (pre-registered, failed on fold 4); LoRA ladder on Qwen3.5-4B; recovered Reddit context; DAPT; /s pre-training;
+LLM-reader feature (pre-registered, failed)}
+
+\subsection{Seeds, data and ceilings}
+\todo{ensemble-size curve (R7): seed averaging saturates at 3 seeds (+0.003), family diversity +0.006;
+learning curves for DeBERTa and both probes (pending GPU); ablations: prefix, single-task, shared sarcasm head (pending)}
+
+\subsection{Are the labels the ceiling?}
+\label{sec:labels}
+\todo{R1 kappa vs BESSTIE second annotator; R6 blind re-annotation table; disputed-item analysis (readers side with model 2:1)}
+
+\subsection{Two sarcasms}
+\todo{R9: within-negative separability (AU .77 vs UK .91), cue-sign flips table (mocking/contempt/anger vs joking/praise);
+R2 transfer matrix and surrogate as corroboration}
+
+\subsection{Benchmark audit}
+\todo{R3: Reddit provenance, thread overlap between train and valid, no thread-memorisation gap for our members}
+
+\section{Conclusion}
+\todo{}
+
+\section*{Limitations}
+Our re-annotation uses LLM readers, not humans; their mutual agreement is closer to test--retest reliability than to
+inter-annotator agreement, and they may share our models' notion of sarcasm. \todo{single annotator per item in BESSTIE;
+small test set; en-UK Google sarcasm has one positive}
+
+\bibliography{references}
+
+\end{document}
