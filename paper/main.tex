@@ -118,9 +118,41 @@ submission (0.845--0.895) and within 0.002 of the OOF point estimate; the bindin
 \section{Analysis}
 \subsection{What did not help}
 \label{sec:negative}
-\todo{table: EMA / LLRD / NLI-DeBERTa / ELECTRA / ModernBERT screens (R5); in-ensemble swaps; thread-label features; kNN;
-pseudo-labelling (pre-registered, failed on fold 4); LoRA ladder on Qwen3.5-4B; recovered Reddit context; DAPT; /s pre-training;
-LLM-reader feature (pre-registered, failed)}
+Table~\ref{tab:negative} lists what we tried after the three-member ensemble was in place. None cleared the
+charter's bar, and two ideas that passed a fold-0 screen failed their pre-registered confirmation.
+\begin{table}[t]
+\centering\small
+\begin{tabular}{p{4.6cm}r}
+\toprule
+Intervention (protocol) & $\Delta$ \\
+\midrule
+\multicolumn{2}{l}{\emph{DeBERTa recipe / backbone} (fold 0, 3 paired seeds)} \\
+\quad weight EMA & +.001 \\
+\quad layer-wise LR decay + EMA & +.004 \\
+\quad NLI-tuned DeBERTa-v3-large & $-$.016 \\
+\quad ELECTRA-large & $-$.009 \\
+\quad ModernBERT-large & $-$.012 \\
+\quad any of the above inside the ensemble & $-$.007 to +.002 \\
+\quad domain-adaptive pre-training (43M tokens) & tie \\
+\quad \texttt{/s}-labelled sarcasm pre-training & $-$.004 \\
+\midrule
+\multicolumn{2}{l}{\emph{LLMs}} \\
+\quad Qwen3.5-4B LoRA (fold 0), alone vs DeBERTa\,$\times$3 / in ensemble & $-$.018 / .000 \\
+\quad EVA / DoRA / Riemannian LoRA variants & $-$.03 to $-$.10 \\
+\midrule
+\multicolumn{2}{l}{\emph{Data and context} (5-fold unless noted)} \\
+\quad pseudo-labelled in-domain Reddit (pre-reg., fold 4) & $-$.006 \\
+\quad recovered thread context (parent, title) & $-$.001 \\
+\quad same-thread label features (transductive) & +.001 \\
+\quad $k$NN label vote over embeddings & $-$.005 \\
+\quad LLM-reader sarcasm label, en-UK (pre-reg.) & +.001 \\
+\bottomrule
+\end{tabular}
+\caption{Changes relative to the matching baseline (official score). Fold-0 rows compare 3-seed averages on one held-out
+fold; all are inside the paired-resampling noise ($p<0.8$) except the negative backbone rows. \todo{double-check each entry
+against NOTES R4/R5/R8}}
+\label{tab:negative}
+\end{table}
 
 \subsection{Seeds, data and ceilings}
 \todo{ensemble-size curve (R7): seed averaging saturates at 3 seeds (+0.003), family diversity +0.006;
@@ -128,11 +160,69 @@ learning curves for DeBERTa and both probes (pending GPU); ablations: prefix, si
 
 \subsection{Are the labels the ceiling?}
 \label{sec:labels}
-\todo{R1 kappa vs BESSTIE second annotator; R6 blind re-annotation table; disputed-item analysis (readers side with model 2:1)}
+BESSTIE reports second-annotator agreement on only 50 items per variety, too few to bound anything (en-AU sarcasm
+$\kappa=0.47$, 95\% CI $[.19,.72]$). We therefore ran a pre-registered blind re-annotation: two independent LLM readers
+(Claude subagents with a fixed guideline, text and variety only, no labels or model outputs) labelled 150 random Reddit
+comments per variety, plus about 50 per variety on which our ensemble confidently contradicts the gold sarcasm label
+(Table~\ref{tab:reannot}).
+\begin{table}[t]
+\centering\small
+\begin{tabular}{lcccc}
+\toprule
+ & gold--ours & gold--reader & ours--reader & positive rate \\
+\midrule
+sarc AU & \textbf{.56} & .21--.28 & .30--.34 & .43 / .43 / .16 \\
+sarc UK & .59 & \textbf{.62} & .45 & .29 / .23 / .27 \\
+sent AU & .74 & .60--.65 & .60--.65 & .29 / .33 / .27 \\
+sent UK & .85 & .81--.83 & .67--.69 & .17 / .15 / .22 \\
+\bottomrule
+\end{tabular}
+\caption{Cohen's $\kappa$ on 150 random Reddit comments per variety (ranges over the two readers; the readers agree with each
+other at $\kappa=.90$--.98). Positive rate: gold / ours / readers.}
+\label{tab:reannot}
+\end{table}
+Two findings stand out. For en-AU sarcasm the gold annotator marks 43\% of comments sarcastic against 16\% for the readers;
+our ensemble reproduces the annotator ($\kappa=.56$) far better than it matches a neutral reader ($.30$--$.34$). On the
+disputed items the two readers agree with each other on 45/50 (AU) and 48/49 (UK) and side with our model rather than the
+gold label 31:14 (AU) and 31:17 (UK). A large share of the ensemble's confident ``errors'' are therefore contestable labels.
+For en-UK sarcasm the picture differs: a neutral reader recovers the gold label at least as well as our model does ($.62$ vs
+$.59$), and adding the reader's label to the ensemble raises en-UK Reddit sarcasm AUC from .906 to .920; yet, pre-registered
+as a feature, it moved the official score by only +.001, because the gain falls away from the F1 operating point and
+en-UK rarely binds.
 
 \subsection{Two sarcasms}
-\todo{R9: within-negative separability (AU .77 vs UK .91), cue-sign flips table (mocking/contempt/anger vs joking/praise);
-R2 transfer matrix and surrogate as corroboration}
+In both varieties virtually every sarcastic comment is negative (97\% AU, 99\% UK), but the en-AU annotator labels
+60\% of \emph{all} negative Reddit comments sarcastic, against 24\% in en-UK. The en-AU task therefore reduces to deciding
+which negative comments the annotator called sarcastic, and that is exactly where our ensemble is weak: its sarcasm AUC
+within negative comments is .77 in en-AU but .91 in en-UK. To see what the annotators respond to, we scored every comment
+with label-free zero-shot NLI hypotheses (a DeBERTa-v3-large zero-shot classifier) and measured, within negative comments,
+how well each predicts the gold sarcasm label (Table~\ref{tab:cues}).
+\begin{table}[t]
+\centering\small
+\begin{tabular}{lcc}
+\toprule
+Cue (within negative comments) & en-AU & en-UK \\
+\midrule
+mocks or ridicules someone & .68 & .45 \\
+contempt / condescension & .65 & .36 \\
+angry / frustrated & .61 & .32 \\
+cynical / pessimistic & .60 & .40 \\
+\midrule
+joking / playful & .65 & .79 \\
+praise / compliment & .58 & .73 \\
+positive surface, negative intent & .62 & .71 \\
+\bottomrule
+\end{tabular}
+\caption{AUC of each zero-shot cue for the gold sarcasm label among gold-negative Reddit comments (.5 = no signal;
+$<.5$ = the cue predicts \emph{non}-sarcasm).}
+\label{tab:cues}
+\end{table}
+The en-AU annotator's sarcasm tracks derision: mocking, contempt, anger and cynicism. The en-UK annotator's tracks playful
+irony with a positive surface, and hostility is evidence \emph{against} sarcasm. The same cue points in opposite directions,
+which explains why sarcasm does not transfer across varieties (training on one variety and testing on the other costs .12 to
+.17 F1 for a fine-tuned DeBERTa, while sentiment transfers fully). The en-AU construct also leaks into sentiment: 30\% of our
+en-AU Reddit sentiment errors are comments the annotator called sarcastic and negative that our model reads as sincere and
+positive, so both binding components share one source of error.
 
 \subsection{Benchmark audit}
 \todo{R3: Reddit provenance, thread overlap between train and valid, no thread-memorisation gap for our members}
