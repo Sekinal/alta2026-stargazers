@@ -48,7 +48,7 @@ REFS = [
     ("hu2022lora", "LoRA: Low-Rank Adaptation of Large Language Models", "Hu", 2021, "arxiv", "ICLR 2022"),
     ("kalajdzievski2023rslora", "A Rank Stabilization Scaling Factor for Fine-Tuning with LoRA", "Kalajdzievski", 2023, "arxiv", ""),
     ("liu2024dora", "DoRA: Weight-Decomposed Low-Rank Adaptation", "Liu", 2024, "arxiv", "ICML 2024"),
-    ("paischer2024eva", "One Initialization to Rule them All: Fine-tuning via Explained Variance Adaptation", "Paischer", 2024, "arxiv", ""),
+    ("paischer2024eva", "Parameter Efficient Fine-tuning via Explained Variance Adaptation", "Paischer", 2025, "arxiv", ""),
     ("zhang2024riemannian", "Riemannian Preconditioned LoRA for Fine-Tuning Foundation Models", "Zhang", 2024, "arxiv", "ICML 2024"),
     ("gururangan-etal-2020-dont", "Don't Stop Pretraining: Adapt Language Models to Domains and Tasks", "Gururangan", 2020, "doi", ""),
     ("howard-ruder-2018-universal", "Universal Language Model Fine-tuning for Text Classification", "Howard", 2018, "doi", ""),
@@ -156,12 +156,14 @@ def sim(a: str, b: str) -> float:
 
 
 def rekey(bib: str, key: str) -> str:
-    return re.sub(r"^(@\w+\{)[^,]+,", lambda m: m.group(1) + key + ",", bib.strip(), count=1)
+    bib = re.sub(r"^(@\w+\{)[^,]+,", lambda m: m.group(1) + key + ",", bib.strip(), count=1)
+    # DOI-resolver BibTeX writes months as bare words (June, Sept) that are not BibTeX macros
+    return re.sub(r"month\s*=\s*([A-Za-z]+)(?=\s*[,}])", lambda m: f"month={m.group(1)[:3].lower()}", bib)
 
 
 def crossref(title: str, first: str, year: int):
     import json
-    q = urllib.parse.quote(title)
+    q = urllib.parse.quote(f"{title} {first}")  # the author term ranks the published version above preprints
     d = json.loads(get(f"https://api.crossref.org/works?query.bibliographic={q}&rows=8"))
     best = None
     for it in d["message"]["items"]:
@@ -215,11 +217,12 @@ ARXIV_IDS = {"he2023debertav": "2111.09543", "wang2022e5": "2212.03533", "wang20
 
 def arxiv_official(key: str, title: str, first: str, venue: str) -> str | None:
     """Official arXiv BibTeX (arxiv.org/bibtex/<id>), accepted only if its title and first author match."""
-    wait = 3.2 - (time.time() - _last_arxiv[0])
+    wait = 6.0 - (time.time() - _last_arxiv[0])
     if wait > 0:
         time.sleep(wait)
     _last_arxiv[0] = time.time()
-    bib = get(f"https://arxiv.org/bibtex/{ARXIV_IDS[key]}")
+    local = HERE / "arxiv_bib" / f"{ARXIV_IDS[key]}.bib"  # pre-fetched official BibTeX (arXiv throttles scripts)
+    bib = local.read_text() if local.exists() and local.stat().st_size > 50 else get(f"https://arxiv.org/bibtex/{ARXIV_IDS[key]}")
     t = " ".join(re.search(r"title=\{(.+?)\},\s*\n", bib, re.S).group(1).split())
     au = re.search(r"author=\{(.+?)\},", bib, re.S).group(1)
     if sim(t, title) < 0.9 or first.lower()[:4] not in au.split(" and ")[0].lower():

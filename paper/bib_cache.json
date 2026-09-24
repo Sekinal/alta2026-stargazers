@@ -1,0 +1,222 @@
+{
+ "srirag-etal-2025-besstie": {
+  "bib": "@inproceedings{srirag-etal-2025-besstie,\n    title = \"{BESSTIE}: A Benchmark for Sentiment and Sarcasm Classification for Varieties of {E}nglish\",\n    author = \"Srirag, Dipankar  and\n      Joshi, Aditya  and\n      Painter, Jordan  and\n      Kanojia, Diptesh\",\n    editor = \"Che, Wanxiang  and\n      Nabende, Joyce  and\n      Shutova, Ekaterina  and\n      Pilehvar, Mohammad Taher\",\n    booktitle = \"Findings of the Association for Computational Linguistics: ACL 2025\",\n    month=jul,\n    year = \"2025\",\n    address = \"Vienna, Austria\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/2025.findings-acl.441/\",\n    doi = \"10.18653/v1/2025.findings-acl.441\",\n    pages = \"8413--8429\",\n    ISBN = \"979-8-89176-256-5\"\n}",
+  "report": "OK  srirag-etal-2025-besstie: doi 10.18653/v1/2025.findings-acl.441 (title sim 1.00)"
+ },
+ "he2023debertav": {
+  "bib": "@misc{he2023debertav,\n      title={DeBERTaV3: Improving DeBERTa using ELECTRA-Style Pre-Training with Gradient-Disentangled Embedding Sharing}, \n      author={Pengcheng He and Jianfeng Gao and Weizhu Chen},\n      year={2023},\n      eprint={2111.09543},\n      archivePrefix={arXiv},\n      primaryClass={cs.CL},\n      url={https://arxiv.org/abs/2111.09543},\n      note={ICLR 2023}\n}",
+  "report": "OK  he2023debertav: arXiv 2111.09543 (official bibtex)"
+ },
+ "wang2022e5": {
+  "bib": "@misc{wang2022e5,\n      title={Text Embeddings by Weakly-Supervised Contrastive Pre-training}, \n      author={Liang Wang and Nan Yang and Xiaolong Huang and Binxing Jiao and Linjun Yang and Daxin Jiang and Rangan Majumder and Furu Wei},\n      year={2024},\n      eprint={2212.03533},\n      archivePrefix={arXiv},\n      primaryClass={cs.CL},\n      url={https://arxiv.org/abs/2212.03533}, \n}",
+  "report": "OK  wang2022e5: arXiv 2212.03533 (official bibtex)"
+ },
+ "dettmers2023qlora": {
+  "bib": "@misc{dettmers2023qlora,\n      title={QLoRA: Efficient Finetuning of Quantized LLMs}, \n      author={Tim Dettmers and Artidoro Pagnoni and Ari Holtzman and Luke Zettlemoyer},\n      year={2023},\n      eprint={2305.14314},\n      archivePrefix={arXiv},\n      primaryClass={cs.LG},\n      url={https://arxiv.org/abs/2305.14314},\n      note={NeurIPS 2023}\n}",
+  "report": "OK  dettmers2023qlora: arXiv 2305.14314 (official bibtex)"
+ },
+ "cohen1960kappa": {
+  "bib": "@article{cohen1960kappa, title={A Coefficient of Agreement for Nominal Scales}, volume={20}, ISSN={1552-3888}, url={http://dx.doi.org/10.1177/001316446002000104}, DOI={10.1177/001316446002000104}, number={1}, journal={Educational and Psychological Measurement}, publisher={SAGE Publications}, author={Cohen, Jacob}, year={1960}, month=apr, pages={37\u201346} }",
+  "report": "OK  cohen1960kappa: doi 10.1177/001316446002000104 (title sim 1.00)"
+ },
+ "faisal-etal-2024-dialectbench": {
+  "bib": "@inproceedings{faisal-etal-2024-dialectbench,\n    title = \"{DIALECTBENCH}: An {NLP} Benchmark for Dialects, Varieties, and Closely-Related Languages\",\n    author = \"Faisal, Fahim  and\n      Ahia, Orevaoghene  and\n      Srivastava, Aarohi  and\n      Ahuja, Kabir  and\n      Chiang, David  and\n      Tsvetkov, Yulia  and\n      Anastasopoulos, Antonios\",\n    editor = \"Ku, Lun-Wei  and\n      Martins, Andre  and\n      Srikumar, Vivek\",\n    booktitle = \"Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)\",\n    month=aug,\n    year = \"2024\",\n    address = \"Bangkok, Thailand\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/2024.acl-long.777/\",\n    doi = \"10.18653/v1/2024.acl-long.777\",\n    pages = \"14412--14454\"\n}",
+  "report": "OK  faisal-etal-2024-dialectbench: doi 10.18653/v1/2024.acl-long.777 (title sim 1.00)"
+ },
+ "riloff-etal-2013-sarcasm": {
+  "bib": "@inproceedings{riloff-etal-2013-sarcasm,\n    title = \"Sarcasm as Contrast between a Positive Sentiment and Negative Situation\",\n    author = \"Riloff, Ellen  and\n      Qadir, Ashequl  and\n      Surve, Prafulla  and\n      De Silva, Lalindra  and\n      Gilbert, Nathan  and\n      Huang, Ruihong\",\n    editor = \"Yarowsky, David  and\n      Baldwin, Timothy  and\n      Korhonen, Anna  and\n      Livescu, Karen  and\n      Bethard, Steven\",\n    booktitle = \"Proceedings of the 2013 Conference on Empirical Methods in Natural Language Processing\",\n    month=oct,\n    year = \"2013\",\n    address = \"Seattle, Washington, USA\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/D13-1066/\",\n    pages = \"704--714\"\n}",
+  "report": "OK  riloff-etal-2013-sarcasm: doi 10.18653/v1/d13-1066 (title sim 1.00)"
+ },
+ "joshi2017survey": {
+  "bib": "@article{joshi2017survey, title={Automatic Sarcasm Detection: A Survey}, volume={50}, ISSN={1557-7341}, url={http://dx.doi.org/10.1145/3124420}, DOI={10.1145/3124420}, number={5}, journal={ACM Computing Surveys}, publisher={Association for Computing Machinery (ACM)}, author={Joshi, Aditya and Bhattacharyya, Pushpak and Carman, Mark J.}, year={2017}, month=sep, pages={1\u201322} }",
+  "report": "OK  joshi2017survey: doi 10.1145/3124420 (title sim 1.00)"
+ },
+ "van-hee-etal-2018-semeval": {
+  "bib": "@inproceedings{van-hee-etal-2018-semeval,\n    title = \"{S}em{E}val-2018 Task 3: Irony Detection in {E}nglish Tweets\",\n    author = \"Van Hee, Cynthia  and\n      Lefever, Els  and\n      Hoste, V{\\'e}ronique\",\n    editor = \"Apidianaki, Marianna  and\n      Mohammad, Saif M.  and\n      May, Jonathan  and\n      Shutova, Ekaterina  and\n      Bethard, Steven  and\n      Carpuat, Marine\",\n    booktitle = \"Proceedings of the 12th International Workshop on Semantic Evaluation\",\n    month=jun,\n    year = \"2018\",\n    address = \"New Orleans, Louisiana\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/S18-1005/\",\n    doi = \"10.18653/v1/S18-1005\",\n    pages = \"39--50\"\n}",
+  "report": "OK  van-hee-etal-2018-semeval: doi 10.18653/v1/s18-1005 (title sim 1.00)"
+ },
+ "abu-farha-etal-2022-semeval": {
+  "bib": "@inproceedings{abu-farha-etal-2022-semeval,\n    title = \"{S}em{E}val-2022 Task 6: i{S}arcasm{E}val, Intended Sarcasm Detection in {E}nglish and {A}rabic\",\n    author = \"Abu Farha, Ibrahim  and\n      Oprea, Silviu Vlad  and\n      Wilson, Steven  and\n      Magdy, Walid\",\n    editor = \"Emerson, Guy  and\n      Schluter, Natalie  and\n      Stanovsky, Gabriel  and\n      Kumar, Ritesh  and\n      Palmer, Alexis  and\n      Schneider, Nathan  and\n      Singh, Siddharth  and\n      Ratan, Shyam\",\n    booktitle = \"Proceedings of the 16th International Workshop on Semantic Evaluation (SemEval-2022)\",\n    month=jul,\n    year = \"2022\",\n    address = \"Seattle, United States\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/2022.semeval-1.111/\",\n    doi = \"10.18653/v1/2022.semeval-1.111\",\n    pages = \"802--814\"\n}",
+  "report": "OK  abu-farha-etal-2022-semeval: doi 10.18653/v1/2022.semeval-1.111 (title sim 1.00)"
+ },
+ "frenda-etal-2023-epic": {
+  "bib": "@inproceedings{frenda-etal-2023-epic,\n    title = \"{EPIC}: Multi-Perspective Annotation of a Corpus of Irony\",\n    author = \"Frenda, Simona  and\n      Pedrani, Alessandro  and\n      Basile, Valerio  and\n      Lo, Soda Marem  and\n      Cignarella, Alessandra Teresa  and\n      Panizzon, Raffaella  and\n      Marco, Cristina  and\n      Scarlini, Bianca  and\n      Patti, Viviana  and\n      Bosco, Cristina  and\n      Bernardi, Davide\",\n    editor = \"Rogers, Anna  and\n      Boyd-Graber, Jordan  and\n      Okazaki, Naoaki\",\n    booktitle = \"Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)\",\n    month=jul,\n    year = \"2023\",\n    address = \"Toronto, Canada\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/2023.acl-long.774/\",\n    doi = \"10.18653/v1/2023.acl-long.774\",\n    pages = \"13844--13857\"\n}",
+  "report": "OK  frenda-etal-2023-epic: doi 10.18653/v1/2023.acl-long.774 (title sim 1.00)"
+ },
+ "ghosh-etal-2020-report": {
+  "bib": "@inproceedings{ghosh-etal-2020-report,\n    title = \"A Report on the 2020 Sarcasm Detection Shared Task\",\n    author = \"Ghosh, Debanjan  and\n      Vajpayee, Avijit  and\n      Muresan, Smaranda\",\n    editor = \"Klebanov, Beata Beigman  and\n      Shutova, Ekaterina  and\n      Lichtenstein, Patricia  and\n      Muresan, Smaranda  and\n      Wee, Chee  and\n      Feldman, Anna  and\n      Ghosh, Debanjan\",\n    booktitle = \"Proceedings of the Second Workshop on Figurative Language Processing\",\n    month=jul,\n    year = \"2020\",\n    address = \"Online\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/2020.figlang-1.1/\",\n    doi = \"10.18653/v1/2020.figlang-1.1\",\n    pages = \"1--11\"\n}",
+  "report": "OK  ghosh-etal-2020-report: doi 10.18653/v1/2020.figlang-1.1 (title sim 1.00)"
+ },
+ "wallace-etal-2014-humans": {
+  "bib": "@inproceedings{wallace-etal-2014-humans, title={Humans Require Context to Infer Ironic Intent (so Computers Probably do, too)}, url={http://dx.doi.org/10.3115/v1/p14-2084}, DOI={10.3115/v1/p14-2084}, booktitle={Proceedings of the 52nd Annual Meeting of the Association for Computational Linguistics (Volume 2: Short Papers)}, publisher={Association for Computational Linguistics}, author={Wallace, Byron C. and Choe, Do Kook and Kertz, Laura and Charniak, Eugene}, year={2014}, pages={512\u2013516} }",
+  "report": "OK  wallace-etal-2014-humans: doi 10.3115/v1/p14-2084 (title sim 1.00)"
+ },
+ "castro-etal-2019-towards": {
+  "bib": "@inproceedings{castro-etal-2019-towards,\n    title = \"Towards Multimodal Sarcasm Detection (An \\textit{Obviously} Perfect Paper)\",\n    author = \"Castro, Santiago  and\n      Hazarika, Devamanyu  and\n      P{\\'e}rez-Rosas, Ver{\\'o}nica  and\n      Zimmermann, Roger  and\n      Mihalcea, Rada  and\n      Poria, Soujanya\",\n    editor = \"Korhonen, Anna  and\n      Traum, David  and\n      M{\\`a}rquez, Llu{\\'i}s\",\n    booktitle = \"Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics\",\n    month=jul,\n    year = \"2019\",\n    address = \"Florence, Italy\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/P19-1455/\",\n    doi = \"10.18653/v1/P19-1455\",\n    pages = \"4619--4629\"\n}",
+  "report": "OK  castro-etal-2019-towards: doi 10.18653/v1/p19-1455 (title sim 1.00)"
+ },
+ "hu2022lora": {
+  "bib": "@misc{hu2022lora,\n      title={LoRA: Low-Rank Adaptation of Large Language Models}, \n      author={Edward J. Hu and Yelong Shen and Phillip Wallis and Zeyuan Allen-Zhu and Yuanzhi Li and Shean Wang and Lu Wang and Weizhu Chen},\n      year={2021},\n      eprint={2106.09685},\n      archivePrefix={arXiv},\n      primaryClass={cs.CL},\n      url={https://arxiv.org/abs/2106.09685},\n      note={ICLR 2022}\n}",
+  "report": "OK  hu2022lora: arXiv 2106.09685 (official bibtex)"
+ },
+ "gururangan-etal-2020-dont": {
+  "bib": "@inproceedings{gururangan-etal-2020-dont,\n    title = \"Don{'}t Stop Pretraining: Adapt Language Models to Domains and Tasks\",\n    author = \"Gururangan, Suchin  and\n      Marasovi{\\'c}, Ana  and\n      Swayamdipta, Swabha  and\n      Lo, Kyle  and\n      Beltagy, Iz  and\n      Downey, Doug  and\n      Smith, Noah A.\",\n    editor = \"Jurafsky, Dan  and\n      Chai, Joyce  and\n      Schluter, Natalie  and\n      Tetreault, Joel\",\n    booktitle = \"Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics\",\n    month=jul,\n    year = \"2020\",\n    address = \"Online\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/2020.acl-main.740/\",\n    doi = \"10.18653/v1/2020.acl-main.740\",\n    pages = \"8342--8360\"\n}",
+  "report": "OK  gururangan-etal-2020-dont: doi 10.18653/v1/2020.acl-main.740 (title sim 1.00)"
+ },
+ "howard-ruder-2018-universal": {
+  "bib": "@inproceedings{howard-ruder-2018-universal,\n    title = \"Universal Language Model Fine-tuning for Text Classification\",\n    author = \"Howard, Jeremy  and\n      Ruder, Sebastian\",\n    editor = \"Gurevych, Iryna  and\n      Miyao, Yusuke\",\n    booktitle = \"Proceedings of the 56th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)\",\n    month=jul,\n    year = \"2018\",\n    address = \"Melbourne, Australia\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/P18-1031/\",\n    doi = \"10.18653/v1/P18-1031\",\n    pages = \"328--339\"\n}",
+  "report": "OK  howard-ruder-2018-universal: doi 10.18653/v1/p18-1031 (title sim 1.00)"
+ },
+ "barbieri-etal-2020-tweeteval": {
+  "bib": "@inproceedings{barbieri-etal-2020-tweeteval,\n    title = \"{T}weet{E}val: Unified Benchmark and Comparative Evaluation for Tweet Classification\",\n    author = \"Barbieri, Francesco  and\n      Camacho-Collados, Jose  and\n      Espinosa Anke, Luis  and\n      Neves, Leonardo\",\n    editor = \"Cohn, Trevor  and\n      He, Yulan  and\n      Liu, Yang\",\n    booktitle = \"Findings of the Association for Computational Linguistics: EMNLP 2020\",\n    month=nov,\n    year = \"2020\",\n    address = \"Online\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/2020.findings-emnlp.148/\",\n    doi = \"10.18653/v1/2020.findings-emnlp.148\",\n    pages = \"1644--1650\"\n}",
+  "report": "OK  barbieri-etal-2020-tweeteval: doi 10.18653/v1/2020.findings-emnlp.148 (title sim 1.00)"
+ },
+ "lee2013pseudo": {
+  "bib": "@inproceedings{lee2013pseudo,\n  title     = {Pseudo-Label: The Simple and Efficient Semi-Supervised Learning Method for Deep Neural Networks},\n  author    = {Lee, Dong-Hyun},\n  booktitle = {ICML 2013 Workshop on Challenges in Representation Learning},\n  year      = {2013}\n}",
+  "report": "MAN lee2013pseudo: manual (no DOI / arXiv)"
+ },
+ "ke2017lightgbm": {
+  "bib": "@inproceedings{ke2017lightgbm,\n  title     = {{LightGBM}: A Highly Efficient Gradient Boosting Decision Tree},\n  author    = {Ke, Guolin and Meng, Qi and Finley, Thomas and Wang, Taifeng and Chen, Wei and Ma, Weidong and Ye, Qiwei and Liu, Tie-Yan},\n  booktitle = {Advances in Neural Information Processing Systems 30},\n  year      = {2017}\n}",
+  "report": "MAN ke2017lightgbm: manual (no DOI / arXiv)"
+ },
+ "chen2016xgboost": {
+  "bib": "@inproceedings{chen2016xgboost, series={KDD \u201916}, title={XGBoost: A Scalable Tree Boosting System}, url={http://dx.doi.org/10.1145/2939672.2939785}, DOI={10.1145/2939672.2939785}, booktitle={Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining}, publisher={ACM}, author={Chen, Tianqi and Guestrin, Carlos}, year={2016}, month=aug, pages={785\u2013794}, collection={KDD \u201916} }",
+  "report": "OK  chen2016xgboost: doi 10.1145/2939672.2939785 (title sim 1.00)"
+ },
+ "wang-manning-2012-baselines": {
+  "bib": "@inproceedings{wang-manning-2012-baselines,\n    title = \"Baselines and Bigrams: Simple, Good Sentiment and Topic Classification\",\n    author = \"Wang, Sida  and\n      Manning, Christopher\",\n    editor = \"Li, Haizhou  and\n      Lin, Chin-Yew  and\n      Osborne, Miles  and\n      Lee, Gary Geunbae  and\n      Park, Jong C.\",\n    booktitle = \"Proceedings of the 50th Annual Meeting of the Association for Computational Linguistics (Volume 2: Short Papers)\",\n    month=jul,\n    year = \"2012\",\n    address = \"Jeju Island, Korea\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/P12-2018/\",\n    pages = \"90--94\"\n}",
+  "report": "OK  wang-manning-2012-baselines: ACL P12-2018"
+ },
+ "monroe2008fightin": {
+  "bib": "@article{monroe2008fightin, title={Fightin\u2019 Words: Lexical Feature Selection and Evaluation for Identifying the Content of Political Conflict}, volume={16}, ISSN={1476-4989}, url={http://dx.doi.org/10.1093/pan/mpn018}, DOI={10.1093/pan/mpn018}, number={4}, journal={Political Analysis}, publisher={Cambridge University Press (CUP)}, author={Monroe, Burt L. and Colaresi, Michael P. and Quinn, Kevin M.}, year={2008}, pages={372\u2013403} }",
+  "report": "OK  monroe2008fightin: doi 10.1093/pan/mpn018 (title sim 1.00)"
+ },
+ "northcutt2021confident": {
+  "bib": "@article{northcutt2021confident, title={Confident Learning: Estimating Uncertainty in Dataset Labels}, volume={70}, ISSN={1076-9757}, url={http://dx.doi.org/10.1613/jair.1.12125}, DOI={10.1613/jair.1.12125}, journal={Journal of Artificial Intelligence Research}, publisher={AI Access Foundation}, author={Northcutt, Curtis and Jiang, Lu and Chuang, Isaac}, year={2021}, month=apr, pages={1373\u20131411} }",
+  "report": "OK  northcutt2021confident: doi 10.1613/jair.1.12125 (title sim 1.00)"
+ },
+ "hutto2014vader": {
+  "bib": "@article{hutto2014vader, title={VADER: A Parsimonious Rule-Based Model for Sentiment Analysis of Social Media Text}, volume={8}, ISSN={2162-3449}, url={http://dx.doi.org/10.1609/icwsm.v8i1.14550}, DOI={10.1609/icwsm.v8i1.14550}, number={1}, journal={Proceedings of the International AAAI Conference on Web and Social Media}, publisher={Association for the Advancement of Artificial Intelligence (AAAI)}, author={Hutto, C. and Gilbert, Eric}, year={2014}, month=may, pages={216\u2013225} }",
+  "report": "OK  hutto2014vader: doi 10.1609/icwsm.v8i1.14550 (title sim 1.00)"
+ },
+ "mohammad2013emolex": {
+  "bib": "@article{mohammad2013emolex, title={CROWDSOURCING A WORD\u2013EMOTION ASSOCIATION LEXICON}, volume={29}, ISSN={1467-8640}, url={http://dx.doi.org/10.1111/j.1467-8640.2012.00460.x}, DOI={10.1111/j.1467-8640.2012.00460.x}, number={3}, journal={Computational Intelligence}, publisher={Wiley}, author={Mohammad, Saif M. and Turney, Peter D.}, year={2012}, month=sep, pages={436\u2013465} }",
+  "report": "OK  mohammad2013emolex: doi 10.1111/j.1467-8640.2012.00460.x (title sim 1.00)"
+ },
+ "daume-iii-2007-frustratingly": {
+  "bib": "@inproceedings{daume-iii-2007-frustratingly,\n    title = \"Frustratingly Easy Domain Adaptation\",\n    author = \"Daum{\\'e} III, Hal\",\n    editor = \"Zaenen, Annie  and\n      van den Bosch, Antal\",\n    booktitle = \"Proceedings of the 45th Annual Meeting of the Association of Computational Linguistics\",\n    month=jun,\n    year = \"2007\",\n    address = \"Prague, Czech Republic\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/P07-1033/\",\n    pages = \"256--263\"\n}",
+  "report": "OK  daume-iii-2007-frustratingly: ACL P07-1033"
+ },
+ "efron1979bootstrap": {
+  "bib": "@article{efron1979bootstrap, title={Bootstrap Methods: Another Look at the Jackknife}, volume={7}, ISSN={0090-5364}, url={http://dx.doi.org/10.1214/aos/1176344552}, DOI={10.1214/aos/1176344552}, number={1}, journal={The Annals of Statistics}, publisher={Institute of Mathematical Statistics}, author={Efron, B.}, year={1979}, month=jan }",
+  "report": "OK  efron1979bootstrap: doi 10.1214/aos/1176344552 (title sim 1.00)"
+ },
+ "hartmann2023siebert": {
+  "bib": "@article{hartmann2023siebert, title={More than a Feeling: Accuracy and Application of Sentiment Analysis}, volume={40}, ISSN={0167-8116}, url={http://dx.doi.org/10.1016/j.ijresmar.2022.05.005}, DOI={10.1016/j.ijresmar.2022.05.005}, number={1}, journal={International Journal of Research in Marketing}, publisher={Elsevier BV}, author={Hartmann, Jochen and Heitmann, Mark and Siebert, Christian and Schamp, Christina}, year={2023}, month=mar, pages={75\u201387} }",
+  "report": "OK  hartmann2023siebert: doi 10.1016/j.ijresmar.2022.05.005 (title sim 1.00)"
+ },
+ "demszky-etal-2020-goemotions": {
+  "bib": "@inproceedings{demszky-etal-2020-goemotions,\n    title = \"{G}o{E}motions: A Dataset of Fine-Grained Emotions\",\n    author = \"Demszky, Dorottya  and\n      Movshovitz-Attias, Dana  and\n      Ko, Jeongwoo  and\n      Cowen, Alan  and\n      Nemade, Gaurav  and\n      Ravi, Sujith\",\n    editor = \"Jurafsky, Dan  and\n      Chai, Joyce  and\n      Schluter, Natalie  and\n      Tetreault, Joel\",\n    booktitle = \"Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics\",\n    month=jul,\n    year = \"2020\",\n    address = \"Online\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/2020.acl-main.372/\",\n    doi = \"10.18653/v1/2020.acl-main.372\",\n    pages = \"4040--4054\"\n}",
+  "report": "OK  demszky-etal-2020-goemotions: doi 10.18653/v1/2020.acl-main.372 (title sim 1.00)"
+ },
+ "potts-etal-2021-dynasent": {
+  "bib": "@inproceedings{potts-etal-2021-dynasent,\n    title = \"{D}yna{S}ent: A Dynamic Benchmark for Sentiment Analysis\",\n    author = \"Potts, Christopher  and\n      Wu, Zhengxuan  and\n      Geiger, Atticus  and\n      Kiela, Douwe\",\n    editor = \"Zong, Chengqing  and\n      Xia, Fei  and\n      Li, Wenjie  and\n      Navigli, Roberto\",\n    booktitle = \"Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing (Volume 1: Long Papers)\",\n    month=aug,\n    year = \"2021\",\n    address = \"Online\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/2021.acl-long.186/\",\n    doi = \"10.18653/v1/2021.acl-long.186\",\n    pages = \"2388--2404\"\n}",
+  "report": "OK  potts-etal-2021-dynasent: doi 10.18653/v1/2021.acl-long.186 (title sim 1.00)"
+ },
+ "socher-etal-2013-recursive": {
+  "bib": "@inproceedings{socher-etal-2013-recursive,\n    title = \"Recursive Deep Models for Semantic Compositionality Over a Sentiment Treebank\",\n    author = \"Socher, Richard  and\n      Perelygin, Alex  and\n      Wu, Jean  and\n      Chuang, Jason  and\n      Manning, Christopher D.  and\n      Ng, Andrew  and\n      Potts, Christopher\",\n    editor = \"Yarowsky, David  and\n      Baldwin, Timothy  and\n      Korhonen, Anna  and\n      Livescu, Karen  and\n      Bethard, Steven\",\n    booktitle = \"Proceedings of the 2013 Conference on Empirical Methods in Natural Language Processing\",\n    month=oct,\n    year = \"2013\",\n    address = \"Seattle, Washington, USA\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/D13-1170/\",\n    pages = \"1631--1642\"\n}",
+  "report": "OK  socher-etal-2013-recursive: ACL D13-1170"
+ },
+ "pang-lee-2005-seeing": {
+  "bib": "@inproceedings{pang-lee-2005-seeing,\n    title = \"Seeing Stars: Exploiting Class Relationships for Sentiment Categorization with Respect to Rating Scales\",\n    author = \"Pang, Bo  and\n      Lee, Lillian\",\n    editor = \"Knight, Kevin  and\n      Ng, Hwee Tou  and\n      Oflazer, Kemal\",\n    booktitle = \"Proceedings of the 43rd Annual Meeting of the Association for Computational Linguistics ({ACL}{'}05)\",\n    month=jun,\n    year = \"2005\",\n    address = \"Ann Arbor, Michigan\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/P05-1015/\",\n    doi = \"10.3115/1219840.1219855\",\n    pages = \"115--124\"\n}",
+  "report": "OK  pang-lee-2005-seeing: ACL P05-1015"
+ },
+ "maas-etal-2011-learning": {
+  "bib": "@inproceedings{maas-etal-2011-learning,\n    title = \"Learning Word Vectors for Sentiment Analysis\",\n    author = \"Maas, Andrew L.  and\n      Daly, Raymond E.  and\n      Pham, Peter T.  and\n      Huang, Dan  and\n      Ng, Andrew Y.  and\n      Potts, Christopher\",\n    editor = \"Lin, Dekang  and\n      Matsumoto, Yuji  and\n      Mihalcea, Rada\",\n    booktitle = \"Proceedings of the 49th Annual Meeting of the Association for Computational Linguistics: Human Language Technologies\",\n    month=jun,\n    year = \"2011\",\n    address = \"Portland, Oregon, USA\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/P11-1015/\",\n    pages = \"142--150\"\n}",
+  "report": "OK  maas-etal-2011-learning: ACL P11-1015"
+ },
+ "chang-etal-2020-convokit": {
+  "bib": "@inproceedings{chang-etal-2020-convokit,\n    title = \"{C}onvo{K}it: A Toolkit for the Analysis of Conversations\",\n    author = \"Chang, Jonathan P.  and\n      Chiam, Caleb  and\n      Fu, Liye  and\n      Wang, Andrew  and\n      Zhang, Justine  and\n      Danescu-Niculescu-Mizil, Cristian\",\n    editor = \"Pietquin, Olivier  and\n      Muresan, Smaranda  and\n      Chen, Vivian  and\n      Kennington, Casey  and\n      Vandyke, David  and\n      Dethlefs, Nina  and\n      Inoue, Koji  and\n      Ekstedt, Erik  and\n      Ultes, Stefan\",\n    booktitle = \"Proceedings of the 21th Annual Meeting of the Special Interest Group on Discourse and Dialogue\",\n    month=jul,\n    year = \"2020\",\n    address = \"1st virtual meeting\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/2020.sigdial-1.8/\",\n    doi = \"10.18653/v1/2020.sigdial-1.8\",\n    pages = \"57--60\"\n}",
+  "report": "OK  chang-etal-2020-convokit: doi 10.18653/v1/2020.sigdial-1.8 (title sim 1.00)"
+ },
+ "he2017translation": {
+  "bib": "@inproceedings{he2017translation, series={RecSys \u201917}, title={Translation-based Recommendation}, url={http://dx.doi.org/10.1145/3109859.3109882}, DOI={10.1145/3109859.3109882}, booktitle={Proceedings of the Eleventh ACM Conference on Recommender Systems}, publisher={ACM}, author={He, Ruining and Kang, Wang-Cheng and McAuley, Julian}, year={2017}, month=aug, pages={161\u2013169}, collection={RecSys \u201917} }",
+  "report": "OK  he2017translation: doi 10.1145/3109859.3109882 (title sim 1.00)"
+ },
+ "wang2024me5": {
+  "bib": "@misc{wang2024me5,\n      title={Multilingual E5 Text Embeddings: A Technical Report}, \n      author={Liang Wang and Nan Yang and Xiaolong Huang and Linjun Yang and Rangan Majumder and Furu Wei},\n      year={2024},\n      eprint={2402.05672},\n      archivePrefix={arXiv},\n      primaryClass={cs.CL},\n      url={https://arxiv.org/abs/2402.05672}, \n}",
+  "report": "OK  wang2024me5: arXiv 2402.05672 (official bibtex)"
+ },
+ "clark2020electra": {
+  "bib": "@misc{clark2020electra,\n      title={ELECTRA: Pre-training Text Encoders as Discriminators Rather Than Generators}, \n      author={Kevin Clark and Minh-Thang Luong and Quoc V. Le and Christopher D. Manning},\n      year={2020},\n      eprint={2003.10555},\n      archivePrefix={arXiv},\n      primaryClass={cs.CL},\n      url={https://arxiv.org/abs/2003.10555},\n      note={ICLR 2020}\n}",
+  "report": "OK  clark2020electra: arXiv 2003.10555 (official bibtex)"
+ },
+ "liu2019roberta": {
+  "bib": "@misc{liu2019roberta,\n      title={RoBERTa: A Robustly Optimized BERT Pretraining Approach}, \n      author={Yinhan Liu and Myle Ott and Naman Goyal and Jingfei Du and Mandar Joshi and Danqi Chen and Omer Levy and Mike Lewis and Luke Zettlemoyer and Veselin Stoyanov},\n      year={2019},\n      eprint={1907.11692},\n      archivePrefix={arXiv},\n      primaryClass={cs.CL},\n      url={https://arxiv.org/abs/1907.11692}, \n}",
+  "report": "OK  liu2019roberta: arXiv 1907.11692 (official bibtex)"
+ },
+ "mcinnes2018umap": {
+  "bib": "@misc{mcinnes2018umap,\n      title={UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction}, \n      author={Leland McInnes and John Healy and James Melville},\n      year={2020},\n      eprint={1802.03426},\n      archivePrefix={arXiv},\n      primaryClass={stat.ML},\n      url={https://arxiv.org/abs/1802.03426}, \n}",
+  "report": "OK  mcinnes2018umap: arXiv 1802.03426 (official bibtex)"
+ },
+ "alain2017probes": {
+  "bib": "@misc{alain2017probes,\n      title={Understanding intermediate layers using linear classifier probes}, \n      author={Guillaume Alain and Yoshua Bengio},\n      year={2018},\n      eprint={1610.01644},\n      archivePrefix={arXiv},\n      primaryClass={stat.ML},\n      url={https://arxiv.org/abs/1610.01644},\n      note={ICLR 2017 workshop}\n}",
+  "report": "OK  alain2017probes: arXiv 1610.01644 (official bibtex)"
+ },
+ "laurer2023zeroshot": {
+  "bib": "@misc{laurer2023zeroshot,\n      title={Building Efficient Universal Classifiers with Natural Language Inference}, \n      author={Moritz Laurer and Wouter van Atteveldt and Andreu Casas and Kasper Welbers},\n      year={2024},\n      eprint={2312.17543},\n      archivePrefix={arXiv},\n      primaryClass={cs.CL},\n      url={https://arxiv.org/abs/2312.17543}, \n}",
+  "report": "OK  laurer2023zeroshot: arXiv 2312.17543 (official bibtex)"
+ },
+ "khodak-etal-2018-large": {
+  "bib": "@misc{khodak-etal-2018-large,\n      title={A Large Self-Annotated Corpus for Sarcasm}, \n      author={Mikhail Khodak and Nikunj Saunshi and Kiran Vodrahalli},\n      year={2018},\n      eprint={1704.05579},\n      archivePrefix={arXiv},\n      primaryClass={cs.CL},\n      url={https://arxiv.org/abs/1704.05579},\n      note={LREC 2018}\n}",
+  "report": "OK  khodak-etal-2018-large: arXiv 1704.05579 (official bibtex)"
+ },
+ "kalajdzievski2023rslora": {
+  "bib": "@misc{kalajdzievski2023rslora,\n      title={A Rank Stabilization Scaling Factor for Fine-Tuning with LoRA}, \n      author={Damjan Kalajdzievski},\n      year={2023},\n      eprint={2312.03732},\n      archivePrefix={arXiv},\n      primaryClass={cs.CL},\n      url={https://arxiv.org/abs/2312.03732}, \n}",
+  "report": "OK  kalajdzievski2023rslora: arXiv 2312.03732 (official bibtex)"
+ },
+ "liu2024dora": {
+  "bib": "@misc{liu2024dora,\n      title={DoRA: Weight-Decomposed Low-Rank Adaptation}, \n      author={Shih-Yang Liu and Chien-Yi Wang and Hongxu Yin and Pavlo Molchanov and Yu-Chiang Frank Wang and Kwang-Ting Cheng and Min-Hung Chen},\n      year={2024},\n      eprint={2402.09353},\n      archivePrefix={arXiv},\n      primaryClass={cs.CL},\n      url={https://arxiv.org/abs/2402.09353},\n      note={ICML 2024}\n}",
+  "report": "OK  liu2024dora: arXiv 2402.09353 (official bibtex)"
+ },
+ "zhang2024riemannian": {
+  "bib": "@misc{zhang2024riemannian,\n      title={Riemannian Preconditioned LoRA for Fine-Tuning Foundation Models}, \n      author={Fangzhao Zhang and Mert Pilanci},\n      year={2024},\n      eprint={2402.02347},\n      archivePrefix={arXiv},\n      primaryClass={cs.LG},\n      url={https://arxiv.org/abs/2402.02347},\n      note={ICML 2024}\n}",
+  "report": "OK  zhang2024riemannian: arXiv 2402.02347 (official bibtex)"
+ },
+ "warner2024modernbert": {
+  "bib": "@misc{warner2024modernbert,\n      title={Smarter, Better, Faster, Longer: A Modern Bidirectional Encoder for Fast, Memory Efficient, and Long Context Finetuning and Inference}, \n      author={Benjamin Warner and Antoine Chaffin and Benjamin Clavi\u00e9 and Orion Weller and Oskar Hallstr\u00f6m and Said Taghadouini and Alexis Gallagher and Raja Biswas and Faisal Ladhak and Tom Aarsen and Nathan Cooper and Griffin Adams and Jeremy Howard and Iacopo Poli},\n      year={2024},\n      eprint={2412.13663},\n      archivePrefix={arXiv},\n      primaryClass={cs.CL},\n      url={https://arxiv.org/abs/2412.13663}, \n}",
+  "report": "OK  warner2024modernbert: arXiv 2412.13663 (official bibtex)"
+ },
+ "beaglehole2025xrfm": {
+  "bib": "@misc{beaglehole2025xrfm,\n      title={xRFM: Accurate, scalable, and interpretable feature learning models for tabular data}, \n      author={Daniel Beaglehole and David Holzm\u00fcller and Adityanarayanan Radhakrishnan and Mikhail Belkin},\n      year={2026},\n      eprint={2508.10053},\n      archivePrefix={arXiv},\n      primaryClass={cs.LG},\n      url={https://arxiv.org/abs/2508.10053}, \n}",
+  "report": "OK  beaglehole2025xrfm: arXiv 2508.10053 (official bibtex)"
+ },
+ "prokhorenkova2018catboost": {
+  "bib": "@misc{prokhorenkova2018catboost,\n      title={CatBoost: unbiased boosting with categorical features}, \n      author={Liudmila Prokhorenkova and Gleb Gusev and Aleksandr Vorobev and Anna Veronika Dorogush and Andrey Gulin},\n      year={2019},\n      eprint={1706.09516},\n      archivePrefix={arXiv},\n      primaryClass={cs.LG},\n      url={https://arxiv.org/abs/1706.09516},\n      note={NeurIPS 2018}\n}",
+  "report": "OK  prokhorenkova2018catboost: arXiv 1706.09516 (official bibtex)"
+ },
+ "xiao2023cpack": {
+  "bib": "@misc{xiao2023cpack,\n      title={C-Pack: Packed Resources For General Chinese Embeddings}, \n      author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},\n      year={2024},\n      eprint={2309.07597},\n      archivePrefix={arXiv},\n      primaryClass={cs.CL},\n      url={https://arxiv.org/abs/2309.07597}, \n}",
+  "report": "OK  xiao2023cpack: arXiv 2309.07597 (official bibtex)"
+ },
+ "dodge2020finetuning": {
+  "bib": "@misc{dodge2020finetuning,\n      title={Fine-Tuning Pretrained Language Models: Weight Initializations, Data Orders, and Early Stopping}, \n      author={Jesse Dodge and Gabriel Ilharco and Roy Schwartz and Ali Farhadi and Hannaneh Hajishirzi and Noah Smith},\n      year={2020},\n      eprint={2002.06305},\n      archivePrefix={arXiv},\n      primaryClass={cs.CL},\n      url={https://arxiv.org/abs/2002.06305}, \n}",
+  "report": "OK  dodge2020finetuning: arXiv 2002.06305 (official bibtex)"
+ },
+ "mosbach2021stability": {
+  "bib": "@misc{mosbach2021stability,\n      title={On the Stability of Fine-tuning BERT: Misconceptions, Explanations, and Strong Baselines}, \n      author={Marius Mosbach and Maksym Andriushchenko and Dietrich Klakow},\n      year={2021},\n      eprint={2006.04884},\n      archivePrefix={arXiv},\n      primaryClass={cs.LG},\n      url={https://arxiv.org/abs/2006.04884},\n      note={ICLR 2021}\n}",
+  "report": "OK  mosbach2021stability: arXiv 2006.04884 (official bibtex)"
+ },
+ "zhang2015character": {
+  "bib": "@misc{zhang2015character,\n      title={Character-level Convolutional Networks for Text Classification}, \n      author={Xiang Zhang and Junbo Zhao and Yann LeCun},\n      year={2016},\n      eprint={1509.01626},\n      archivePrefix={arXiv},\n      primaryClass={cs.LG},\n      url={https://arxiv.org/abs/1509.01626},\n      note={NeurIPS 2015}\n}",
+  "report": "OK  zhang2015character: arXiv 1509.01626 (official bibtex)"
+ },
+ "paischer2024eva": {
+  "bib": "@misc{paischer2024eva,\n      title={Parameter Efficient Fine-tuning via Explained Variance Adaptation}, \n      author={Fabian Paischer and Lukas Hauzenberger and Thomas Schmied and Benedikt Alkin and Marc Peter Deisenroth and Sepp Hochreiter},\n      year={2025},\n      eprint={2410.07170},\n      archivePrefix={arXiv},\n      primaryClass={cs.LG},\n      url={https://arxiv.org/abs/2410.07170}, \n}",
+  "report": "OK  paischer2024eva: arXiv 2410.07170 (official bibtex)"
+ },
+ "nosek2018preregistration": {
+  "bib": "@article{nosek2018preregistration, title={The preregistration revolution}, volume={115}, ISSN={1091-6490}, url={http://dx.doi.org/10.1073/pnas.1708274114}, DOI={10.1073/pnas.1708274114}, number={11}, journal={Proceedings of the National Academy of Sciences}, publisher={National Academy of Sciences}, author={Nosek, Brian A. and Ebersole, Charles R. and DeHaven, Alexander C. and Mellor, David T.}, year={2018}, month=mar, pages={2600\u20132606} }",
+  "report": "OK  nosek2018preregistration: doi 10.1073/pnas.1708274114 (title sim 1.00)"
+ }
+}
