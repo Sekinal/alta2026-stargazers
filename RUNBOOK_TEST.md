@@ -56,7 +56,11 @@ scorer, and prints the shift diagnostics (segment shares vs valid, and segment+u
 If shift WARNs appear or the test has < 400 rows, stay on `segment+ukg` (not a prevalence policy).
 Upload `submissions/test_<LEAD>_segment+ukg/answer.zip` (answer.csv at the zip root).
 
-## Current lead: `stk_v5` (0.874 OOF, segment+ukg), verified end to end on the fake test
+## Test submission 1 (2026-09-24): `stk_v5r` = `stk_v5` rebuilt on the new box (0.869 OOF; tie with the original 0.874, p 0.72)
+Deberta seeds retrained as `enc_deb_l_r13..17` (`experiments/encoders/queue_retrain.sh`), blended as `enc_deb_l_rx5` (0.867 vs 0.863 original).
+Built with `validate submit stk_v5r --policy segment+ukg --test data/test.csv` -> `submissions/test_stk_v5r_segment+ukg/answer.zip`.
+
+## Previous lead: `stk_v5` (0.874 OOF, segment+ukg), verified end to end on the fake test
 Weight-free logit mean of `enc_deb_l_x5` (deberta-v3-large, seeds 13-17), `cls_e5me5_lr`, `llm_q35_9b_probe`.
 (Replaced `stk_v4` / `enc_deb_l_x3`: +0.002, positive on 5/5 folds, lower variance.)
 ```
