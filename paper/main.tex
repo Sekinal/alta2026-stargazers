@@ -155,8 +155,25 @@ against NOTES R4/R5/R8}}
 \end{table}
 
 \subsection{Seeds, data and ceilings}
-\todo{ensemble-size curve (R7): seed averaging saturates at 3 seeds (+0.003), family diversity +0.006;
-learning curves for DeBERTa and both probes (pending GPU); ablations: prefix, single-task, shared sarcasm head (pending)}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{fig_learning_curve.pdf}
+\caption{Learning curves: official OOF score when each member is trained on a nested, segment-stratified share of the
+training folds (error bars: SD over seeds or subset draws).}
+\label{fig:lc}
+\end{figure}
+\paragraph{Data.} Figure~\ref{fig:lc} shows learning curves for the three member families. Both strong members plateau at
+about half the data (2.5k rows): DeBERTa scores .858, .859 and .860 at 50, 75 and 100\%, and the LLM probe .853, .854 and
+.853. The binding en-AU sarcasm component is flat from 75\% in both families (DeBERTa Reddit AUC .845 at 75\% and 100\%),
+whereas en-UK sarcasm, with only 248 positive Reddit comments, is still improving (AUC .845, .856, .867 at 50, 75, 100\%).
+More data from the same annotators would help the non-binding variety only. With a quarter of the data the frozen LLM probe
+beats the fine-tuned encoder.
+\paragraph{Seeds and members.} With ten DeBERTa seeds (the five used in the submission and five earlier ones), averaging
+saturates after about three seeds: .860 for one seed, .863 for three, .864 for ten. Adding the two probes on top adds
+another +.006, so the gain of the ensemble comes from model-family diversity rather than seed averaging. Two sets of five
+seeds of the same recipe still differ by .004 in OOF score, which is the scale of noise below which no change in
+Table~\ref{tab:negative} can be read.
+\todo{ablations: variety/source prefix, single-task training, shared vs per-variety sarcasm head (GPU queue running)}
 
 \subsection{Are the labels the ceiling?}
 \label{sec:labels}
