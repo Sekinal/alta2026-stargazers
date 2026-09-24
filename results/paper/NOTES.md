@@ -114,3 +114,29 @@ Tables in this folder contain no raw text.
 - Transductive same-thread label features over the lead (nested cross-fit, experiments/classical/thread_labels.py):
   .8742 vs .8737, unstable coefficients -> noise. Cross-fitted kNN (e5+me5, K=30) as a 4th member: .869 vs .874 (lead wins 5/5 folds).
 - Annotation: the ensemble is saturated at ~.874 OOF; backbone/recipe diversity and label-propagation signals add nothing.
+
+## R6. Blind LLM re-annotation (pre-registered: experiments/prereg/reannotation.md; results/paper/reannotation.csv)
+Two independent Claude subagents (same fixed guideline, text + variety only, shuffled, no gold/model output) labelled
+399 Reddit pool rows: per variety 150 uniform (U) + ~50 disputed (D: lead stk_v5r OOF contradicts gold sarcasm, margin > .8).
+U stratum, Cohen's kappa [95% bootstrap CI]:
+| | gold-lead | gold-A1/A2 | lead-A1/A2 | A1-A2 | positive rate gold/lead/A1/A2 |
+| sarc AU | .56 [.43,.70] | .21 / .28 | .30 / .34 | .90 | .43/.43/.15/.17 |
+| sarc UK | .59 [.44,.72] | .62 / .62 | .45 / .45 | .97 | .29/.23/.27/.27 |
+| sent AU | .74 | .60 / .65 | .60 / .65 | .91 | .29/.33/.26/.27 |
+| sent UK | .85 | .81 / .83 | .67 / .69 | .98 | .17/.15/.22/.21 |
+D stratum (annotators agree on 45/50 AU, 48/49 UK): they side with the LEAD on 31 vs gold 14 (AU), 31 vs 17 (UK).
+Pre-registered criteria: A1-A2 > gold-A (yes, both); lead-A >= lead-gold (NO, both varieties); annotators side with the
+lead on > 60% of D (yes: 69% AU, 65% UK). Mixed -> read per variety:
+- AU sarcasm: the gold annotator labels 43% of AU Reddit comments sarcastic vs ~16% for a careful independent reader;
+  the lead reproduces the annotator's construct (kappa .56 with gold vs .30-.34 with the readers). In confident
+  disagreements the readers side with the model 2:1 -> a real, annotator-specific noise floor.
+- UK sarcasm: a generic reader recovers gold as well as the lead (.62 vs .59, CIs overlap) while agreeing only .45 with
+  the lead -> evidence (weak) of recoverable UK sarcasm signal the models miss; not a clean ceiling.
+- Caveat: A1/A2 are the same LLM (their agreement is closer to test-retest than to two humans); LLM readers may share
+  the models' notion of sarcasm.
+
+## R7. Ensemble-size curve (10 deberta seeds: s13-17 + retrains r13-17; results/paper/ensemble_curve.csv)
+Mean over up to 30 random n-subsets (probability mean), official score: deberta alone n=1 .8604, 2 .8618, 3 .8632,
+5 .8638, 10 .8637; inside the lead (logit mean with e5+me5 and 9B probe) n=1 .8669, 3 .8700, 5 .8705, 10 .8695.
+- Annotation: seed averaging saturates by ~3 seeds (+.003); model-family diversity adds +.006 on top. Retrained
+  seeds r13-17 (.867 x5) vs originals s13-17 (.863 x5): seed-draw noise ~.004 even for 5-seed blends.

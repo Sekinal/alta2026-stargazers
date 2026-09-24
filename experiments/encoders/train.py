@@ -119,12 +119,22 @@ def run_fold(a, pool: pl.DataFrame, k: int) -> None:
     if a.train_variety:  # transfer runs: train on one variety's rows, predict ALL held-out rows with its heads
         tr = tr.filter(pl.col("variety").cast(pl.String) == a.train_variety)
         sarc_head_idx = int(a.train_variety == "en-UK")
+    if a.train_frac < 1:  # learning curves: nested, segment-stratified subsets (same rows for every model seed)
+        r = np.random.default_rng(2026 + k).random(tr.height)
+        rank = tr.with_columns(pl.Series("r", r)).with_columns(
+            (pl.col("r").rank("ordinal").over("variety", "source") / pl.len().over("variety", "source")).alias("q"))
+        tr = tr.filter(rank["q"] <= a.train_frac)
+        print(f"fold {k}: train_frac {a.train_frac} -> {tr.height} rows", flush=True)
+    if a.shared_sarc:  # one sarcasm head for both varieties (head 0), in training and prediction
+        sarc_head_idx = 0
     tok = AutoTokenizer.from_pretrained(a.model)
     ids = encode(tok, model_inputs(tr, not a.no_prefix), a.max_len)
     y_sent = tr["sentiment"].to_numpy().astype(np.float32)
     y_sarc = tr["sarcasm"].to_numpy().astype(np.float32)
     y_sarc = y_sarc * (1 - a.ls) + a.ls / 2
     var = (tr["variety"].cast(pl.String) == "en-UK").cast(pl.Int64).to_numpy()
+    if a.shared_sarc:
+        var = np.zeros_like(var)
 
     model = build(a.model, a.dropout).to(dev)
     if a.grad_ckpt:
@@ -161,7 +171,7 @@ def run_fold(a, pool: pl.DataFrame, k: int) -> None:
                 ls, lc = model(x.to(dev), m.to(dev), v)
             sm = torch.as_tensor(sarc_mask[idx], device=dev)
             l_sarc = (bce_each(lc.float(), torch.as_tensor(y_sarc[idx], device=dev)) * sm).sum() / sm.sum().clamp(min=1)
-            loss = bce(ls.float(), torch.as_tensor(y_sent[idx], device=dev)) + a.sarc_w * l_sarc
+            loss = a.sent_w * bce(ls.float(), torch.as_tensor(y_sent[idx], device=dev)) + a.sarc_w * l_sarc
             (loss / a.accum).backward()
             run_loss += loss.item(); n += 1
             if (bi + 1) % a.accum == 0 or bi == len(batches) - 1:
@@ -240,6 +250,9 @@ def main() -> None:
     ap.add_argument("--dropout", type=float, default=0.1)
     ap.add_argument("--ls", type=float, default=0.0, help="label smoothing for sarcasm targets")
     ap.add_argument("--sarc_w", type=float, default=1.0)
+    ap.add_argument("--sent_w", type=float, default=1.0)
+    ap.add_argument("--train_frac", type=float, default=1.0, help="learning curves: train on this share of the training folds")
+    ap.add_argument("--shared_sarc", action="store_true", help="one sarcasm head for both varieties")
     ap.add_argument("--seed", type=int, default=13)
     ap.add_argument("--no_prefix", action="store_true")
     ap.add_argument("--sarc_only", default=None, choices=["en-AU", "en-UK"],
