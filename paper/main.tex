@@ -9,6 +9,7 @@
 \usepackage{inconsolata}
 \usepackage{booktabs}
 \usepackage{amsmath}
+\usepackage{array}
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{url}
@@ -95,23 +96,26 @@ stacked generalisation did not beat this (Section~\ref{sec:negative}).
 \label{sec:results}
 \begin{table}[t]
 \centering\small
+\setlength{\tabcolsep}{4pt}
 \begin{tabular}{lccccc}
 \toprule
- & sent-AU & sent-UK & sarc-AU & sarc-UK & score \\
+ & \multicolumn{2}{c}{Sentiment} & \multicolumn{2}{c}{Sarcasm} & \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+ & AU & UK & AU & UK & Score \\
 \midrule
-DeBERTa $\times$5 (OOF) & .931 & .972 & .803 & .816 & .867 \\
-e5+me5 probe (OOF) & .917 & .969 & .777 & .788 & .847 \\
-9B LLM probe (OOF) & .916 & .973 & .789 & .806 & .853 \\
+DeBERTa $\times$5, OOF & .931 & .972 & .803 & .816 & .867 \\
+e5+me5 probe, OOF & .917 & .969 & .777 & .788 & .847 \\
+9B LLM probe, OOF & .916 & .973 & .789 & .806 & .853 \\
 \midrule
-Ensemble (OOF) & .934 & .976 & .805 & .841 & .869 \\
-Ensemble (\textbf{test}) & .932 & .976 & .801 & .837 & \textbf{.867} \\
-DeBERTa $\times$5 alone (\textbf{test}) & .916 & .975 & .793 & .820 & .854 \\
+Ensemble, OOF & .934 & .976 & .805 & .841 & .869 \\
+Ensemble, \textbf{test} & .932 & .976 & .801 & .837 & \textbf{.867} \\
+DeBERTa $\times$5, \textbf{test} & .916 & .975 & .793 & .820 & .854 \\
 \midrule
-Organisers' baseline (test) & .866 & .931 & .680 & .696 & .773 \\
+Baseline, test & .866 & .931 & .680 & .696 & .773 \\
 \bottomrule
 \end{tabular}
 \caption{Macro-F1 per component; score $=\frac12[\min(\text{sent})+\min(\text{sarc})]$. OOF rows: pooled 5-fold CV with
-cross-fitted thresholds. \todo{add rank}}
+cross-fitted thresholds. Baseline: the organisers'. \todo{add rank}}
 \label{tab:main}
 \end{table}
 Table~\ref{tab:main} gives the main results. The test score (0.8668) lies inside the 90\% interval we predicted before
@@ -128,7 +132,7 @@ Table~\ref{tab:negative} lists what we tried after the three-member ensemble was
 charter's bar, and two ideas that passed a fold-0 screen failed their pre-registered confirmation.
 \begin{table}[t]
 \centering\small
-\begin{tabular}{p{4.6cm}r}
+\begin{tabular}{>{\raggedright\arraybackslash}p{4.85cm}r}
 \toprule
 Intervention (protocol) & $\Delta$ \\
 \midrule
@@ -138,20 +142,20 @@ Intervention (protocol) & $\Delta$ \\
 \quad NLI-tuned DeBERTa-v3-large & $-$.016 \\
 \quad ELECTRA-large & $-$.009 \\
 \quad ModernBERT-large & $-$.012 \\
-\quad any of the above inside the ensemble & $-$.007 to +.002 \\
-\quad domain-adaptive pre-training (43M tokens) & $-$.004 \\
+\quad any of these inside the ensemble & $-$.007 to +.002 \\
+\quad domain-adaptive pre-training & $-$.004 \\
 \quad \texttt{/s}-labelled sarcasm pre-training & $-$.011 \\
 \midrule
 \multicolumn{2}{l}{\emph{LLMs}} \\
-\quad Qwen3.5-4B LoRA (fold 0), alone vs DeBERTa\,$\times$3 / in ensemble & $-$.018 / .000 \\
-\quad EVA / DoRA / Riemannian LoRA variants & $-$.03 to $-$.10 \\
+\quad 4B LoRA, alone / in ensemble & $-$.018 / .000 \\
+\quad EVA / DoRA / Riemannian LoRA & $-$.03 to $-$.10 \\
 \midrule
 \multicolumn{2}{l}{\emph{Data and context} (5-fold unless noted)} \\
-\quad pseudo-labelled in-domain Reddit (pre-reg., fold 4) & $-$.006 \\
-\quad recovered thread context (parent, title) & $-$.001 \\
-\quad same-thread label features (transductive) & +.001 \\
-\quad $k$NN label vote over embeddings & $-$.005 \\
-\quad LLM-reader sarcasm label, en-UK (pre-reg.) & +.001 \\
+\quad pseudo-labels (pre-reg., fold 4) & $-$.006 \\
+\quad recovered thread context & $-$.001 \\
+\quad same-thread label features & +.001 \\
+\quad $k$NN label vote & $-$.005 \\
+\quad LLM-reader label, UK (pre-reg.) & +.001 \\
 \bottomrule
 \end{tabular}
 \caption{Changes relative to the matching baseline (official score). Fold-0 rows compare 3-seed averages on one held-out
@@ -194,18 +198,20 @@ comments per variety, plus about 50 per variety on which our ensemble confidentl
 (Table~\ref{tab:reannot}).
 \begin{table}[t]
 \centering\small
+\setlength{\tabcolsep}{3pt}
 \begin{tabular}{lcccc}
 \toprule
- & gold--ours & gold--reader & ours--reader & positive rate \\
+ & G--O & G--R & O--R & Positive rate G / O / R \\
 \midrule
-sarc AU & \textbf{.56} & .21--.28 & .30--.34 & .43 / .43 / .16 \\
-sarc UK & .59 & \textbf{.62} & .45 & .29 / .23 / .27 \\
-sent AU & .74 & .60--.65 & .60--.65 & .29 / .33 / .27 \\
-sent UK & .85 & .81--.83 & .67--.69 & .17 / .15 / .22 \\
+Sarc AU & \textbf{.56} & .21--.28 & .30--.34 & .43 / .43 / .16 \\
+Sarc UK & .59 & \textbf{.62} & .45 & .29 / .23 / .27 \\
+Sent AU & .74 & .60--.65 & .60--.65 & .29 / .33 / .27 \\
+Sent UK & .85 & .81--.83 & .67--.69 & .17 / .15 / .22 \\
 \bottomrule
 \end{tabular}
-\caption{Cohen's $\kappa$ \citep{cohen1960kappa} on 150 random Reddit comments per variety (ranges over the two readers; the readers agree with each
-other at $\kappa=.90$--.98). Positive rate: gold / ours / readers.}
+\caption{Cohen's $\kappa$ \citep{cohen1960kappa} on 150 random Reddit comments per variety between gold (G), our
+ensemble (O) and the two LLM readers (R; ranges over readers, who agree with each other at $\kappa=.90$--.98), and the
+share labelled positive by each.}
 \label{tab:reannot}
 \end{table}
 Two findings stand out. For en-AU sarcasm the gold annotator marks 43\% of comments sarcastic against 16\% for the readers;
@@ -236,7 +242,8 @@ left of .5 it predicts its absence.}
 \end{figure}
 \begin{table}[t]
 \centering\small
-\begin{tabular}{p{0.3cm}p{4.6cm}cc}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lp{4.4cm}cc}
 \toprule
  & Comment (paraphrased) & gold & ours \\
 \midrule
