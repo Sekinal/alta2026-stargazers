@@ -32,3 +32,4 @@ experiments/**/*.csv
 experiments/robustness/holdout_*/
 experiments/**/catboost_info/
 *.npy
+experiments/reannot/work/
