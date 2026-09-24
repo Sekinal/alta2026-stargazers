@@ -167,3 +167,12 @@ One Claude reader labelled all 1,143 UK Reddit pool rows (and 286 test rows) bli
   lead .771 (cross-fitted LR); other ling/ctx sets add nothing or hurt. Realistic version (all AU Reddit rows, gold
   sentiment unknown): AU-reddit AUC .866 -> .858-.863, score .869 -> .870 (noise): the cues only separate sarcasm once
   negativity is known; otherwise they re-encode negativity the lead already has.
+
+## R10. The AU sarcasm construct also drives AU sentiment errors (stk_v5r OOF, segment+ukg decisions, Reddit rows)
+- AU: 184 sentiment errors, 431 sarcasm errors, 75 on both; P(sarc error | sent error) .41 vs base .22 (UK .39 vs .12).
+- 55/184 (30%) of AU sentiment errors are one pattern: gold sarcastic+negative, predicted sincere+positive (UK 4/36, 11%).
+  Reading the most confident ones: sincere-looking recommendations / factual comments labelled sarcastic AND negative.
+- Enforcing "predicted sarcastic -> negative" at decision time changes nothing (score .8693 -> .8691-.8696): the lead is
+  already consistent; the coupled errors are items it reads as sincere.
+- Annotation: both AU components (the binding ones on test) share one source of error, the AU annotator's broad sarcasm
+  construct, which propagates to sentiment because sarcastic implies negative in 97% of AU gold rows.
