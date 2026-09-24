@@ -224,26 +224,40 @@ In both varieties virtually every sarcastic comment is negative (97\% AU, 99\% U
 which negative comments the annotator called sarcastic, and that is exactly where our ensemble is weak: its sarcasm AUC
 within negative comments is .77 in en-AU but .91 in en-UK. To see what the annotators respond to, we scored every comment
 with label-free zero-shot NLI hypotheses (a DeBERTa-v3-large zero-shot classifier; \citealp{laurer2023zeroshot}) and measured, within negative comments,
-how well each predicts the gold sarcasm label (Table~\ref{tab:cues}).
+how well each predicts the gold sarcasm label (Figure~\ref{fig:cues}; examples in Table~\ref{tab:examples}).
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{fig_cue_flip.pdf}
+\caption{The same cue points in opposite directions. AUC of label-free zero-shot cues (NLI hypotheses; joy from an
+emotion classifier) for the gold sarcasm label among negative Reddit comments, per variety, with 95\% bootstrap intervals
+(en-AU $n=1{,}364$, 812 sarcastic; en-UK $n=1{,}012$, 245 sarcastic). Right of .5 the cue predicts a sarcasm label;
+left of .5 it predicts its absence.}
+\label{fig:cues}
+\end{figure}
 \begin{table}[t]
 \centering\small
-\begin{tabular}{lcc}
+\begin{tabular}{p{0.3cm}p{4.6cm}cc}
 \toprule
-Cue (within negative comments) & en-AU & en-UK \\
+ & Comment (paraphrased) & gold & ours \\
 \midrule
-mocks or ridicules someone & .68 & .45 \\
-contempt / condescension & .65 & .36 \\
-angry / frustrated & .61 & .32 \\
-cynical / pessimistic & .60 & .40 \\
-\midrule
-joking / playful & .65 & .79 \\
-praise / compliment & .58 & .73 \\
-positive surface, negative intent & .62 & .71 \\
+\multicolumn{4}{l}{\emph{Derision labelled sarcastic (en-AU)}} \\
+AU & A private-school boy playing gangster. Couldn't be more embarrassing if he tried. & S & S \\
+AU & Couldn't have happened to a more deserving creep. Good riddance. & S & S \\
+\multicolumn{4}{l}{\emph{Irony labelled sarcastic (en-UK)}} \\
+UK & A sensible policy from \emph{that} party? Has Hell frozen over? & S & S \\
+UK & I, for one, welcome our new pigeon overlords. & S & S \\
+\multicolumn{4}{l}{\emph{Hostility labelled not sarcastic (en-UK)}} \\
+UK & How did this clown end up running the country? Total knuckle-dragger. & -- & -- \\
+UK & Can we stop giving this con artist airtime? Half the country already fell for him once. & -- & -- \\
+\multicolumn{4}{l}{\emph{Sincere-looking, labelled sarcastic and negative (en-AU)}} \\
+AU & Skip the supermarket and order online, that site is great. & S$^-$ & --$^+$ \\
+AU & You deserve support. I hope you feel able to reach out for it soon. & S$^-$ & --$^+$ \\
 \bottomrule
 \end{tabular}
-\caption{AUC of each zero-shot cue for the gold sarcasm label among gold-negative Reddit comments (.5 = no signal;
-$<.5$ = the cue predicts \emph{non}-sarcasm).}
-\label{tab:cues}
+\caption{Paraphrased examples (wording changed, pattern kept) of the constructs in Figure~\ref{fig:cues}. S = sarcastic,
+-- = not sarcastic; $^{-}$/$^{+}$ = negative/positive sentiment. The last block is the pattern behind 30\% of our en-AU
+sentiment errors.}
+\label{tab:examples}
 \end{table}
 The en-AU annotator's sarcasm tracks derision: mocking, contempt, anger and cynicism. The en-UK annotator's tracks playful
 irony with a positive surface, and hostility is evidence \emph{against} sarcasm. The same cue points in opposite directions,

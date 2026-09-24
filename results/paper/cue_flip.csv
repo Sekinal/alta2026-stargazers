@@ -1,0 +1,17 @@
+variety,cue,group,auc,lo,hi,n,n_sarc
+en-AU,mocking,derision,0.6782,0.6508,0.7066,1364,812
+en-AU,contempt,derision,0.6544,0.6261,0.6842,1364,812
+en-AU,anger,derision,0.6103,0.5818,0.639,1364,812
+en-AU,cynicism,derision,0.5949,0.5647,0.6239,1364,812
+en-AU,playful joking,irony,0.6503,0.6208,0.6778,1364,812
+en-AU,praise,irony,0.5816,0.5508,0.613,1364,812
+en-AU,ironic praise,irony,0.6225,0.5949,0.6524,1364,812
+en-AU,joy,irony,0.571,0.5391,0.6034,1364,812
+en-UK,mocking,derision,0.45,0.4096,0.4908,1012,245
+en-UK,contempt,derision,0.357,0.315,0.3956,1012,245
+en-UK,anger,derision,0.324,0.2858,0.3637,1012,245
+en-UK,cynicism,derision,0.3971,0.3569,0.4427,1012,245
+en-UK,playful joking,irony,0.7892,0.7576,0.8179,1012,245
+en-UK,praise,irony,0.7249,0.6904,0.7618,1012,245
+en-UK,ironic praise,irony,0.7101,0.6719,0.7466,1012,245
+en-UK,joy,irony,0.7311,0.6948,0.767,1012,245

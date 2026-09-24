@@ -90,5 +90,71 @@ def main() -> None:
     print("saved", out)
 
 
+
+
+def cue_flip_figure() -> None:
+    """Dumbbell chart of results/paper/cue_flip.csv (AUC of zero-shot cues for gold sarcasm among negative Reddit comments,
+    per variety, 95% bootstrap CI). Blue/orange = validated categorical slots 1-2; markers differ for grayscale print."""
+    d = pl.read_csv(ROOT / "results" / "paper" / "cue_flip.csv")
+    cues = d.filter(pl.col("variety") == "en-AU")["cue"].to_list()
+    groups = d.filter(pl.col("variety") == "en-AU")["group"].to_list()
+    # layout: derision block on top, a gap, irony block below
+    ypos, y = {}, 0.0
+    for c, g in zip(cues, groups):
+        if ypos and g != groups[cues.index(list(ypos)[-1])]:
+            y += 0.9
+        ypos[c] = y
+        y += 1.0
+    plt.rcParams.update({"font.family": "serif", "font.size": 7.5})
+    fig, ax = plt.subplots(figsize=(3.3, 2.7))
+    lo_x, hi_x = 0.28, 0.86
+    ax.axvspan(lo_x, 0.5, color="#f0efec", zorder=0, lw=0)
+    ax.axvline(0.5, color=INK2, lw=0.8, zorder=1)
+    get = {(r["variety"], r["cue"]): r for r in d.iter_rows(named=True)}
+    for c in cues:
+        a, u = get[("en-AU", c)], get[("en-UK", c)]
+        yy = ypos[c]
+        ax.plot([a["auc"], u["auc"]], [yy, yy], color="#b8b7b1", lw=1.6, zorder=2, solid_capstyle="round")
+        for r, col, mk, dy in ((a, BLUE, "o", -0.13), (u, ORANGE, "s", 0.13)):
+            ax.plot([r["lo"], r["hi"]], [yy + dy, yy + dy], color=col, lw=0.9, zorder=3, alpha=0.9)
+            ax.plot(r["auc"], yy + dy, marker=mk, ms=5.2, color=col, mec="white", mew=0.8, zorder=4)
+    ax.set_yticks([ypos[c] for c in cues])
+    ax.set_yticklabels(cues, color=INK)
+    ax.invert_yaxis()
+    ax.set_xlim(lo_x, hi_x)
+    ax.set_ylim(y + 0.3, -0.95)
+    ax.set_xticks([0.3, 0.4, 0.5, 0.6, 0.7, 0.8])
+    ax.set_xlabel("AUC for gold sarcasm, negative Reddit comments", color=INK2)
+    # region captions and group headers (text in ink tokens, never series colour)
+    ax.text(0.49, y - 0.05, "\u2190 predicts not sarcastic", ha="right", va="center", fontsize=6.3, color=INK2, style="italic")
+    ax.text(0.51, y - 0.05, "predicts sarcastic \u2192", ha="left", va="center", fontsize=6.3, color=INK2, style="italic")
+    first = {g: min(ypos[c] for c, gg in zip(cues, groups) if gg == g) for g in set(groups)}
+    for g, label in (("derision", "DERISION"), ("irony", "IRONY")):
+        ax.text(-0.02, first[g] - 0.62, label, transform=ax.get_yaxis_transform(), ha="right", va="center",
+                fontsize=6.3, color=INK2, weight="bold")
+    # direct labels above the top row's markers + a legend above the plot (identity never by colour alone)
+    top = cues[0]
+    for var, dy in (("en-AU", -0.13), ("en-UK", 0.13)):
+        ax.annotate(var.split("-")[1], (get[(var, top)]["auc"], ypos[top] + dy), xytext=(0, 5.5), textcoords="offset points",
+                    ha="center", va="bottom", fontsize=6.3, color=INK, weight="bold")
+    from matplotlib.lines import Line2D
+    ax.legend(handles=[Line2D([], [], marker="o", color=BLUE, mec="white", lw=0, ms=5, label="en-AU annotator"),
+                       Line2D([], [], marker="s", color=ORANGE, mec="white", lw=0, ms=5, label="en-UK annotator")],
+              loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=2, frameon=False, fontsize=6.5, handletextpad=0.2,
+              columnspacing=1.2, borderaxespad=0.0)
+    ax.grid(axis="x", color=GRID, lw=0.5, zorder=0)
+    ax.tick_params(axis="y", length=0)
+    ax.tick_params(axis="x", colors=INK2)
+    for s in ("top", "right", "left"):
+        ax.spines[s].set_visible(False)
+    ax.spines["bottom"].set_color(INK2)
+    fig.tight_layout()
+    out = ROOT / "paper" / "fig_cue_flip.pdf"
+    fig.savefig(out, bbox_inches="tight", pad_inches=0.02)
+    fig.savefig(out.with_suffix(".png"), dpi=220, bbox_inches="tight", pad_inches=0.02)
+    print("saved", out)
+
+
 if __name__ == "__main__":
-    main()
+    import sys
+    cue_flip_figure() if "cues" in sys.argv[1:] else main()
