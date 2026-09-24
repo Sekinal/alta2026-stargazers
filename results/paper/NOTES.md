@@ -164,4 +164,6 @@ One Claude reader labelled all 1,143 UK Reddit pool rows (and 286 test rows) bli
   annotator's tracks playful irony with a positive surface, and hostility is evidence AGAINST sarcasm in UK. The cue signs
   flip, which explains the zero/negative cross-variety transfer (R2) mechanistically.
 - Exploratory (10 feature sets tried, selection-biased): within AU negatives, lead + zs_nli .785 and lead + zs_affect .784 vs
-  lead .771 (cross-fitted LR); other ling/ctx sets add nothing or hurt. Earlier whole-pool stackers with features were ties.
+  lead .771 (cross-fitted LR); other ling/ctx sets add nothing or hurt. Realistic version (all AU Reddit rows, gold
+  sentiment unknown): AU-reddit AUC .866 -> .858-.863, score .869 -> .870 (noise): the cues only separate sarcasm once
+  negativity is known; otherwise they re-encode negativity the lead already has.
