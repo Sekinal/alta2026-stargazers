@@ -198,3 +198,12 @@ AU Reddit sentiment AUC .929/.945/.946/.950.
 - Annotation: the segment prefix is the one design choice with evidence (+.008); multi-task sharing is neutral despite the
   label coupling (R10); separate per-variety sarcasm heads mainly protect UK sarcasm (.824 vs .803), consistent with the
   two constructs (R9).
+
+## R13. Test-set ablation: DeBERTa x5 alone (enc_deb_l_rx5, segment+ukg; test submission 3, 2026-09-24)
+Test: sent-AU .9155, sent-UK .9750, sarc-AU .7927, sarc-UK .8195, score .8541 (OOF .867).
+Ensemble (stk_v5r) test .8668 (OOF .869). Test gain of the two probes: +.0127; OOF paired expectation +.005
+(90% band -.010 to +.023; validate compare stk_v5r enc_deb_l_rx5) -> consistent.
+- The ensemble's test score tracks its OOF estimate (-.002); DeBERTa alone drops -.013, mostly on the binding AU
+  components (sent-AU .931 -> .916, sarc-AU .803 -> .793). Matches the valid-subset diagnostic (DeBERTa alone .819 vs
+  ensemble .851 on valid.csv rows).
+- Submission 2 was an accidental duplicate of submission 1 (identical file, identical score).

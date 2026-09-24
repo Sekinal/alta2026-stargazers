@@ -104,6 +104,7 @@ e5+me5 probe (OOF) & .917 & .969 & .777 & .788 & .847 \\
 \midrule
 Ensemble (OOF) & .934 & .976 & .805 & .841 & .869 \\
 Ensemble (\textbf{test}) & .932 & .976 & .801 & .837 & \textbf{.867} \\
+DeBERTa $\times$5 alone (\textbf{test}) & .916 & .975 & .793 & .820 & .854 \\
 \midrule
 Organisers' baseline (test) & .866 & .931 & .680 & .696 & .773 \\
 \bottomrule
@@ -114,7 +115,10 @@ cross-fitted thresholds. \todo{add rank}}
 \end{table}
 Table~\ref{tab:main} gives the main results. The test score (0.8668) lies inside the 90\% interval we predicted before
 submission (0.845--0.895) and within 0.002 of the OOF point estimate; the binding components were en-AU for both tasks.
-\todo{leaderboard context: top-2 separated by 0.0007, well inside test-sampling SD $\approx$0.013}
+We also submitted DeBERTa $\times$5 alone as an ablation: it scored .854 on test against .867 for the ensemble
+(+.013; the paired OOF expectation was +.005, 90\% band $-$.010 to +.023). The ensemble's test score tracked its OOF
+estimate, whereas DeBERTa alone fell by .013, mostly on the two binding en-AU components (sentiment .931 $\to$ .916,
+sarcasm .803 $\to$ .793). \todo{leaderboard context once final: top-2 separated by 0.0007, well inside test-sampling SD $\approx$0.013}
 
 \section{Analysis}
 \subsection{What did not help}
