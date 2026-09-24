@@ -16,6 +16,7 @@ eda/*/examples/
 eda/*/output.txt
 eda/structure/tables/dups_text.csv
 eda/structure/tables/near_duplicates.csv
+eda/structure/tables/dups_norm.csv
 # submission answer.csv files contain raw test text
 submissions/
 
@@ -33,3 +34,4 @@ experiments/robustness/holdout_*/
 experiments/**/catboost_info/
 *.npy
 experiments/reannot/work/
+.hf_stage/
