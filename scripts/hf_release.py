@@ -65,6 +65,18 @@ def files() -> list[str]:
     return sorted(r for r in out if not excluded(r) and (ROOT / r).is_file())
 
 
+RELEASE_UNIGNORE = {"preds/", "models/", "*.npy", "experiments/*/cache/", "experiments/features/store/", "*.zip",
+                    "experiments/*/logs/", "logs/", "redteam/*/out/"}
+
+
+def release_gitignore() -> str:
+    """The project .gitignore minus the rules that cover published artifacts (the Hub applies .gitignore to uploads)."""
+    lines = (ROOT / ".gitignore").read_text().splitlines()
+    keep = [ln for ln in lines if ln.strip() not in RELEASE_UNIGNORE]
+    keep = [("submissions/*/answer.csv\nsubmissions/*/answer.zip" if ln.strip() == "submissions/" else ln) for ln in keep]
+    return "\n".join(keep + [".cache/", ""])
+
+
 def stage() -> None:
     if STAGE.exists():
         shutil.rmtree(STAGE)
@@ -72,7 +84,10 @@ def stage() -> None:
     for r in fl:
         dst = STAGE / ("PROJECT_README.md" if r == "README.md" else "README.md" if r == "hf/README.md" else r)
         dst.parent.mkdir(parents=True, exist_ok=True)
-        os.link(ROOT / r, dst)
+        if r == ".gitignore":
+            dst.write_text(release_gitignore())
+        else:
+            os.link(ROOT / r, dst)
     size = sum((STAGE / p).stat().st_size for p in [str(x.relative_to(STAGE)) for x in STAGE.rglob("*") if x.is_file()])
     print(f"staged {len(fl)} files, {size / 1e9:.2f} GB in {STAGE}")
 
@@ -150,6 +165,9 @@ def upload(repo: str) -> None:
         sys.exit("refusing to upload: flagged files (see above)")
     api = HfApi()
     api.create_repo(repo, private=True, exist_ok=True)
+    # commit the release .gitignore first so the Hub does not silently skip published .npy / model files
+    api.upload_file(path_or_fileobj=str(STAGE / ".gitignore"), path_in_repo=".gitignore", repo_id=repo,
+                    commit_message="Release .gitignore (does not ignore published artifacts)")
     api.upload_large_folder(repo_id=repo, folder_path=STAGE, repo_type="model")
     print(json.dumps({"repo": repo, "private": api.repo_info(repo).private}))
 
