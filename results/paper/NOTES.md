@@ -176,3 +176,15 @@ One Claude reader labelled all 1,143 UK Reddit pool rows (and 286 test rows) bli
   already consistent; the coupled errors are items it reads as sincere.
 - Annotation: both AU components (the binding ones on test) share one source of error, the AU annotator's broad sarcasm
   construct, which propagates to sentiment because sarcastic implies negative in 97% of AU gold rows.
+
+## R11. Learning curves (results/paper/learning_curve_{deberta,probes}.csv; paper/fig_learning_curve.pdf)
+Nested segment-stratified training subsets, full 5-fold OOF, official score (segment+ukg):
+| share of training rows | 10% | 25% | 50% | 75% | 100% |
+| DeBERTa (2 seeds; 100% = 10 seeds) | - | .828 | .858 | .859 | .860 |
+| 9B probe (3 draws) | .833 | .846 | .853 | .854 | .853 |
+| e5+me5 probe (3 draws) | .791 | .824 | .837 | .843 | .847 |
+DeBERTa components (2 seeds; 100% = s13/s14): Reddit sarcasm AUC AU .821/.833/.845/.845, UK .778/.845/.856/.867;
+AU Reddit sentiment AUC .929/.945/.946/.950.
+- Annotation: the two strong members plateau from ~50% of the data (2.5k rows); the binding AU sarcasm component is flat
+  from 75% in both families, while UK sarcasm (248 Reddit positives) is still rising in both. AU sarcasm is construct-limited
+  (R6, R9), UK sarcasm data-limited. At 25% the frozen 9B probe beats fine-tuned DeBERTa.
