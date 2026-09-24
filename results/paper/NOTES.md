@@ -149,3 +149,19 @@ One Claude reader labelled all 1,143 UK Reddit pool rows (and 286 test rows) bli
   AUC .906 -> .920, AP .761 -> .794 (4/5 folds), but the gains fall away from the F1 operating point.
 - Annotation: a strong generic reader carries UK-sarcasm information the fine-tuned models lack (consistent with R6),
   but under the official min-over-varieties metric and F1 decisions it does not move the score.
+
+## R9. Where AU sarcasm is hard, and what each annotator calls sarcasm (pool OOF, stk_v5r; gold labels)
+- Reddit: P(sarc | gold negative) AU .60 vs UK .24; P(sarc | positive) .05 / .02; 97% (AU) / 99% (UK) of sarcastic rows
+  are negative. Lead sarcasm AUC overall AU .866 / UK .906, WITHIN gold-negative rows AU .773 / UK .909; gold negativity
+  alone AUC AU .745 / UK .565. -> AU sarcasm = "which negative comments did the annotator call sarcastic", where the lead is
+  weak (.77); UK sarcasm is separable within negatives (.91).
+- R6 sample: AU annotator labels 58% of negative comments sarcastic vs 21% for the readers; 44 of 64 gold-sarcastic AU items
+  are reader-non-sarcastic (UK off-diagonals 13 vs 11).
+- Univariate AUC of zero-shot NLI cues (MoritzLaurer deberta-v3-large-zeroshot-v2.0, label-free) for gold sarcasm WITHIN
+  negative Reddit rows, AU / UK: mocking .68/.45, contempt .65/.36, angry .61/.32, cynical .60/.40, politics .58/.45;
+  joking .65/.79, praise .58/.73, ironic praise .62/.71, joy (emotion model) .57/.73.
+- Annotation: among negative comments the AU annotator's sarcasm tracks derision (mocking, contempt, anger, cynicism); the UK
+  annotator's tracks playful irony with a positive surface, and hostility is evidence AGAINST sarcasm in UK. The cue signs
+  flip, which explains the zero/negative cross-variety transfer (R2) mechanistically.
+- Exploratory (10 feature sets tried, selection-biased): within AU negatives, lead + zs_nli .785 and lead + zs_affect .784 vs
+  lead .771 (cross-fitted LR); other ling/ctx sets add nothing or hurt. Earlier whole-pool stackers with features were ties.
