@@ -46,6 +46,15 @@ BESSTIE \citep{srirag-etal-2025-besstie}: Google Places reviews and Reddit comme
 binary sarcasm. The official score averages, over the two tasks, the macro-F1 of the \emph{weaker} variety, which rewards
 systems that are robust across varieties.
 
+Computational sarcasm detection has moved from incongruity cues \citep{riloff-etal-2013-sarcasm} to large self-labelled
+Reddit corpora \citep{khodak-etal-2018-large} and shared tasks on irony and intended sarcasm
+\citep{van-hee-etal-2018-semeval,ghosh-etal-2020-report,abu-farha-etal-2022-semeval}; see \citet{joshi2017survey} for a
+survey. Two strands are closest to this work: robustness across language varieties
+\citep{faisal-etal-2024-dialectbench,srirag-etal-2025-besstie}, and perspectivist annotation: the EPIC corpus had irony
+annotated by annotators from five English-speaking countries, including the UK and Australia, and found systematic
+differences between annotator groups \citep{frenda-etal-2023-epic}. Our analysis reaches a related conclusion from the other side: with one annotator per
+variety, the two varieties' sarcasm labels behave like different constructs (Section~\ref{sec:two}).
+
 Our contributions are:
 (i) a simple, well-validated ensemble that placed \todo{final rank} on the test leaderboard (0.8668), whose test score matched
 its cross-validated estimate component by component;
@@ -71,11 +80,13 @@ labels, with identical texts kept in one fold; every candidate produces out-of-f
 only as a diagnostic.
 \item \textbf{Cross-fitted decisions.} Decision thresholds (one per task and segment) are fitted on four folds and applied
 to the fifth, so reported scores include threshold-selection noise. En-UK Google sarcasm is always predicted negative.
-\item \textbf{Paired, test-sized resampling.} Candidates are compared with a paired bootstrap over test-sized replicates;
-we treat $p<0.8$ as no evidence: two runs of the same recipe that differ only in seed reach $p\geq0.9$ in 18\% of pairs.
+\item \textbf{Paired, test-sized resampling.} Candidates are compared with a paired bootstrap \citep{efron1979bootstrap}
+over test-sized replicates;
+we treat $p<0.8$ as no evidence: two runs of the same recipe that differ only in seed reach $p\geq0.9$ in 18\% of pairs,
+in line with the seed sensitivity of fine-tuning \citep{dodge2020finetuning,mosbach2021stability}.
 \item \textbf{Leak canaries.} Each trained member is re-run with shuffled labels and must score at the no-information floor.
 \item \textbf{Pre-registration.} Promising fold-0 screens are confirmed on an untouched fold with the success criterion
-written down beforehand (Section~\ref{sec:negative}).
+written down beforehand \citep{nosek2018preregistration} (Section~\ref{sec:negative}).
 \end{itemize}
 
 \section{System}
@@ -86,9 +97,9 @@ its variety and source (e.g.\ \texttt{[en-UK] [reddit]}). Five seeds, each train
 average the 25 fold models.
 \paragraph{Embedding probe.} L2-regularised logistic regression over concatenated frozen embeddings of e5-large-v2
 \citep{wang2022e5} and multilingual-e5-large-instruct \citep{wang2024me5}, with the regularisation strength chosen by inner CV.
-\paragraph{LLM probe.} Qwen3.5-9B \citep{qwen35} in 4-bit NF4 reads each text inside a zero-shot sarcasm (or sentiment) prompt;
-a logistic regression is fitted on the layer-24 last-token hidden state plus the verbalizer margin, separately per variety
-for sarcasm.
+\paragraph{LLM probe.} Qwen3.5-9B \citep{qwen35} in 4-bit NF4 \citep{dettmers2023qlora} reads each text inside a zero-shot sarcasm (or sentiment) prompt;
+a logistic regression (a linear probe; \citealp{alain2017probes}) is fitted on the layer-24 last-token hidden state plus the
+verbalizer margin, separately per variety for sarcasm.
 \paragraph{Combination.} The three members' probabilities are averaged in logit space with equal weights; weight fitting and
 stacked generalisation did not beat this (Section~\ref{sec:negative}).
 
@@ -158,7 +169,12 @@ Intervention (protocol) & $\Delta$ \\
 \quad LLM-reader label, UK (pre-reg.) & +.001 \\
 \bottomrule
 \end{tabular}
-\caption{Changes relative to the matching baseline (official score). Fold-0 rows compare 3-seed averages on one held-out
+\caption{Changes relative to the matching baseline (official score). Methods: EMA of weights; layer-wise learning-rate
+decay \citep{howard-ruder-2018-universal}; NLI-tuned DeBERTa \citep{laurer2023zeroshot}; ELECTRA \citep{clark2020electra};
+ModernBERT \citep{warner2024modernbert}; domain-adaptive pre-training \citep{gururangan-etal-2020-dont} on AU/UK Reddit and
+reviews; \texttt{/s}-labelled Reddit \citep{khodak-etal-2018-large}; LoRA \citep{hu2022lora} with rsLoRA
+\citep{kalajdzievski2023rslora}, DoRA \citep{liu2024dora}, EVA \citep{paischer2024eva} and Riemannian preconditioning
+\citep{zhang2024riemannian}; pseudo-labelling \citep{lee2013pseudo}. Fold-0 rows compare 3-seed averages on one held-out
 fold (3-seed probability means); the other rows use all five folds. Rows outside the paired-resampling noise ($p\geq0.8$) are all
 negative: the three alternative backbones, \texttt{/s} pre-training and the LoRA variants; everything else is a tie.}
 \label{tab:negative}
@@ -282,6 +298,20 @@ LLM probe +.007, frozen-embedding probe $-$.008), so the comment-level split doe
 Recovered thread context (parent comment, submission title) did not help any member. The en-AU sarcasm rate varies by
 subreddit (61\% in r/AustralianPolitics vs 31--35\% elsewhere), consistent with its derision reading.
 
+\section{Development Process}
+\label{sec:process}
+This system was built with AI coding agents. Claude Code \citep{claudecode}, running Claude Opus~5 (first phase) and
+Claude Opus~5.5 (second phase), wrote all code, ran every experiment and analysis, and drafted this paper, while the author
+set the goals and constraints, provided compute, uploaded the test submissions and made the final decisions. The first
+phase used an orchestrating agent and 16 specialised sub-agents (data exploration, red-teaming of the validation code,
+modelling, data collection, feature engineering). The design was \emph{not} guided by a literature review: methods came
+from the models' prior knowledge, from the author's suggestions and an earlier project by the author, and from a pasted
+recommendation for LoRA variants; the first literature search happened after the system was chosen, and the citations
+above were added afterwards. What protected the result was the protocol of Section~\ref{sec:protocol}, not prior
+knowledge: agent red teams found and fixed leaks that passed the first version of the checks, and the one idea that
+looked best on a single fold failed its pre-registered confirmation. Appendix~\ref{app:process} gives the full account,
+including the mistakes found along the way, and Appendix~\ref{app:resources} lists every model and dataset used.
+
 \section{Conclusion}
 A three-family ensemble, selected under a strict protocol, reached 0.867 on the test set, exactly where cross-validation
 put it. The more useful finding for the task concerns the labels. Our analyses (learning curves, seed and ablation studies,
@@ -300,5 +330,89 @@ contain a single sarcastic example, so that segment is handled by a rule rather 
 results are for DeBERTa-v3-large and two frozen-feature probes; other model families may behave differently.
 
 \bibliography{references}
+
+\appendix
+
+\section{Development Process in Detail}
+\label{app:process}
+\paragraph{Roles.} The author directed the work; Claude Code agents did all implementation, experimentation, analysis and
+drafting. Phase~1 (17--19 September 2026, Claude Opus~5) used an orchestrating agent and 16 sub-agents: three for data
+exploration, three red teams (statistics and leakage, software and submission path, calibration of the validation
+estimates), three modelling agents (encoders, LLMs, classical models and stacking), four for external data (sarcasm,
+sentiment, in-domain unlabelled text, one sub-agent searching for review corpora), two for feature engineering, and one
+for recovering Reddit thread context. Phase~2 (23--24 September 2026, Claude Opus~5.5) rebuilt the system after the
+machine holding its checkpoints was lost, ran the screens, curves and ablations of Section~6, and used further sub-agents
+as the blind readers of Section~\ref{sec:labels} and to reconstruct this account from the session transcripts.
+Compute: a laptop RTX~4070 (8~GB), an A100 (80~GB) spot instance that was pre-empted, a 2$\times$RTX~3090 machine
+(phase~1) and one RTX~3090 (phase~2).
+
+\paragraph{Author decisions and suggestions.} The author fixed the tooling (polars, lets-plot, a multi-agent setup, version
+control from the start), made generalisation the overriding criterion (which became the selection charter of
+Section~\ref{sec:protocol}), asked for a thorough validation stack and for adversarial red-teaming of it, chose single-fold
+screening for neural models and five folds for the rest, required local models only, named Qwen3.5-4B as the
+preferred LLM size, and later ruled out larger LLMs and paid human annotation. The author also suggested gradient-boosted
+trees on CPU \citep{chen2016xgboost,ke2017lightgbm,prokhorenkova2018catboost}, TF-IDF models and SVMs, embeddings as tree
+features, xRFM \citep{beaglehole2025xrfm}, Unsloth \citep{unsloth}, PiSSA (dropped before it was run), a ladder of LoRA
+variants taken from a recommendation generated by another chatbot that the author pasted in (EVA, DoRA, rsLoRA and
+Riemannian preconditioning; two further suggested methods were not run, one because it was not available in the fine-tuning library and one because it needed far more GPUs than we had), and recipes from the author's
+earlier AstroCLIMB project (a separate linear head with a higher learning rate, and a pseudo-label adaptation stage).
+
+\paragraph{Agent decisions.} The agents chose not to use the public BESSTIE release in any form, designed the validation
+harness (cross-fitted thresholds, paired test-sized bootstrap, permutation canaries, test-file fingerprints), chose the
+three-member ensemble under the charter, and designed the LLM hidden-state probe. The multi-task head with per-variety
+sarcasm heads and the \texttt{[variety] [source]} prefix were proposed by the orchestrating agent. Methods were drawn from
+the models' prior knowledge; when the author asked about prior literature during phase~1, the orchestrator confirmed
+that none had been searched. The first literature search took place after the final system was chosen, and all
+references in this paper were added and verified afterwards against Crossref, the ACL Anthology and arXiv.
+
+\paragraph{Mistakes found and corrected.} Red teams found that test predictions were not bound to the test file they were
+made for, that the submission path did not run the integrity checks, that source and variety values were not validated,
+and that a realistic leak (feature selection on all labels, +.043) passed every existing check; the permutation canary
+was added in response. Other corrections: raw competition text committed early in the project (removed, and later purged
+from the version history); a version-control rule that silently excluded a code directory; a non-deterministic row order
+in pseudo-label sampling; domain-adaptive pre-training that started from a randomly initialised language-model head;
+an EVA initialisation that had not converged; a table that mixed logit and probability averaging; a canary result
+reused across seeds; an overstated claim that other teams' development scores were contaminated, later retracted; an
+LLM feature cache keyed by split rather than by test file, which would have mixed test sets (fixed before any test
+prediction was made); and a relative file path given to the author for a test upload, which cost one submission that the
+organiser restored.
+
+\paragraph{The blind readers.} The readers of Section~\ref{sec:labels} are instances of the same model family that
+designed and ran the experiments. They saw only the texts, the variety and a fixed guideline, never labels or model
+outputs, and the protocol was pre-registered before annotation; they are nevertheless not independent of our models in the
+way human annotators would be.
+
+\section{Resources}
+\label{app:resources}
+\paragraph{Final system.} \texttt{microsoft/deberta-v3-large} \citep{he2023debertav}; \texttt{intfloat/e5-large-v2}
+\citep{wang2022e5}; \texttt{intfloat/multilingual-e5-large-instruct} \citep{wang2024me5}; \texttt{Qwen/Qwen3.5-9B}
+\citep{qwen35} with bitsandbytes NF4 quantisation \citep{dettmers2023qlora}. Trained only on the shared-task training and
+development data.
+
+\paragraph{Analyses.} \texttt{MoritzLaurer/deberta-v3-large-zeroshot-v2.0} \citep{laurer2023zeroshot} and
+\texttt{j-hartmann/emotion-english-distilroberta-base} for the cues of Figure~\ref{fig:cues}; VADER \citep{hutto2014vader},
+the NRC Emotion Lexicon \citep{mohammad2013emolex}, weighted log-odds \citep{monroe2008fightin}, confident learning
+\citep{northcutt2021confident} and UMAP \citep{mcinnes2018umap} in the data exploration; Reddit thread context matched
+through Arctic Shift \citep{arcticshift} for the audit.
+
+\paragraph{Explored, not in the final system.} Encoders: RoBERTa-large \citep{liu2019roberta}, Twitter-RoBERTa models
+\citep{barbieri-etal-2020-tweeteval}, ELECTRA-large, ModernBERT-large and NLI-tuned DeBERTa (Table~\ref{tab:negative}).
+Embedding models: e5-base, BGE \citep{xiao2023cpack}, GTE-large, mxbai-embed-large, all-mpnet-base-v2, Qwen3-Embedding
+(0.6B, 4B). LLMs: Qwen3.5-4B (probes, LoRA), Qwen3-8B (4-bit), Qwen2.5-1.5B (surprisal features). Zero-shot feature models:
+BART-MNLI, SiEBERT \citep{hartmann2023siebert}, a star-rating model, irony and sarcasm classifiers, toxicity, formality and
+topic classifiers. Classical models: TF-IDF with logistic regression, SVMs, NB-SVM \citep{wang-manning-2012-baselines} and
+feature augmentation \citep{daume-iii-2007-frustratingly}.
+
+\paragraph{External data (exploration only).} Sarcasm and irony: Reddit comments tagged \texttt{/s} from AU and UK
+subreddits (collected via Arctic Shift and ConvoKit, \citealp{chang-etal-2020-convokit}), SARC \citep{khodak-etal-2018-large},
+EPIC \citep{frenda-etal-2023-epic}, iSarcasmEval \citep{abu-farha-etal-2022-semeval}, SemEval-2018 Task~3
+\citep{van-hee-etal-2018-semeval}, the FigLang 2020 data \citep{ghosh-etal-2020-report}, \citet{wallace-etal-2014-humans},
+MUStARD \citep{castro-etal-2019-towards} and a news-headline sarcasm set. Sentiment: GoEmotions
+\citep{demszky-etal-2020-goemotions}, TweetEval \citep{barbieri-etal-2020-tweeteval}, DynaSent \citep{potts-etal-2021-dynasent},
+SST-2 \citep{socher-etal-2013-recursive}, Rotten Tomatoes \citep{pang-lee-2005-seeing}, IMDB \citep{maas-etal-2011-learning},
+Yelp and Amazon polarity \citep{zhang2015character} and Sentiment140. Unlabelled in-domain text (about 236M tokens) for
+domain-adaptive pre-training and pseudo-labelling: AU and UK Reddit, Google Local reviews \citep{he2017translation},
+Booking.com, NHS GP and Inside Airbnb reviews. All external data were deduplicated against the task data before use; none
+of it is used by the final system, and every experiment that used it was a tie or worse (Table~\ref{tab:negative}).
 
 \end{document}
