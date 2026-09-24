@@ -56,9 +56,9 @@ def main() -> None:
     deb = deberta_curve(df)
     deb.write_csv(ROOT / "results" / "paper" / "learning_curve_deberta.csv")
     probes = pl.read_csv(ROOT / "results" / "paper" / "learning_curve_probes.csv")
-    series = [("DeBERTa-v3-large (single seed)", BLUE, "o", deb),
-              ("Qwen3.5-9B probe", ORANGE, "s", probes.filter(pl.col("member") == "llm")),
-              ("e5 + me5 probe", AQUA, "^", probes.filter(pl.col("member") == "e5"))]
+    series = [("DeBERTa (1 seed)", BLUE, "o", deb),
+              ("9B LLM probe", ORANGE, "s", probes.filter(pl.col("member") == "llm")),
+              ("e5+me5 probe", AQUA, "^", probes.filter(pl.col("member") == "e5"))]
     plt.rcParams.update({"font.family": "serif", "font.size": 8})
     fig, ax = plt.subplots(figsize=(3.3, 2.4))
     for name, col, mk, d in series:
@@ -73,7 +73,7 @@ def main() -> None:
     ax.set_xscale("log")
     ax.set_xticks([500, 1000, 2500, 5000])
     ax.set_xticklabels(["500", "1k", "2.5k", "5k"])
-    ax.set_xlim(400, 5200 * 4.2)
+    ax.set_xlim(400, 5200 * 2.3)
     ax.set_xlabel("training rows (log scale)", color=INK2)
     ax.set_ylabel("official score (OOF)", color=INK2)
     ax.grid(True, color=GRID, lw=0.6)
