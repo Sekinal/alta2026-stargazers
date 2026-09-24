@@ -56,7 +56,7 @@ The training and development files together (the \emph{pool}) contain 6,288 rows
 and en-UK 3,208 (2,065 Google, 1,143 Reddit). Sarcasm is concentrated on Reddit: 42\% of en-AU and 22\% of en-UK Reddit
 comments are labelled sarcastic, against 6.8\% of en-AU and a single en-UK Google review. The test set has 1,573 rows with
 the same segment proportions as the development set.
-\todo{one line on the official split being by comment, and the thread overlap audit (Sec. 6.5)}
+The official split is by comment, not by thread; Section~\ref{sec:audit} checks whether this inflates our estimates.
 
 \section{Validation Protocol}
 \label{sec:protocol}
@@ -247,15 +247,30 @@ en-AU Reddit sentiment errors are comments the annotator called sarcastic and ne
 positive, so both binding components share one source of error.
 
 \subsection{Benchmark audit}
-\todo{R3: Reddit provenance, thread overlap between train and valid, no thread-memorisation gap for our members}
+\label{sec:audit}
+By matching Reddit rows to public comment dumps we recovered 95\% of them (en-AU 95.0\%, en-UK 95.9\%): they come from seven
+subreddits between February and June 2024, and 82\% of the matched development rows share a thread with a training row.
+Re-running our members with thread-grouped folds changes the ensemble score by only $-$.001 to $-$.002 (DeBERTa $-$.001,
+LLM probe +.007, frozen-embedding probe $-$.008), so the comment-level split does not materially inflate our estimates.
+Recovered thread context (parent comment, submission title) did not help any member. The en-AU sarcasm rate varies by
+subreddit (61\% in r/AustralianPolitics vs 31--35\% elsewhere), consistent with its derision reading.
 
 \section{Conclusion}
-\todo{}
+A three-family ensemble, selected under a strict protocol, reached 0.867 on the test set, exactly where cross-validation
+put it. The more useful finding for the task concerns the labels. Our analyses (learning curves, seed and ablation studies,
+a blind re-annotation) point the same way: the binding en-AU sarcasm component is limited by an annotator-specific
+construct that is broader than what independent readers call sarcasm and that also propagates to en-AU sentiment, while
+en-UK sarcasm is limited by data. Because the metric takes the weaker variety, further gains on this benchmark will come
+mostly from modelling one annotator's notion of derision, not from better sarcasm detection. Future variety-sensitive
+benchmarks would benefit from multiple annotators per item and from reporting the annotation construct per variety.
 
 \section*{Limitations}
 Our re-annotation uses LLM readers, not humans; their mutual agreement is closer to test--retest reliability than to
-inter-annotator agreement, and they may share our models' notion of sarcasm. \todo{single annotator per item in BESSTIE;
-small test set; en-UK Google sarcasm has one positive}
+inter-annotator agreement, and they may share our models' notion of sarcasm. BESSTIE provides one label per item, so we cannot separate annotator
+noise from genuine ambiguity. The test set (1,573 rows) gives a sampling SD of about .013 on the official score, larger than
+most differences we report, which is why we rely on out-of-fold estimates and paired resampling. En-UK Google reviews
+contain a single sarcastic example, so that segment is handled by a rule rather than learned. Our ablation and curve
+results are for DeBERTa-v3-large and two frozen-feature probes; other model families may behave differently.
 
 \bibliography{references}
 
