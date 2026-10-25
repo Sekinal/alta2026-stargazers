@@ -1,4 +1,4 @@
-% ALTA 2026 Shared Task system description (draft). Build: latexmk -pdf main.tex
+% ALTA 2026 Shared Task system description. Build: latexmk -pdf main.tex
 \documentclass[11pt]{article}
 \usepackage[final]{acl}
 \usepackage{times}
@@ -13,9 +13,10 @@
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{url}
-\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\usepackage{enumitem}
+\setlist{nosep,leftmargin=1.4em}
 
-\title{Two Annotators, Two Sarcasms: A Validation-First Ensemble for Sentiment and Sarcasm in Australian and British English}
+\title{Two Annotators, Two Sarcasms: What Limits a Well-Validated Ensemble\\on Australian and British English}
 
 \author{Irving Ernesto Quezada Ram\'{i}rez \\
   Independent researcher \\
@@ -26,241 +27,77 @@
 \maketitle
 
 \begin{abstract}
-We describe our system for the ALTA 2026 shared task on sentiment and sarcasm classification in Australian (en-AU) and
-British (en-UK) English, scored by the weaker variety of each task. Our submission is a weight-free logit average of a
-multi-task DeBERTa-v3-large ensemble, a linear probe over frozen sentence embeddings and a linear probe over the hidden
-states of a 9B instruction-tuned LLM, with decision thresholds cross-fitted per data segment. Every design choice was made
-on pooled 5-fold cross-validation under a pre-committed selection charter; the system scored 0.8668 on the official test
-set against a cross-validated estimate of 0.869, with all four component scores within 0.004 of their estimates.
-Beyond the system, we ask why dozens of architectures, recipes and data interventions converge on the same score. Learning
-curves, ensemble-size curves and a blind re-annotation study point to the labels: the en-AU annotator's ``sarcasm'' tracks
-derision (mocking, contempt, anger) among negative comments, whereas the en-UK annotator's tracks playful irony with a
-positive surface, and the cues that predict one predict the absence of the other. In confident disagreements, independent
-readers side with our model two times out of three.
+We describe our system for the ALTA 2026 shared task, which asks for sentiment and sarcasm labels on Australian
+(en-AU) and British (en-UK) Reddit comments and Google reviews, and scores each task by its weaker variety. A simple
+ensemble of a fine-tuned DeBERTa-v3-large and two linear probes, chosen under a strict validation protocol, scored
+0.867 on the test set: second on the leaderboard and statistically tied for first. Its test score matched our
+cross-validated estimate to within 0.002. We then ask why so many different models stall at the same score. The answer
+is in the labels. The en-AU annotator calls 58\% of negative comments sarcastic, against about 20\% for independent
+readers; the en-UK annotator agrees with the readers. The two annotators label different things: \emph{derisive}
+sarcasm (mocking, contempt, anger) in en-AU and \emph{playful} sarcasm (irony with a positive surface) in en-UK, and the
+same cue predicts sarcasm in one variety and its absence in the other. Learning curves, seed curves and a blind
+re-annotation all agree: the binding en-AU components are limited by this label construct, not by the models.
 \end{abstract}
 
 \section{Introduction}
-Sentiment and sarcasm classification are textbook sequence-classification problems, yet both are sensitive to the language
-variety of the text and to how the labels were produced. The ALTA 2026 shared task uses the en-AU and en-UK portions of
-BESSTIE \citep{srirag-etal-2025-besstie}: Google Places reviews and Reddit comments, each labelled for binary sentiment and
-binary sarcasm. The official score averages, over the two tasks, the macro-F1 of the \emph{weaker} variety, which rewards
-systems that are robust across varieties.
+\label{sec:intro}
 
-Computational sarcasm detection has moved from incongruity cues \citep{riloff-etal-2013-sarcasm} to large self-labelled
-Reddit corpora \citep{khodak-etal-2018-large} and shared tasks on irony and intended sarcasm
-\citep{van-hee-etal-2018-semeval,ghosh-etal-2020-report,abu-farha-etal-2022-semeval}; see \citet{joshi2017survey} for a
-survey. Two strands are closest to this work: robustness across language varieties
-\citep{faisal-etal-2024-dialectbench,srirag-etal-2025-besstie}, and perspectivist annotation: the EPIC corpus had irony
-annotated by annotators from five English-speaking countries, including the UK and Australia, and found systematic
-differences between annotator groups \citep{frenda-etal-2023-epic}. Our analysis reaches a related conclusion from the other side: with one annotator per
-variety, the two varieties' sarcasm labels behave like different constructs (Section~\ref{sec:two}).
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{fig_headline.pdf}
+\caption{The two annotators label different things. (a) Share of negative Reddit comments labelled sarcastic, by the
+gold annotator and by two blind readers who saw only the text (150 random comments per variety, 95\% Wilson intervals).
+(b) Comments where our ensemble confidently contradicts the gold sarcasm label: the readers side with the model about
+two times in three.}
+\label{fig:headline}
+\end{figure}
 
-Our contributions are:
-(i) a simple, well-validated ensemble that scored 0.8668 on the test set, second on the leaderboard and among the six
-runs the organisers found statistically tied for first place, whose test score matched its cross-validated estimate
-component by component;
-(ii) a catalogue of interventions that did \emph{not} help under a strict protocol (Section~\ref{sec:negative});
-(iii) evidence that the remaining error is dominated by the labels, and that the two varieties' sarcasm labels encode
-different constructs (Section~\ref{sec:labels}).
+The ALTA 2026 shared task uses the en-AU and en-UK portions of BESSTIE \citep{srirag-etal-2025-besstie}. Each text is a
+Google review or a Reddit comment with a binary sentiment label and a binary sarcasm label. The official score takes, for
+each task, the macro-F1 of the \emph{weaker} variety, and averages the two tasks. This rewards systems that work for
+both varieties at once.
+
+This paper makes two points. First, a small, carefully validated ensemble is enough to tie for first place, and its
+cross-validated estimate predicted its test score almost exactly. Second, and more useful for anyone working with this
+data, the remaining error is set by the labels rather than by the models. Figure~\ref{fig:headline} shows the core of
+the argument: the en-AU annotator calls far more negative comments sarcastic than independent readers do, while the
+en-UK annotator does not.
+
+Our findings, in order:
+\begin{enumerate}
+\item A three-model ensemble scored 0.867 on the test set, second on the leaderboard and among six runs the organisers
+found statistically tied for first. Its test score was within 0.002 of our estimate (\S\ref{sec:results}).
+\item The models plateau at half the training data, and averaging more seeds stops helping at three. Only combining
+different model families still helps (\S\ref{sec:capacity}).
+\item Blind readers disagree with the en-AU sarcasm labels far more than with the en-UK ones, and in disputed cases they
+side with our model two times in three (\S\ref{sec:readers}).
+\item The two annotators label different constructs, \emph{derisive} and \emph{playful} sarcasm, whose cues point in
+opposite directions. This explains why sarcasm does not transfer between the varieties, and it also accounts for 30\% of
+our en-AU sentiment errors (\S\ref{sec:constructs}).
+\end{enumerate}
+We also report everything that did not help (\S\ref{sec:negative}) and how the system was built with AI agents
+(\S\ref{sec:process}).
+
+\paragraph{Related work.} Sarcasm detection has moved from incongruity cues \citep{riloff-etal-2013-sarcasm} to large
+self-labelled Reddit corpora \citep{khodak-etal-2018-large} and to shared tasks on irony and intended sarcasm
+\citep{van-hee-etal-2018-semeval,ghosh-etal-2020-report,abu-farha-etal-2022-semeval}; \citet{joshi2017survey} survey the
+field. Two strands are closest to this work. One studies robustness across language varieties
+\citep{faisal-etal-2024-dialectbench,srirag-etal-2025-besstie}. The other studies annotator perspective: the EPIC corpus
+had irony annotated by people from five English-speaking countries, including the UK and Australia, and found systematic
+differences between annotator groups \citep{frenda-etal-2023-epic}. We reach a related conclusion from the other side,
+with one annotator per variety.
 
 \section{Task and Data}
 \label{sec:data}
-The training and development files together (the \emph{pool}) contain 6,288 rows: en-AU 3,080 (1,076 Google, 2,004 Reddit)
-and en-UK 3,208 (2,065 Google, 1,143 Reddit). Sarcasm is concentrated on Reddit: 42\% of en-AU and 22\% of en-UK Reddit
-comments are labelled sarcastic, against 6.8\% of en-AU and a single en-UK Google review. The test set has 1,573 rows with
-the same segment proportions as the development set.
-The official split is by comment, not by thread; Section~\ref{sec:audit} checks whether this inflates our estimates.
+The training and development files together (the \emph{pool}) hold 6,288 texts: 3,080 en-AU (1,076 reviews, 2,004
+Reddit comments) and 3,208 en-UK (2,065 reviews, 1,143 comments). Sarcasm lives almost entirely on Reddit: 42\% of en-AU
+and 22\% of en-UK comments are labelled sarcastic, against 6.8\% of en-AU reviews and a single en-UK review. The test set
+has 1,573 texts with the same proportions. Each item has one annotator, and the official split is by comment rather than
+by Reddit thread; we check whether that matters in \S\ref{sec:audit}.
 
-\section{Validation Protocol}
-\label{sec:protocol}
-With a small, noisy dataset and a min-over-varieties metric, most apparent gains are selection noise. We therefore fixed a
-selection charter before modelling:
-\begin{itemize}
-\item \textbf{Pooled 5-fold CV.} Train and development rows are pooled and split into five folds stratified by segment and
-labels, with identical texts kept in one fold; every candidate produces out-of-fold (OOF) predictions for all 6,288 rows. The official development file is used
-only as a diagnostic.
-\item \textbf{Cross-fitted decisions.} Decision thresholds (one per task and segment) are fitted on four folds and applied
-to the fifth, so reported scores include threshold-selection noise. En-UK Google sarcasm is always predicted negative.
-\item \textbf{Paired, test-sized resampling.} Candidates are compared with a paired bootstrap \citep{efron1979bootstrap}
-over test-sized replicates;
-we treat $p<0.8$ as no evidence: two runs of the same recipe that differ only in seed reach $p\geq0.9$ in 18\% of pairs,
-in line with the seed sensitivity of fine-tuning \citep{dodge2020finetuning,mosbach2021stability}.
-\item \textbf{Leak canaries.} Each trained member is re-run with shuffled labels and must score at the no-information floor.
-\item \textbf{Pre-registration.} Promising fold-0 screens are confirmed on an untouched fold with the success criterion
-written down beforehand \citep{nosek2018preregistration} (Section~\ref{sec:negative}).
-\end{itemize}
+Table~\ref{tab:examples} previews what the rest of the paper shows: what counts as sarcasm differs between the two
+annotators.
 
-\section{System}
-\label{sec:system}
-\paragraph{DeBERTa ensemble.} DeBERTa-v3-large \citep{he2023debertav} fine-tuned for four epochs (lr $10^{-5}$, batch 16) with
-a first-token representation feeding one sentiment logit and one sarcasm logit \emph{per variety}; the input is prefixed with
-its variety and source (e.g.\ \texttt{[en-UK] [reddit]}). Five seeds, each trained on the five CV folds; test predictions
-average the 25 fold models.
-\paragraph{Embedding probe.} L2-regularised logistic regression over concatenated frozen embeddings of e5-large-v2
-\citep{wang2022e5} and multilingual-e5-large-instruct \citep{wang2024me5}, with the regularisation strength chosen by inner CV.
-\paragraph{LLM probe.} Qwen3.5-9B \citep{qwen35} in 4-bit NF4 \citep{dettmers2023qlora} reads each text inside a zero-shot sarcasm (or sentiment) prompt;
-a logistic regression (a linear probe; \citealp{alain2017probes}) is fitted on the layer-24 last-token hidden state plus the
-verbalizer margin, separately per variety for sarcasm.
-\paragraph{Combination.} The three members' probabilities are averaged in logit space with equal weights; weight fitting and
-stacked generalisation did not beat this (Section~\ref{sec:negative}).
-
-\section{Results}
-\label{sec:results}
-\begin{table}[t]
-\centering\small
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{lccccc}
-\toprule
- & \multicolumn{2}{c}{Sentiment} & \multicolumn{2}{c}{Sarcasm} & \\
-\cmidrule(lr){2-3}\cmidrule(lr){4-5}
- & AU & UK & AU & UK & Score \\
-\midrule
-DeBERTa $\times$5, OOF & .931 & .972 & .803 & .816 & .867 \\
-e5+me5 probe, OOF & .917 & .969 & .777 & .788 & .847 \\
-9B LLM probe, OOF & .916 & .973 & .789 & .806 & .853 \\
-\midrule
-Ensemble, OOF & .934 & .976 & .805 & .841 & .869 \\
-Ensemble, \textbf{test} & .932 & .976 & .801 & .837 & \textbf{.867} \\
-DeBERTa $\times$5, \textbf{test} & .916 & .975 & .793 & .820 & .854 \\
-\midrule
-Baseline, test & .866 & .931 & .680 & .696 & .773 \\
-\bottomrule
-\end{tabular}
-\caption{Macro-F1 per component; score $=\frac12[\min(\text{sent})+\min(\text{sarc})]$. OOF rows: pooled 5-fold CV with
-cross-fitted thresholds. Baseline: the organisers'.}
-\label{tab:main}
-\end{table}
-Table~\ref{tab:main} gives the main results. The test score (0.8668) lies inside the 90\% interval we predicted before
-submission (0.844--0.895) and within 0.002 of the OOF point estimate; the binding components were en-AU for both tasks.
-We also submitted DeBERTa $\times$5 alone as an ablation: it scored .854 on test against .867 for the ensemble
-(+.013; the paired OOF expectation was +.005, 90\% band $-$.010 to +.023). The ensemble's test score tracked its OOF
-estimate, whereas DeBERTa alone fell by .013, mostly on the two binding en-AU components (sentiment .931 $\to$ .916,
-sarcasm .803 $\to$ .793). Our run placed second on the leaderboard, 0.0007 behind the top run. Using an approximate
-randomisation test with 10{,}000 swaps \citep{dror-etal-2018-hitchhikers}, the organisers found the top six runs
-statistically indistinguishable; they share first place. Our run and the top run differ on only 2.1\% of sentiment and
-4.7\% of sarcasm labels: independently built systems converge on nearly the same decisions, which fits the label-limited
-picture of Section~\ref{sec:labels}.
-
-\section{Analysis}
-\subsection{What did not help}
-\label{sec:negative}
-Table~\ref{tab:negative} lists what we tried after the three-member ensemble was in place. None cleared the
-charter's bar, and two ideas that passed a fold-0 screen failed their pre-registered confirmation.
-\begin{table}[t]
-\centering\small
-\begin{tabular}{>{\raggedright\arraybackslash}p{4.85cm}r}
-\toprule
-Intervention (protocol) & $\Delta$ \\
-\midrule
-\multicolumn{2}{l}{\emph{DeBERTa recipe / backbone} (fold 0, 3 paired seeds)} \\
-\quad weight EMA & +.001 \\
-\quad layer-wise LR decay + EMA & +.004 \\
-\quad NLI-tuned DeBERTa-v3-large & $-$.016 \\
-\quad ELECTRA-large & $-$.009 \\
-\quad ModernBERT-large & $-$.012 \\
-\quad any of these inside the ensemble & $-$.007 to +.002 \\
-\quad domain-adaptive pre-training & $-$.004 \\
-\quad \texttt{/s}-labelled sarcasm pre-training & $-$.011 \\
-\midrule
-\multicolumn{2}{l}{\emph{LLMs}} \\
-\quad 4B LoRA, alone / in ensemble & $-$.018 / .000 \\
-\quad EVA / DoRA / Riemannian LoRA & $-$.03 to $-$.10 \\
-\midrule
-\multicolumn{2}{l}{\emph{Data and context} (5-fold unless noted)} \\
-\quad pseudo-labels (pre-reg., fold 4) & $-$.006 \\
-\quad recovered thread context & $-$.001 \\
-\quad same-thread label features & +.001 \\
-\quad $k$NN label vote & $-$.005 \\
-\quad LLM-reader label, UK (pre-reg.) & +.001 \\
-\bottomrule
-\end{tabular}
-\caption{Changes relative to the matching baseline (official score). Methods: EMA of weights; layer-wise learning-rate
-decay \citep{howard-ruder-2018-universal}; NLI-tuned DeBERTa \citep{laurer2023zeroshot}; ELECTRA \citep{clark2020electra};
-ModernBERT \citep{warner2024modernbert}; domain-adaptive pre-training \citep{gururangan-etal-2020-dont} on AU/UK Reddit and
-reviews; \texttt{/s}-labelled Reddit \citep{khodak-etal-2018-large}; LoRA \citep{hu2022lora} with rsLoRA
-\citep{kalajdzievski2023rslora}, DoRA \citep{liu2024dora}, EVA \citep{paischer2024eva} and Riemannian preconditioning
-\citep{zhang2024riemannian}; pseudo-labelling \citep{lee2013pseudo}. Fold-0 rows compare 3-seed averages on one held-out
-fold (3-seed probability means); the other rows use all five folds. Rows outside the paired-resampling noise ($p\geq0.8$) are all
-negative: the three alternative backbones, \texttt{/s} pre-training and the LoRA variants; everything else is a tie.}
-\label{tab:negative}
-\end{table}
-
-\subsection{Seeds, data and ceilings}
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{fig_learning_curve.pdf}
-\caption{Learning curves: official OOF score when each member is trained on a nested, segment-stratified share of the
-training folds (error bars: SD over seeds or subset draws).}
-\label{fig:lc}
-\end{figure}
-\paragraph{Data.} Figure~\ref{fig:lc} shows learning curves for the three member families. Both strong members plateau at
-about half the data (2.5k rows): DeBERTa scores .858, .859 and .860 at 50, 75 and 100\%, and the LLM probe .853, .854 and
-.853. The binding en-AU sarcasm component is flat from 75\% in both families (DeBERTa Reddit AUC .845 at 75\% and 100\%),
-whereas en-UK sarcasm, with only 248 positive Reddit comments, is still improving (AUC .845, .856, .867 at 50, 75, 100\%).
-More data from the same annotators would help the non-binding variety only. With a quarter of the data the frozen LLM probe
-beats the fine-tuned encoder.
-\paragraph{Seeds and members.} With ten DeBERTa seeds (the five used in the submission and five earlier ones), averaging
-saturates after about three seeds: .860 for one seed, .863 for three, .864 for ten. Adding the two probes on top adds
-another +.006, so the gain of the ensemble comes from model-family diversity rather than seed averaging. Two sets of five
-seeds of the same recipe still differ by .004 in OOF score, which is the scale of noise below which no change in
-Table~\ref{tab:negative} can be read.
-\paragraph{Architecture.} Averaging two seeds per arm (baseline .865): removing the \texttt{[variety] [source]} prefix
-costs .008 (.857; $p=.84$, 4/5 folds), the only design choice with clear evidence. Replacing the multi-task model with two
-single-task models is neutral (.865), despite the coupling between the labels. Sharing one sarcasm head across varieties
-leaves the overall score within noise (.863) but lowers en-UK sarcasm from .824 to .803: per-variety heads let the model
-keep the two varieties' different notions of sarcasm apart (Section~\ref{sec:two}).
-
-\subsection{Are the labels the ceiling?}
-\label{sec:labels}
-BESSTIE reports second-annotator agreement on only 50 items per variety, too few to bound anything (en-AU sarcasm
-$\kappa=0.47$, 95\% CI $[.19,.72]$). We therefore ran a pre-registered blind re-annotation: two independent LLM readers
-(Claude subagents with a fixed guideline, text and variety only, no labels or model outputs) labelled 150 random Reddit
-comments per variety, plus about 50 per variety on which our ensemble confidently contradicts the gold sarcasm label
-(Table~\ref{tab:reannot}).
-\begin{table}[t]
-\centering\small
-\setlength{\tabcolsep}{3pt}
-\begin{tabular}{lcccc}
-\toprule
- & G--O & G--R & O--R & Positive rate G / O / R \\
-\midrule
-Sarc AU & \textbf{.56} & .21--.28 & .30--.34 & .43 / .43 / .16 \\
-Sarc UK & .59 & \textbf{.62} & .45 & .29 / .23 / .27 \\
-Sent AU & .74 & .60--.65 & .60--.65 & .29 / .33 / .27 \\
-Sent UK & .85 & .81--.83 & .67--.69 & .17 / .15 / .22 \\
-\bottomrule
-\end{tabular}
-\caption{Cohen's $\kappa$ \citep{cohen1960kappa} on 150 random Reddit comments per variety between gold (G), our
-ensemble (O) and the two LLM readers (R; ranges over readers, who agree with each other at $\kappa=.90$--.98), and the
-share labelled positive by each.}
-\label{tab:reannot}
-\end{table}
-Two findings stand out. For en-AU sarcasm the gold annotator marks 43\% of comments sarcastic against 16\% for the readers;
-our ensemble reproduces the annotator ($\kappa=.56$) far better than it matches a neutral reader ($.30$--$.34$). On the
-disputed items the two readers agree with each other on 45/50 (AU) and 48/49 (UK) and side with our model rather than the
-gold label 31:14 (AU) and 31:17 (UK). A large share of the ensemble's confident ``errors'' are therefore contestable labels.
-For en-UK sarcasm the picture differs: a neutral reader recovers the gold label at least as well as our model does ($.62$ vs
-$.59$), and adding the reader's label to the ensemble raises en-UK Reddit sarcasm AUC from .906 to .920; yet, pre-registered
-as a feature, it moved the official score by only +.001, because the gain falls away from the F1 operating point and
-en-UK rarely binds.
-
-\subsection{Two sarcasms}
-\label{sec:two}
-In both varieties virtually every sarcastic comment is negative (97\% AU, 99\% UK), but the en-AU annotator labels
-60\% of \emph{all} negative Reddit comments sarcastic, against 24\% in en-UK. The en-AU task therefore reduces to deciding
-which negative comments the annotator called sarcastic, and that is exactly where our ensemble is weak: its sarcasm AUC
-within negative comments is .77 in en-AU but .91 in en-UK. To see what the annotators respond to, we scored every comment
-with label-free zero-shot NLI hypotheses (a DeBERTa-v3-large zero-shot classifier; \citealp{laurer2023zeroshot}) and measured, within negative comments,
-how well each predicts the gold sarcasm label (Figure~\ref{fig:cues}; examples in Table~\ref{tab:examples}).
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{fig_cue_flip.pdf}
-\caption{The same cue points in opposite directions. AUC of label-free zero-shot cues (NLI hypotheses; joy from an
-emotion classifier) for the gold sarcasm label among negative Reddit comments, per variety, with 95\% bootstrap intervals
-(en-AU $n=1{,}364$, 812 sarcastic; en-UK $n=1{,}012$, 245 sarcastic). Right of .5 the cue predicts a sarcasm label;
-left of .5 it predicts its absence.}
-\label{fig:cues}
-\end{figure}
 \begin{table}[t]
 \centering\small
 \setlength{\tabcolsep}{4pt}
@@ -282,57 +119,309 @@ AU & Skip the supermarket and order online, that site is great. & S$^-$ & --$^+$
 AU & You deserve support. I hope you feel able to reach out for it soon. & S$^-$ & --$^+$ \\
 \bottomrule
 \end{tabular}
-\caption{Paraphrased examples (wording changed, pattern kept) of the constructs in Figure~\ref{fig:cues}. S = sarcastic,
--- = not sarcastic; $^{-}$/$^{+}$ = negative/positive sentiment. The last block is the pattern behind 30\% of our en-AU
-sentiment errors.}
+\caption{What each annotator calls sarcasm. Real comments, paraphrased (wording changed, pattern kept). S = sarcastic,
+-- = not; $^{-}$/$^{+}$ = negative/positive sentiment. The last block is the pattern behind 30\% of our en-AU sentiment
+errors (\S\ref{sec:constructs}).}
 \label{tab:examples}
 \end{table}
-The en-AU annotator's sarcasm tracks derision: mocking, contempt, anger and cynicism. The en-UK annotator's tracks playful
-irony with a positive surface, and hostility is evidence \emph{against} sarcasm. The same cue points in opposite directions,
-which explains why sarcasm does not transfer across varieties (training on one variety and testing on the other costs .12 to
-.17 F1 for a fine-tuned DeBERTa, while sentiment transfers fully). The en-AU construct also leaks into sentiment: 30\% of our
-en-AU Reddit sentiment errors are comments the annotator called sarcastic and negative that our model reads as sincere and
-positive, so both binding components share one source of error.
 
-\subsection{Benchmark audit}
+\section{Validation Protocol}
+\label{sec:protocol}
+With small, noisy data and a metric that takes the weaker variety, most apparent improvements are noise. We fixed a
+protocol before modelling. Each safeguard answers one risk.
+\begin{itemize}
+\item \textbf{Overfitting the development file.} We pool training and development data and use five folds,
+stratified by segment and labels and keeping identical texts together. Every candidate is judged on out-of-fold (OOF)
+predictions for all 6,288 texts; the official development file serves only as a check.
+\item \textbf{Optimistic thresholds.} Decision thresholds (one per task and segment) are fitted on four folds and
+applied to the fifth, so reported scores include the cost of choosing them. En-UK reviews are never labelled sarcastic.
+\item \textbf{Mistaking noise for gains.} We compare candidates with a paired bootstrap \citep{efron1979bootstrap} over
+test-sized samples and treat $p<0.8$ as no evidence: two runs of one recipe that differ only in random seed reach
+$p\geq0.9$ in 18\% of pairs, consistent with the seed sensitivity of fine-tuning
+\citep{dodge2020finetuning,mosbach2021stability}.
+\item \textbf{Leakage.} Every trained model is re-run with shuffled labels and must fall to chance level.
+\item \textbf{Selection on one lucky split.} Ideas are screened on one fold; anything promising is confirmed on an
+untouched fold, with the success criterion written down beforehand \citep{nosek2018preregistration}.
+\end{itemize}
+
+\section{System}
+\label{sec:system}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{fig_system.pdf}
+\caption{The submitted system. Three models score each text; their logits are averaged with equal weights, and a
+threshold for each task and segment turns the average into labels.}
+\label{fig:system}
+\end{figure}
+
+The system (Figure~\ref{fig:system}) averages three models that see the data in different ways.
+
+\paragraph{Fine-tuned encoder.} DeBERTa-v3-large \citep{he2023debertav}, fine-tuned for four epochs (learning rate
+$10^{-5}$, batch size 16). The input is prefixed with its variety and source, e.g.\ \texttt{[en-UK] [reddit]}. One
+output predicts sentiment; sarcasm has a separate output for each variety. We train five seeds on each of the five
+folds and average the 25 resulting models on the test set.
+
+\paragraph{Embedding probe.} A logistic regression on frozen sentence embeddings from e5-large-v2 \citep{wang2022e5}
+and multilingual-e5-large-instruct \citep{wang2024me5}, with regularisation chosen by inner cross-validation.
+
+\paragraph{LLM probe.} Qwen3.5-9B \citep{qwen35}, quantised to 4 bits \citep{dettmers2023qlora}, reads each text
+inside a zero-shot sarcasm (or sentiment) prompt. A logistic regression, i.e.\ a linear probe \citep{alain2017probes},
+is fitted on its hidden state at layer 24 and on the margin between the answer words, with separate sarcasm probes per
+variety.
+
+\paragraph{Combination.} We average the three models' logits with equal weights. Learned weights and stacking did
+not do better (\S\ref{sec:negative}).
+
+\section{Results}
+\label{sec:results}
+
+\begin{table}[t]
+\centering\small
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lccccc}
+\toprule
+ & \multicolumn{2}{c}{Sentiment} & \multicolumn{2}{c}{Sarcasm} & \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+ & AU & UK & AU & UK & Score \\
+\midrule
+DeBERTa $\times$5, OOF & .931 & .972 & .803 & .816 & .867 \\
+e5 probe, OOF & .917 & .969 & .777 & .788 & .847 \\
+9B LLM probe, OOF & .916 & .973 & .789 & .806 & .853 \\
+\midrule
+Ensemble, OOF & .934 & .976 & .805 & .841 & .869 \\
+Ensemble, \textbf{test} & .932 & .976 & .801 & .837 & \textbf{.867} \\
+DeBERTa $\times$5, \textbf{test} & .916 & .975 & .793 & .820 & .854 \\
+\midrule
+Organisers' baseline, test & .866 & .931 & .680 & .696 & .773 \\
+\bottomrule
+\end{tabular}
+\caption{Macro-F1 per component; score $=\frac12[\min(\text{sent})+\min(\text{sarc})]$. OOF: out-of-fold predictions
+over the pool, with cross-fitted thresholds.}
+\label{tab:main}
+\end{table}
+
+\paragraph{The test score matched the estimate.} The ensemble scored 0.8668 on the test set (Table~\ref{tab:main}),
+within 0.002 of its OOF estimate and inside the 90\% interval we predicted before submitting (0.844--0.895). All four
+components moved by at most 0.004. The binding components were en-AU for both tasks.
+
+\paragraph{It tied for first.} Our run placed second on the leaderboard, 0.0007 behind the top run. Using an approximate
+randomisation test with 10{,}000 swaps \citep{dror-etal-2018-hitchhikers}, the organisers found the top six runs
+statistically indistinguishable, and they share first place. Our run and the top run disagree on only 2.1\% of sentiment
+and 4.7\% of sarcasm labels: independently built systems reach nearly the same decisions.
+
+\paragraph{Combining model families matters on unseen data.} As an ablation we also submitted the DeBERTa models alone.
+They scored 0.854, against 0.867 for the ensemble. On the pool the gap had been only 0.002 (paired expectation +0.005,
+90\% band $-$0.010 to +0.023), so the test gap is at the high end of what we expected. The loss came almost entirely from
+the two binding en-AU components (sentiment 0.931 to 0.916, sarcasm 0.803 to 0.793).
+
+\section{Why Does Performance Plateau?}
+\label{sec:analysis}
+Dozens of architectures, recipes and data interventions landed within about 0.01 of each other (\S\ref{sec:negative}).
+This section asks why, one question at a time.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{fig_gains.pdf}
+\caption{Where gains run out. (a) OOF score when each model is trained on a nested, segment-stratified share of the
+training folds (error bars: standard deviation over seeds or draws). (b) Averaging more DeBERTa seeds stops helping at
+about three; adding the two probes adds about 0.007 at any number of seeds.}
+\label{fig:gains}
+\end{figure*}
+
+\subsection{Is it a capacity or data limit?}
+\label{sec:capacity}
+No. More data, more seeds and design changes all stop paying off early (Figure~\ref{fig:gains}).
+
+\paragraph{More data.} Both strong models plateau at half the training data: DeBERTa scores 0.858, 0.859 and 0.860
+at 50, 75 and 100\%, and the LLM probe 0.853, 0.854 and 0.853. The binding en-AU sarcasm component is flat from 75\% in
+both. Only en-UK sarcasm, with just 248 sarcastic Reddit comments, is still improving (DeBERTa AUC 0.845, 0.856 and
+0.867 at 50, 75 and 100\%). More data from the same annotators would help the variety that does not set the score.
+
+\paragraph{More seeds.} With ten DeBERTa seeds, averaging saturates at about three (0.860 for one seed, 0.863 for three,
+0.864 for ten). The two probes add about 0.007 on top, so the ensemble's gain comes from model diversity, not from
+averaging. Two sets of five seeds of the same recipe still differ by 0.004, which is the noise floor for every
+comparison in this paper.
+
+\paragraph{Design choices.} We ablated three choices, averaging two seeds each (baseline 0.865). Dropping the
+\texttt{[variety] [source]} prefix costs 0.008 ($p=0.84$, worse on 4 of 5 folds), the one choice with clear evidence.
+Training two single-task models instead of one multi-task model changes nothing (0.865). Sharing one sarcasm output
+across varieties leaves the overall score within noise (0.863) but lowers en-UK sarcasm from 0.824 to 0.803, a first
+hint that the two varieties' sarcasm labels mean different things.
+
+\subsection{Would an independent reader agree with the labels?}
+\label{sec:readers}
+For en-UK, mostly yes; for en-AU sarcasm, much less. BESSTIE reports a second annotator for only 50 items per variety,
+too few to settle the question (en-AU sarcasm $\kappa=0.47$, 95\% interval 0.19--0.72). We therefore ran a pre-registered
+blind re-annotation. Two independent LLM readers (Claude sub-agents with a fixed guideline, shown only the text and its
+variety) labelled 150 random Reddit comments per variety, plus about 50 per variety where our ensemble confidently
+contradicts the gold sarcasm label (Table~\ref{tab:reannot}).
+
+\begin{table}[t]
+\centering\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lcccc}
+\toprule
+ & G--O & G--R & O--R & Positive rate G / O / R \\
+\midrule
+Sarc AU & \textbf{.56} & .21--.28 & .30--.34 & .43 / .43 / .16 \\
+Sarc UK & .59 & \textbf{.62} & .45 & .29 / .23 / .27 \\
+Sent AU & .74 & .60--.65 & .60--.65 & .29 / .33 / .27 \\
+Sent UK & .85 & .81--.83 & .67--.69 & .17 / .15 / .22 \\
+\bottomrule
+\end{tabular}
+\caption{Agreement (Cohen's $\kappa$, \citealp{cohen1960kappa}) on 150 random Reddit comments per variety between the gold
+labels (G), our ensemble (O) and the two readers (R; ranges over readers, who agree with each other at
+$\kappa=0.90$--0.98), and the share each labels positive.}
+\label{tab:reannot}
+\end{table}
+
+\paragraph{en-AU sarcasm follows the annotator, not the reader.} The en-AU annotator labels 43\% of comments sarcastic;
+the readers label 16\%. Our ensemble reproduces the annotator ($\kappa=0.56$) far better than it agrees with a reader
+(0.30--0.34): it has learned this annotator's notion of sarcasm. Among negative comments the gap is starker, 58\% against
+about 20\% (Figure~\ref{fig:headline}a).
+
+\paragraph{Many confident ``errors'' are contestable labels.} On the disputed comments the two readers agree with each
+other on 45 of 50 (en-AU) and 48 of 49 (en-UK). When they agree, they side with our model rather than the gold label 31
+to 14 and 31 to 17 (Figure~\ref{fig:headline}b).
+
+\paragraph{en-UK sarcasm is recoverable by a reader.} A reader matches the en-UK gold labels at least as well as our model
+does ($\kappa$ 0.62 against 0.59). Adding the reader's label to the ensemble raises en-UK Reddit sarcasm AUC from 0.906
+to 0.920. Pre-registered as a feature, however, it moved the official score by only +0.001: the gain falls away from the
+decision threshold, and en-UK rarely sets the score.
+
+\subsection{What does each annotator call sarcasm?}
+\label{sec:constructs}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{fig_cue_flip.pdf}
+\caption{The same cue points in opposite directions. AUC of label-free cues for the gold sarcasm label among negative
+Reddit comments (en-AU $n=1{,}364$, 812 sarcastic; en-UK $n=1{,}012$, 245 sarcastic), with 95\% bootstrap intervals.
+Right of 0.5 a cue predicts a sarcasm label; left of 0.5 it predicts its absence.}
+\label{fig:cues}
+\end{figure}
+
+In en-AU, derision; in en-UK, playful irony. In both varieties almost every sarcastic comment is negative (97\% en-AU,
+99\% en-UK). But the en-AU annotator labels 60\% of \emph{all} negative Reddit comments sarcastic, against 24\% in en-UK.
+The en-AU task therefore reduces to guessing which negative comments the annotator called sarcastic, and that is exactly
+where our ensemble is weakest: its sarcasm AUC within negative comments is 0.77 for en-AU and 0.91 for en-UK.
+
+\paragraph{The cues flip sign.} To see what each annotator responds to, we scored every comment with label-free
+zero-shot cues, using an NLI-based classifier \citep{laurer2023zeroshot} and an emotion classifier, and measured how well
+each cue predicts the gold sarcasm label among negative comments (Figure~\ref{fig:cues}; examples in
+Table~\ref{tab:examples}). For en-AU, derision cues predict sarcasm: mocking (AUC 0.68), contempt (0.65), anger (0.61)
+and cynicism (0.60). For en-UK, the same cues predict \emph{non}-sarcasm (0.32--0.45), while playful joking (0.79),
+praise (0.73) and ironic praise (0.71) predict sarcasm. We call the first construct \emph{derisive} and the second
+\emph{playful} sarcasm.
+
+\paragraph{This explains the transfer failure.} A fine-tuned DeBERTa trained on one variety and tested on the other
+loses 0.12 to 0.17 F1 on sarcasm, while sentiment transfers fully. A cue that means sarcasm in one variety means its
+absence in the other, so no single decision rule can serve both.
+
+\paragraph{It also costs en-AU sentiment.} The en-AU annotator labels sarcastic comments negative 97\% of the time, so the
+broad sarcasm construct leaks into sentiment. 30\% of our en-AU Reddit sentiment errors are comments the annotator called
+sarcastic and negative that our model reads as sincere and positive (last block of Table~\ref{tab:examples}). Both
+binding components share this one source of error.
+
+\subsection{Does the comment-level split inflate scores?}
 \label{sec:audit}
-By matching Reddit rows to public comment dumps we recovered 95\% of them (en-AU 95.0\%, en-UK 95.9\%): they come from seven
-subreddits between February and June 2024, and 82\% of the matched development rows share a thread with a training row.
-Re-running our members with thread-grouped folds changes the ensemble score by only $-$.001 to $-$.002 (DeBERTa $-$.001,
-LLM probe +.007, frozen-embedding probe $-$.008), so the comment-level split does not materially inflate our estimates.
-Recovered thread context (parent comment, submission title) did not help any member. The en-AU sarcasm rate varies by
-subreddit (61\% in r/AustralianPolitics vs 31--35\% elsewhere), consistent with its derision reading.
+No. By matching Reddit texts to public comment archives we recovered 95\% of them (en-AU 95.0\%, en-UK 95.9\%). They
+come from seven subreddits between February and June 2024, and 82\% of the matched development comments share a thread
+with a training comment. Re-running our models with thread-grouped folds changes the ensemble score by only $-$0.001 to
+$-$0.002. Adding the recovered thread context (parent comment, post title) did not help any model. The en-AU sarcasm rate
+varies by subreddit (61\% in r/AustralianPolitics against 31--35\% elsewhere), consistent with the derisive reading.
 
-\section{Development Process}
+\section{What Did Not Help}
+\label{sec:negative}
+Table~\ref{tab:negative} lists everything we tried once the three-model ensemble was in place. Nothing cleared the
+protocol's bar, and the one idea that looked best on a single fold (pseudo-labelling) failed its pre-registered
+confirmation.
+
+\begin{table}[t]
+\centering\small
+\begin{tabular}{>{\raggedright\arraybackslash}p{4.85cm}r}
+\toprule
+Intervention (protocol) & $\Delta$ \\
+\midrule
+\multicolumn{2}{l}{\emph{DeBERTa recipe / backbone} (one fold, 3 paired seeds)} \\
+\quad weight EMA & +.001 \\
+\quad layer-wise LR decay + EMA & +.004 \\
+\quad NLI-tuned DeBERTa-v3-large & $-$.016 \\
+\quad ELECTRA-large & $-$.009 \\
+\quad ModernBERT-large & $-$.012 \\
+\quad any of these inside the ensemble & $-$.007 to +.002 \\
+\quad domain-adaptive pre-training & $-$.004 \\
+\quad \texttt{/s}-labelled sarcasm pre-training & $-$.011 \\
+\midrule
+\multicolumn{2}{l}{\emph{LLMs}} \\
+\quad 4B LoRA, alone / in ensemble & $-$.018 / .000 \\
+\quad EVA / DoRA / Riemannian LoRA & $-$.03 to $-$.10 \\
+\midrule
+\multicolumn{2}{l}{\emph{Data and context} (five folds unless noted)} \\
+\quad pseudo-labels (pre-reg., fold 4) & $-$.006 \\
+\quad recovered thread context & $-$.001 \\
+\quad same-thread label features & +.001 \\
+\quad $k$NN label vote & $-$.005 \\
+\quad LLM-reader label, en-UK (pre-reg.) & +.001 \\
+\bottomrule
+\end{tabular}
+\caption{Change in official score against the matching baseline. Methods: weight averaging (EMA); layer-wise learning-rate
+decay \citep{howard-ruder-2018-universal}; NLI-tuned DeBERTa \citep{laurer2023zeroshot}; ELECTRA \citep{clark2020electra};
+ModernBERT \citep{warner2024modernbert}; domain-adaptive pre-training \citep{gururangan-etal-2020-dont} on AU and UK
+Reddit and reviews; \texttt{/s}-labelled Reddit \citep{khodak-etal-2018-large}; LoRA \citep{hu2022lora} with rsLoRA
+\citep{kalajdzievski2023rslora}, DoRA \citep{liu2024dora}, EVA \citep{paischer2024eva} and Riemannian preconditioning
+\citep{zhang2024riemannian}; pseudo-labelling \citep{lee2013pseudo}. Only the negative rows for the three alternative
+backbones, \texttt{/s} pre-training and the LoRA variants exceed the noise ($p\geq0.8$); everything else is a tie.}
+\label{tab:negative}
+\end{table}
+
+\section{How the System Was Built}
 \label{sec:process}
-This system was built with AI coding agents. Claude Code \citep{claudecode}, running Claude Opus~5 (first phase) and
-Claude Opus~5.5 (second phase), wrote all code, ran every experiment and analysis, and drafted this paper, while the author
-set the goals and constraints, provided compute, uploaded the test submissions and made the final decisions. The first
-phase used an orchestrating agent and 16 specialised sub-agents (data exploration, red-teaming of the validation code,
-modelling, data collection, feature engineering). The design was \emph{not} guided by a literature review: methods came
-from the models' prior knowledge, from the author's suggestions and an earlier project by the author, and from a pasted
-recommendation for LoRA variants; the first literature search happened after the system was chosen, and the citations
-above were added afterwards. What protected the result was the protocol of Section~\ref{sec:protocol}, not prior
-knowledge: agent red teams found and fixed leaks that passed the first version of the checks, and the one idea that
-looked best on a single fold failed its pre-registered confirmation. Appendix~\ref{app:process} gives the full account,
-including the mistakes found along the way, and Appendix~\ref{app:resources} lists every model and dataset used.
+This system was built with AI coding agents. Claude Code \citep{claudecode}, running Claude Opus~5 in the first phase
+and Claude Opus~5.5 in the second, wrote all the code, ran every experiment and analysis, and drafted this paper. The
+author set the goals and constraints, provided compute, uploaded the test submissions and made the final decisions. The
+first phase used an orchestrating agent and 16 specialised sub-agents for data exploration, red-teaming of the validation
+code, modelling, data collection and feature engineering.
+
+The design was \emph{not} guided by a literature review. Methods came from the models' prior knowledge, from the
+author's suggestions and an earlier project of the author's, and from a recommendation for LoRA variants pasted in from
+another chatbot. The first literature search happened after the system was chosen, and the citations in this paper were
+added afterwards. What protected the result was the protocol of \S\ref{sec:protocol}: agent red teams found leaks that
+passed the first version of the checks, and the idea that looked best on a single fold failed its pre-registered
+confirmation. Appendix~\ref{app:process} gives the full account, including the mistakes made along the way, and
+Appendix~\ref{app:resources} lists every model and dataset used.
 
 \section{Conclusion}
-A three-family ensemble, selected under a strict protocol, reached 0.867 on the test set, exactly where cross-validation
-put it. The more useful finding for the task concerns the labels. Our analyses (learning curves, seed and ablation studies,
-a blind re-annotation) point the same way: the binding en-AU sarcasm component is limited by an annotator-specific
-construct that is broader than what independent readers call sarcasm and that also propagates to en-AU sentiment, while
-en-UK sarcasm is limited by data. Because the metric takes the weaker variety, further gains on this benchmark will come
-mostly from modelling one annotator's notion of derision, not from better sarcasm detection. Future variety-sensitive
-benchmarks would benefit from multiple annotators per item and from reporting the annotation construct per variety.
+\label{sec:conclusion}
+A small ensemble, chosen under a strict protocol, tied for first place, and cross-validation predicted its test score
+almost exactly. The more useful finding concerns the labels. Learning curves, seed curves, ablations and a blind
+re-annotation all point the same way: the binding en-AU components are limited by one annotator's broad,
+\emph{derisive} notion of sarcasm, which also reaches into sentiment, while en-UK sarcasm is limited by data. Because the
+metric takes the weaker variety, further gains on this benchmark will mostly come from modelling that annotator, not from
+detecting sarcasm better. We recommend that future variety-sensitive benchmarks collect several annotators per item and
+report what each variety's annotators were asked to label.
 
 \section*{Limitations}
-Our re-annotation uses LLM readers, not humans; their mutual agreement is closer to test--retest reliability than to
-inter-annotator agreement, and they may share our models' notion of sarcasm. BESSTIE provides one label per item, so we cannot separate annotator
-noise from genuine ambiguity. The test set (1,573 rows) gives a sampling SD of about .013 on the official score, larger than
-most differences we report, which is why we rely on out-of-fold estimates and paired resampling. En-UK Google reviews
-contain a single sarcastic example, so that segment is handled by a rule rather than learned. Our ablation and curve
-results are for DeBERTa-v3-large and two frozen-feature probes; other model families may behave differently.
+Our blind readers are LLMs from the same family that built the system, not humans. Their mutual agreement is closer to
+test--retest reliability than to agreement between people, and they may share our models' notion of sarcasm. BESSTIE
+has one label per item, so we cannot separate annotator noise from genuine ambiguity, and our ``derisive'' and
+``playful'' constructs describe one annotator each, not Australian and British English as a whole. The test set gives a
+sampling standard deviation of about 0.013 on the official score, larger than most differences we report; we therefore
+lean on OOF estimates and paired resampling. The DeBERTa epoch count was fixed on one fold that was later also used for
+screening, which makes fold-0 screens slightly optimistic. En-UK reviews contain a single sarcastic example, so that
+segment is handled by a rule. Our ablations and curves cover one encoder and two probes; other model families may
+behave differently.
+
+\section*{Ethics and Data}
+We did not redistribute any competition text: the examples in Table~\ref{tab:examples} are paraphrased, and our released
+code, predictions and models exclude the data. All external data used in exploration (Appendix~\ref{app:resources}) are
+public research datasets, deduplicated against the task data.
+
+\section*{Acknowledgements}
+We thank Lium for a generous grant of GPU credits that made this work, and other papers, possible. This work was carried
+out with Claude Code, using Claude Opus~5 and Claude Opus~5.5. We thank the organisers, Diego Moll\'{a}-Aliod, Aditya
+Joshi and Dipankar Srirag, for running the shared task and for their careful significance analysis.
 
 \bibliography{references}
 
@@ -344,55 +433,55 @@ results are for DeBERTa-v3-large and two frozen-feature probes; other model fami
 drafting. Phase~1 (17--19 September 2026, Claude Opus~5) used an orchestrating agent and 16 sub-agents: three for data
 exploration, three red teams (statistics and leakage, software and submission path, calibration of the validation
 estimates), three modelling agents (encoders, LLMs, classical models and stacking), four for external data (sarcasm,
-sentiment, in-domain unlabelled text, one sub-agent searching for review corpora), two for feature engineering, and one
-for recovering Reddit thread context. Phase~2 (23--24 September 2026, Claude Opus~5.5) rebuilt the system after the
-machine holding its checkpoints was lost, ran the screens, curves and ablations of Section~6, and used further sub-agents
-as the blind readers of Section~\ref{sec:labels} and to reconstruct this account from the session transcripts.
-Compute: a laptop RTX~4070 (8~GB), an A100 (80~GB) spot instance that was pre-empted, a 2$\times$RTX~3090 machine
-(phase~1) and one RTX~3090 (phase~2).
+sentiment, in-domain unlabelled text, and one searching for review corpora), two for feature engineering, and one for
+recovering Reddit thread context. Phase~2 (23 September -- 25 October 2026, Claude Opus~5.5) rebuilt the system after the
+machine holding its checkpoints was lost, ran the screens, curves and ablations of \S\ref{sec:analysis}, and used further
+sub-agents as the blind readers of \S\ref{sec:readers}, to reconstruct this account from the session transcripts, and to
+review the paper. Compute: a laptop RTX~4070 (8~GB), an A100 (80~GB) spot instance that was pre-empted, a
+2$\times$RTX~3090 machine (phase~1) and one RTX~3090 (phase~2).
 
-\paragraph{Author decisions and suggestions.} The author fixed the tooling (polars, lets-plot, a multi-agent setup, version
-control from the start), made generalisation the overriding criterion (which became the selection charter of
-Section~\ref{sec:protocol}), asked for a thorough validation stack and for adversarial red-teaming of it, chose single-fold
-screening for neural models and five folds for the rest, required local models only, named Qwen3.5-4B as the
-preferred LLM size, and later ruled out larger LLMs and paid human annotation. The author also suggested gradient-boosted
-trees on CPU \citep{chen2016xgboost,ke2017lightgbm,prokhorenkova2018catboost}, TF-IDF models and SVMs, embeddings as tree
+\paragraph{Author decisions and suggestions.} The author fixed the tooling (polars, lets-plot, a multi-agent setup,
+version control from the start), made generalisation the overriding criterion (which became the protocol of
+\S\ref{sec:protocol}), asked for a thorough validation stack and for adversarial red-teaming of it, chose single-fold
+screening for neural models and five folds for the rest, required local models only, named Qwen3.5-4B as the preferred
+LLM size, and later ruled out larger LLMs and paid human annotation. The author also suggested gradient-boosted trees on
+CPU \citep{chen2016xgboost,ke2017lightgbm,prokhorenkova2018catboost}, TF-IDF models and SVMs, embeddings as tree
 features, xRFM \citep{beaglehole2025xrfm}, Unsloth \citep{unsloth}, PiSSA (dropped before it was run), a ladder of LoRA
-variants taken from a recommendation generated by another chatbot that the author pasted in (EVA, DoRA, rsLoRA and
-Riemannian preconditioning; two further suggested methods were not run, one because it was not available in the fine-tuning library and one because it needed far more GPUs than we had), and recipes from the author's
-earlier AstroCLIMB project (a separate linear head with a higher learning rate, and a pseudo-label adaptation stage).
+variants taken from a chatbot-generated recommendation (EVA, DoRA, rsLoRA and Riemannian preconditioning; two further
+suggestions were not run, one unavailable in the fine-tuning library and one needing far more GPUs than we had), and
+recipes from the author's earlier AstroCLIMB project (a separate linear head with a higher learning rate, and a
+pseudo-label adaptation stage).
 
 \paragraph{Agent decisions.} The agents chose not to use the public BESSTIE release in any form, designed the validation
-harness (cross-fitted thresholds, paired test-sized bootstrap, permutation canaries, test-file fingerprints), chose the
-three-member ensemble under the charter, and designed the LLM hidden-state probe. The multi-task head with per-variety
-sarcasm heads and the \texttt{[variety] [source]} prefix were proposed by the orchestrating agent. Methods were drawn from
-the models' prior knowledge; when the author asked about prior literature during phase~1, the orchestrator confirmed
-that none had been searched. The first literature search took place after the final system was chosen, and all
-references in this paper were added and verified afterwards against Crossref, the ACL Anthology and arXiv.
+harness (cross-fitted thresholds, paired test-sized bootstrap, label-shuffling canaries, test-file fingerprints), chose
+the three-model ensemble under the protocol, and designed the LLM hidden-state probe. The multi-task head with
+per-variety sarcasm outputs and the \texttt{[variety] [source]} prefix were proposed by the orchestrating agent. When the
+author asked about prior literature during phase~1, the orchestrator confirmed that none had been searched. All
+references in this paper were added afterwards and verified against Crossref, the ACL Anthology and arXiv.
 
-\paragraph{Mistakes found and corrected.} Red teams found that test predictions were not bound to the test file they were
-made for, that the submission path did not run the integrity checks, that source and variety values were not validated,
-and that a realistic leak (feature selection on all labels, +.043) passed every existing check; the permutation canary
-was added in response. Other corrections: raw competition text committed early in the project (removed, and later purged
-from the version history); a version-control rule that silently excluded a code directory; a non-deterministic row order
-in pseudo-label sampling; domain-adaptive pre-training that started from a randomly initialised language-model head;
-an EVA initialisation that had not converged; a table that mixed logit and probability averaging; a canary result
-reused across seeds; an overstated claim that other teams' development scores were contaminated, later retracted; an
-LLM feature cache keyed by split rather than by test file, which would have mixed test sets (fixed before any test
-prediction was made); and a relative file path given to the author for a test upload, which cost one submission that the
-organiser restored.
+\paragraph{Mistakes found and corrected.} Red teams found that test predictions were not bound to the test file they
+were made for, that the submission path did not run the integrity checks, that source and variety values were not
+validated, and that a realistic leak (feature selection on all labels, +0.043) passed every existing check; the
+label-shuffling canary was added in response. Other corrections: raw competition text committed early (removed, and
+later purged from the version history); a version-control rule that silently excluded a code directory; a
+non-deterministic row order in pseudo-label sampling; domain-adaptive pre-training that started from a randomly
+initialised language-model head; an EVA initialisation that had not converged; a table that mixed logit and probability
+averaging; a canary result reused across seeds; an overstated claim that other teams' development scores were
+contaminated, later retracted; an LLM feature cache keyed by split rather than by test file, which would have mixed test
+sets (fixed before any test prediction was made); and a relative file path given to the author for a test upload, which
+cost one submission that the organiser restored.
 
-\paragraph{The blind readers.} The readers of Section~\ref{sec:labels} are instances of the same model family that
-designed and ran the experiments. They saw only the texts, the variety and a fixed guideline, never labels or model
-outputs, and the protocol was pre-registered before annotation; they are nevertheless not independent of our models in the
-way human annotators would be.
+\paragraph{The blind readers.} The readers of \S\ref{sec:readers} are instances of the same model family that designed
+and ran the experiments. They saw only the texts, the variety and a fixed guideline, never labels or model outputs, and
+the protocol was pre-registered before annotation. They are nevertheless not independent of our models in the way human
+annotators would be.
 
 \section{Resources}
 \label{app:resources}
 \paragraph{Final system.} \path{microsoft/deberta-v3-large} \citep{he2023debertav}; \path{intfloat/e5-large-v2}
 \citep{wang2022e5}; \path{intfloat/multilingual-e5-large-instruct} \citep{wang2024me5}; \path{Qwen/Qwen3.5-9B}
-\citep{qwen35} with bitsandbytes NF4 quantisation \citep{dettmers2023qlora}. Trained only on the shared-task training and
-development data.
+\citep{qwen35} with bitsandbytes 4-bit (NF4) quantisation \citep{dettmers2023qlora}. Trained only on the shared-task
+training and development data.
 
 \paragraph{Analyses.} \path{MoritzLaurer/deberta-v3-large-zeroshot-v2.0} \citep{laurer2023zeroshot} and
 \path{j-hartmann/emotion-english-distilroberta-base} for the cues of Figure~\ref{fig:cues}; VADER \citep{hutto2014vader},
@@ -403,21 +492,22 @@ through Arctic Shift \citep{arcticshift} for the audit.
 \paragraph{Explored, not in the final system.} Encoders: RoBERTa-large \citep{liu2019roberta}, Twitter-RoBERTa models
 \citep{barbieri-etal-2020-tweeteval}, ELECTRA-large, ModernBERT-large and NLI-tuned DeBERTa (Table~\ref{tab:negative}).
 Embedding models: e5-base, BGE \citep{xiao2023cpack}, GTE-large, mxbai-embed-large, all-mpnet-base-v2, Qwen3-Embedding
-(0.6B, 4B). LLMs: Qwen3.5-4B (probes, LoRA), Qwen3-8B (4-bit), Qwen2.5-1.5B (surprisal features). Zero-shot feature models:
-BART-MNLI, SiEBERT \citep{hartmann2023siebert}, a star-rating model, irony and sarcasm classifiers, toxicity, formality and
-topic classifiers. Classical models: TF-IDF with logistic regression, SVMs, NB-SVM \citep{wang-manning-2012-baselines} and
-feature augmentation \citep{daume-iii-2007-frustratingly}.
+(0.6B, 4B). LLMs: Qwen3.5-4B (probes, LoRA), Qwen3-8B (4-bit), Qwen2.5-1.5B (surprisal features). Zero-shot feature
+models: BART-MNLI, SiEBERT \citep{hartmann2023siebert}, a star-rating model, irony and sarcasm classifiers, toxicity,
+formality and topic classifiers. Classical models: TF-IDF with logistic regression, SVMs, NB-SVM
+\citep{wang-manning-2012-baselines} and feature augmentation \citep{daume-iii-2007-frustratingly}.
 
 \paragraph{External data (exploration only).} Sarcasm and irony: Reddit comments tagged \texttt{/s} from AU and UK
-subreddits (collected via Arctic Shift and ConvoKit, \citealp{chang-etal-2020-convokit}), SARC \citep{khodak-etal-2018-large},
-EPIC \citep{frenda-etal-2023-epic}, iSarcasmEval \citep{abu-farha-etal-2022-semeval}, SemEval-2018 Task~3
-\citep{van-hee-etal-2018-semeval}, the FigLang 2020 data \citep{ghosh-etal-2020-report}, \citet{wallace-etal-2014-humans},
-MUStARD \citep{castro-etal-2019-towards} and a news-headline sarcasm set. Sentiment: GoEmotions
-\citep{demszky-etal-2020-goemotions}, TweetEval \citep{barbieri-etal-2020-tweeteval}, DynaSent \citep{potts-etal-2021-dynasent},
-SST-2 \citep{socher-etal-2013-recursive}, Rotten Tomatoes \citep{pang-lee-2005-seeing}, IMDB \citep{maas-etal-2011-learning},
-Yelp and Amazon polarity \citep{zhang2015character} and Sentiment140. Unlabelled in-domain text (about 236M tokens) for
-domain-adaptive pre-training and pseudo-labelling: AU and UK Reddit, Google Local reviews \citep{he2017translation},
-Booking.com, NHS GP and Inside Airbnb reviews. All external data were deduplicated against the task data before use; none
-of it is used by the final system, and every experiment that used it was a tie or worse (Table~\ref{tab:negative}).
+subreddits (collected via Arctic Shift and ConvoKit, \citealp{chang-etal-2020-convokit}), SARC
+\citep{khodak-etal-2018-large}, EPIC \citep{frenda-etal-2023-epic}, iSarcasmEval \citep{abu-farha-etal-2022-semeval},
+SemEval-2018 Task~3 \citep{van-hee-etal-2018-semeval}, the FigLang 2020 data \citep{ghosh-etal-2020-report},
+\citet{wallace-etal-2014-humans}, MUStARD \citep{castro-etal-2019-towards} and a news-headline sarcasm set. Sentiment:
+GoEmotions \citep{demszky-etal-2020-goemotions}, TweetEval \citep{barbieri-etal-2020-tweeteval}, DynaSent
+\citep{potts-etal-2021-dynasent}, SST-2 \citep{socher-etal-2013-recursive}, Rotten Tomatoes \citep{pang-lee-2005-seeing},
+IMDB \citep{maas-etal-2011-learning}, Yelp and Amazon polarity \citep{zhang2015character} and Sentiment140. Unlabelled
+in-domain text (about 236M tokens) for domain-adaptive pre-training and pseudo-labelling: AU and UK Reddit, Google Local
+reviews \citep{he2017translation}, Booking.com, NHS GP and Inside Airbnb reviews. All external data were deduplicated
+against the task data before use; none of it is used by the final system, and every experiment that used it was a tie
+or worse (Table~\ref{tab:negative}).
 
 \end{document}
