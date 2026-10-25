@@ -155,6 +155,172 @@ def cue_flip_figure() -> None:
     print("saved", out)
 
 
+
+
+def _style(ax, grid_axis="x"):
+    ax.grid(axis=grid_axis, color=GRID, lw=0.5, zorder=0)
+    for s in ("top", "right"):
+        ax.spines[s].set_visible(False)
+    for s in ("left", "bottom"):
+        ax.spines[s].set_color(INK2)
+    ax.tick_params(colors=INK2, length=2)
+
+
+def headline_figure() -> None:
+    """Figure 1: (a) share of NEGATIVE Reddit comments labelled sarcastic by the gold annotator vs two blind readers
+    (R6 uniform sample, Wilson 95% CIs); (b) on disputed items, whom the agreeing readers side with."""
+    import json
+    import glob
+    s = pl.read_csv(ROOT / "experiments" / "reannot" / "sample.csv")
+    for w in ("a1", "a2"):
+        rows = [json.loads(x) for f in sorted(glob.glob(str(ROOT / f"experiments/reannot/labels/{w}_batch_*.jsonl")))
+                for x in open(f)]
+        s = s.join(pl.DataFrame(rows).rename({"sarcasm": f"{w}_sarc", "sentiment": f"{w}_sent"}), on="item")
+
+    def wilson(k, n, z=1.96):
+        p = k / n
+        d = 1 + z * z / n
+        c = p + z * z / (2 * n)
+        h = z * np.sqrt(p * (1 - p) / n + z * z / (4 * n * n))
+        return p, (c - h) / d, (c + h) / d
+
+    plt.rcParams.update({"font.family": "serif", "font.size": 7.5})
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(3.35, 1.75), gridspec_kw={"width_ratios": [1.15, 1]})
+    # (a)
+    u = s.filter(pl.col("stratum") == "U")
+    xs = {"en-AU": 0, "en-UK": 1}
+    for v, x0 in xs.items():
+        d = u.filter((pl.col("variety") == v) & (pl.col("sentiment") == 0))
+        n = d.height
+        g = wilson(int(d["sarcasm"].sum()), n)
+        r = wilson(int(round((d["a1_sarc"].sum() + d["a2_sarc"].sum()) / 2)), n)
+        for val, col, dx, lab in ((g, BLUE, -0.17, "gold label"), (r, ORANGE, 0.17, "blind readers")):
+            a1.bar(x0 + dx, val[0], width=0.3, color=col, zorder=3, label=lab if v == "en-AU" else None)
+            a1.errorbar(x0 + dx, val[0], yerr=[[val[0] - val[1]], [val[2] - val[0]]], color=INK2, lw=0.7, capsize=1.5,
+                        zorder=4)
+            a1.text(x0 + dx, val[2] + 0.03, f"{val[0]:.0%}", ha="center", va="bottom", fontsize=6.5, color=INK)
+    a1.set_xticks([0, 1])
+    a1.set_xticklabels(["en-AU", "en-UK"], color=INK)
+    a1.set_ylim(0, 0.85)
+    a1.set_yticks([0, 0.2, 0.4, 0.6, 0.8])
+    a1.set_yticklabels(["0", "20", "40", "60", "80%"])
+    a1.set_title("(a) negative comments\nlabelled sarcastic", fontsize=7, color=INK, loc="left")
+    a1.legend(frameon=False, fontsize=6, loc="upper right", handlelength=1, borderaxespad=0)
+    _style(a1, "y")
+    # (b) disputed items, readers agreeing with each other: side with model vs gold
+    side = {"en-AU": (31, 14), "en-UK": (31, 17)}
+    for i, (v, (m, g)) in enumerate(side.items()):
+        tot = m + g
+        a2.barh(i, m / tot, color=AQUA, height=0.5, zorder=3)
+        a2.barh(i, g / tot, left=m / tot, color=BLUE, height=0.5, zorder=3)
+        a2.text(m / tot / 2, i, f"model\n{m}", ha="center", va="center", fontsize=6, color="white", weight="bold")
+        a2.text(m / tot + g / tot / 2, i, f"gold\n{g}", ha="center", va="center", fontsize=6, color="white", weight="bold")
+    a2.set_yticks([0, 1])
+    a2.set_yticklabels(["en-AU", "en-UK"], color=INK)
+    a2.invert_yaxis()
+    a2.set_xlim(0, 1)
+    a2.set_xticks([0, 0.5, 1])
+    a2.set_xticklabels(["0", "50", "100%"])
+    a2.axvline(0.5, color=INK2, lw=0.6, ls=(0, (2, 2)), zorder=4)
+    a2.set_title("(b) disputed items: readers\nside with", fontsize=7, color=INK, loc="left")
+    _style(a2, "x")
+    fig.tight_layout(w_pad=1.0)
+    out = ROOT / "paper" / "fig_headline.pdf"
+    fig.savefig(out, bbox_inches="tight", pad_inches=0.02)
+    fig.savefig(out.with_suffix(".png"), dpi=220, bbox_inches="tight", pad_inches=0.02)
+    print("saved", out)
+
+
+def system_figure() -> None:
+    """System overview: input -> three members -> logit mean -> cross-fitted per-segment thresholds."""
+    from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
+    plt.rcParams.update({"font.family": "serif", "font.size": 6.6})
+    fig, ax = plt.subplots(figsize=(3.35, 1.5))
+    ax.set_xlim(0, 10.4)
+    ax.set_ylim(0, 4.5)
+    ax.axis("off")
+
+    def box(x, y, w, h, text, fc, sub=None):
+        ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.02,rounding_size=0.18", fc=fc, ec=INK2, lw=0.7))
+        if sub:
+            ax.text(x + w / 2, y + h * 0.63, text, ha="center", va="center", fontsize=6.6, color=INK, weight="bold")
+            ax.text(x + w / 2, y + h * 0.3, sub, ha="center", va="center", fontsize=5.8, color=INK2)
+        else:
+            ax.text(x + w / 2, y + h / 2, text, ha="center", va="center", fontsize=6.4, color=INK, linespacing=1.15)
+
+    def arrow(x0, y0, x1, y1):
+        ax.add_patch(FancyArrowPatch((x0, y0), (x1, y1), arrowstyle="-|>", mutation_scale=6, lw=0.7, color=INK2,
+                                     shrinkA=0, shrinkB=0))
+
+    box(0.0, 1.55, 1.75, 1.4, "comment\n[variety]\n[source]", "#f4f3ef")
+    members = [("DeBERTa-v3-large", "fine-tuned, 5 seeds", "#dbe8f9"),
+               ("e5 + mE5", "frozen; linear probe", "#d6f2e7"),
+               ("Qwen3.5-9B", "frozen; linear probe", "#fbe1d6")]
+    ys = [3.15, 1.7, 0.25]
+    for (t, sub, c), y in zip(members, ys):
+        box(2.35, y, 3.0, 1.1, t, c, sub)
+        arrow(1.75, 2.25, 2.35, y + 0.55)
+        arrow(5.35, y + 0.55, 6.0, 2.25)
+    box(6.0, 1.7, 1.55, 1.1, "average\nlogits", "#f4f3ef")
+    arrow(7.55, 2.25, 8.0, 2.25)
+    box(8.0, 1.4, 2.35, 1.7, "per-segment\nthresholds\n(cross-fitted)", "#f4f3ef")
+    fig.tight_layout(pad=0.1)
+    out = ROOT / "paper" / "fig_system.pdf"
+    fig.savefig(out, bbox_inches="tight", pad_inches=0.01)
+    fig.savefig(out.with_suffix(".png"), dpi=220, bbox_inches="tight", pad_inches=0.01)
+    print("saved", out)
+
+
+def gains_figure() -> None:
+    """Two panels: (a) learning curves, (b) ensemble size (DeBERTa seeds alone vs inside the three-family ensemble)."""
+    df = pool()
+    deb = pl.read_csv(ROOT / "results" / "paper" / "learning_curve_deberta.csv")
+    probes = pl.read_csv(ROOT / "results" / "paper" / "learning_curve_probes.csv")
+    ens = pl.read_csv(ROOT / "results" / "paper" / "ensemble_curve.csv")
+    plt.rcParams.update({"font.family": "serif", "font.size": 7.5})
+    fig, (a, b) = plt.subplots(1, 2, figsize=(6.6, 2.15))
+    for name, col, mk, d in (("DeBERTa (1 seed)", BLUE, "o", deb),
+                             ("9B LLM probe", ORANGE, "s", probes.filter(pl.col("member") == "llm")),
+                             ("e5 probe", AQUA, "^", probes.filter(pl.col("member") == "e5"))):
+        g = d.group_by("frac").agg(pl.col("score").mean().alias("m"), pl.col("score").std().fill_null(0).alias("sd")).sort("frac")
+        x = g["frac"].to_numpy() * 100
+        a.errorbar(x, g["m"], yerr=g["sd"], color=col, marker=mk, ms=4, lw=1.5, capsize=2, elinewidth=0.8, zorder=3)
+        a.annotate(name, (x[-1], g["m"][-1]), xytext=(4, 0), textcoords="offset points", va="center", fontsize=6.5, color=INK)
+    a.axvspan(50, 100, color="#f4f3ef", zorder=0, lw=0)
+    a.text(75, 0.792, "plateau", ha="center", fontsize=6.5, color=INK2, style="italic")
+    a.set_xlim(5, 138)
+    a.set_xticks([10, 25, 50, 75, 100])
+    a.set_xticklabels(["10%", "25%", "50%", "75%", "100%"])
+    a.set_xlabel("share of training data", color=INK2)
+    a.set_ylabel("official score (OOF)", color=INK2)
+    a.set_title("(a) more data stops helping at half the data", fontsize=7.5, color=INK, loc="left")
+    _style(a, "y")
+    g = ens.group_by("n").agg(pl.col("deb_score").mean().alias("deb"), pl.col("lead_score").mean().alias("lead")).sort("n")
+    n = g["n"].to_numpy()
+    b.plot(n, g["deb"], color=BLUE, marker="o", ms=3.5, lw=1.5, zorder=3)
+    b.plot(n, g["lead"], color=ORANGE, marker="s", ms=3.5, lw=1.5, zorder=3)
+    b.annotate("DeBERTa seeds only", (n[-1], g["deb"][-1]), xytext=(4, -1), textcoords="offset points", va="center",
+               fontsize=6.5, color=INK)
+    b.annotate("+ e5 probe + 9B probe", (n[-1], g["lead"][-1]), xytext=(4, 1), textcoords="offset points", va="center",
+               fontsize=6.5, color=INK)
+    b.annotate("", xy=(5.5, g["lead"][4]), xytext=(5.5, g["deb"][4]),
+               arrowprops=dict(arrowstyle="<->", color=INK2, lw=0.7))
+    b.text(5.75, (g["lead"][4] + g["deb"][4]) / 2, "+.007 from\nmodel diversity", fontsize=6.3, color=INK2, va="center")
+    b.set_xlim(0.5, 14.8)
+    b.set_xticks([1, 2, 3, 5, 10])
+    b.set_xlabel("number of DeBERTa seeds averaged", color=INK2)
+    b.set_title("(b) more seeds stop helping at three", fontsize=7.5, color=INK, loc="left")
+    _style(b, "y")
+    fig.tight_layout(w_pad=1.5)
+    out = ROOT / "paper" / "fig_gains.pdf"
+    fig.savefig(out, bbox_inches="tight", pad_inches=0.02)
+    fig.savefig(out.with_suffix(".png"), dpi=220, bbox_inches="tight", pad_inches=0.02)
+    print("saved", out)
+
+
 if __name__ == "__main__":
     import sys
-    cue_flip_figure() if "cues" in sys.argv[1:] else main()
+    figs = {"cues": cue_flip_figure, "headline": headline_figure, "system": system_figure, "gains": gains_figure}
+    args = sys.argv[1:] or ["learning"]
+    for a_ in (figs if args == ["all"] else args):
+        figs.get(a_, main)()
