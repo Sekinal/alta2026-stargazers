@@ -19,7 +19,7 @@
 
 \author{Irving Ernesto Quezada Ram\'{i}rez \\
   Independent researcher \\
-  Team \texttt{thermostatic} \\
+  Team Stargazers (CodaBench: \texttt{thermostatic}) \\
   \texttt{research@irvingernesto.com}}
 
 \begin{document}
@@ -56,8 +56,9 @@ differences between annotator groups \citep{frenda-etal-2023-epic}. Our analysis
 variety, the two varieties' sarcasm labels behave like different constructs (Section~\ref{sec:two}).
 
 Our contributions are:
-(i) a simple, well-validated ensemble that was one of the top two runs on the test set (0.8668, statistically tied with
-the top run), whose test score matched its cross-validated estimate component by component;
+(i) a simple, well-validated ensemble that scored 0.8668 on the test set, second on the leaderboard and among the six
+runs the organisers found statistically tied for first place, whose test score matched its cross-validated estimate
+component by component;
 (ii) a catalogue of interventions that did \emph{not} help under a strict protocol (Section~\ref{sec:negative});
 (iii) evidence that the remaining error is dominated by the labels, and that the two varieties' sarcasm labels encode
 different constructs (Section~\ref{sec:labels}).
@@ -134,10 +135,11 @@ submission (0.844--0.895) and within 0.002 of the OOF point estimate; the bindin
 We also submitted DeBERTa $\times$5 alone as an ablation: it scored .854 on test against .867 for the ensemble
 (+.013; the paired OOF expectation was +.005, 90\% band $-$.010 to +.023). The ensemble's test score tracked its OOF
 estimate, whereas DeBERTa alone fell by .013, mostly on the two binding en-AU components (sentiment .931 $\to$ .916,
-sarcasm .803 $\to$ .793). Our run placed second on the leaderboard, 0.0007 behind the top run. The organisers tested the
-difference with a Wilcoxon signed-rank test on 500 bootstrap resamples of the two runs' outputs and found it not
-significant ($p=0.40$); the two systems differ on only 2.1\% of sentiment and 4.7\% of sarcasm labels. Two independently
-built systems thus converge on nearly the same decisions, which fits the label-limited picture of Section~\ref{sec:labels}.
+sarcasm .803 $\to$ .793). Our run placed second on the leaderboard, 0.0007 behind the top run. Using an approximate
+randomisation test with 10{,}000 swaps \citep{dror-etal-2018-hitchhikers}, the organisers found the top six runs
+statistically indistinguishable; they share first place. Our run and the top run differ on only 2.1\% of sentiment and
+4.7\% of sarcasm labels: independently built systems converge on nearly the same decisions, which fits the label-limited
+picture of Section~\ref{sec:labels}.
 
 \section{Analysis}
 \subsection{What did not help}

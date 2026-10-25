@@ -53,3 +53,4 @@ OK  maas-etal-2011-learning: ACL P11-1015
 OK  zhang2015character: arXiv 1509.01626 (official bibtex)
 OK  chang-etal-2020-convokit: doi 10.18653/v1/2020.sigdial-1.8 (title sim 1.00)
 OK  he2017translation: doi 10.1145/3109859.3109882 (title sim 1.00)
+OK  dror-etal-2018-hitchhikers: ACL P18-1128

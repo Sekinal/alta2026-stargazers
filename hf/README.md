@@ -12,7 +12,7 @@ tags:
 pipeline_tag: text-classification
 ---
 
-# Team thermostatic — ALTA 2026 Shared Task (sentiment & sarcasm in en-AU / en-UK)
+# Team Stargazers (CodaBench: thermostatic) — ALTA 2026 Shared Task (sentiment & sarcasm in en-AU / en-UK)
 
 Code, predictions, cached features, model checkpoints and paper for our system in the
 [ALTA 2026 shared task](https://www.alta.asn.au/events/sharedtask2026/) on sentiment and sarcasm classification in
@@ -28,7 +28,7 @@ Official score = ½ [min(sent-AU, sent-UK) + min(sarc-AU, sarc-UK)], macro-F1 pe
 | System | sent-AU | sent-UK | sarc-AU | sarc-UK | score |
 |---|---|---|---|---|---|
 | Ensemble `stk_v5r`, pooled 5-fold OOF (dev estimate) | .934 | .976 | .805 | .841 | .869 |
-| **Ensemble `stk_v5r`, official test** | .932 | .976 | .801 | .837 | **.867** |
+| **Ensemble `stk_v5r`, official test** (2nd on the leaderboard; one of six runs statistically tied for first) | .932 | .976 | .801 | .837 | **.867** |
 | DeBERTa-v3-large ×5 alone, official test (ablation) | .916 | .975 | .793 | .820 | .854 |
 | Organisers' baseline, official test | .866 | .931 | .680 | .696 | .773 |
 

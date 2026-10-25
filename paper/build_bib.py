@@ -84,6 +84,7 @@ REFS = [
     ("zhang2015character", "Character-level Convolutional Networks for Text Classification", "Zhang", 2015, "arxiv", "NeurIPS 2015"),
     ("chang-etal-2020-convokit", "ConvoKit: A Toolkit for the Analysis of Conversations", "Chang", 2020, "doi", ""),
     ("he2017translation", "Translation-based Recommendation", "He", 2017, "doi", ""),
+    ("dror-etal-2018-hitchhikers", "The Hitchhiker's Guide to Testing Statistical Significance in Natural Language Processing", "Dror", 2018, "manual", ""),
 ]
 
 # resources without a paper (URLs verified to exist when this file was written); plus classic papers without DOIs whose
@@ -116,7 +117,7 @@ MANUAL_BIB = {
   note         = {Agentic coding tool; models Claude Opus 5 and Claude Opus 5.5}
 }""",
 }
-ACL_IDS = {"wang-manning-2012-baselines": "P12-2018", "pang-lee-2005-seeing": "P05-1015", "daume-iii-2007-frustratingly": "P07-1033",
+ACL_IDS = {"dror-etal-2018-hitchhikers": "P18-1128", "wang-manning-2012-baselines": "P12-2018", "pang-lee-2005-seeing": "P05-1015", "daume-iii-2007-frustratingly": "P07-1033",
            "socher-etal-2013-recursive": "D13-1170", "maas-etal-2011-learning": "P11-1015"}
 URL_ONLY = {  # classic papers with neither DOI nor anthology id: title/author verified via proceedings page
     "lee2013pseudo": """@inproceedings{lee2013pseudo,
