@@ -32,14 +32,14 @@ We describe our system for the ALTA 2026 shared task, which asks for sentiment a
 (en-AU) and British (en-UK) English Google reviews and Reddit comments, and scores each task by its weaker variety. An
 ensemble of a fine-tuned DeBERTa-v3-large and two linear probes, chosen under a strict validation protocol, scored 0.867
 on the test set: second on the leaderboard, and one of six teams the organisers declared joint winners. We then ask why
-so many different models stall near this score. More data and more seeds help little within the range we can test;
-instead, the two varieties' sarcasm labels behave like different constructs. Among Reddit comments that a sentiment
+so many different models stall near this score. Going from half to all of the training data, or from three to ten
+seeds, helps little, and the two varieties' sarcasm labels turn out to differ markedly. Among Reddit comments that a sentiment
 model calls negative, every en-AU subreddit has a higher sarcastic share (44--64\%) than every en-UK one (12--33\%), and
-derision cues (mocking, contempt, anger) predict an en-AU sarcasm label but the absence of an en-UK one, while playful
-cues predict en-UK sarcasm more. Both patterns are compatible with the task guideline, which counts ``irony or
+derision cues (mocking, contempt, anger) predict an en-AU sarcasm label, while contempt and anger predict the absence of
+an en-UK one and playful cues predict en-UK sarcasm more. Both patterns are compatible with the task guideline, which counts ``irony or
 mockery''. With one annotator per variety we cannot tell whether they stem from the annotators, the communities or the
-texts, but they fit the poor cross-variety transfer of sarcasm and locate the binding en-AU errors: deciding which
-negative comments count as sarcastic.
+texts, but they are consistent with the poor cross-variety transfer of sarcasm and with where our binding en-AU errors
+lie: deciding which negative comments count as sarcastic.
 \end{abstract}
 
 \section{Introduction}
@@ -49,8 +49,9 @@ negative comments count as sarcastic.
 \centering
 \includegraphics[width=\columnwidth]{fig_headline.pdf}
 \caption{The two varieties' sarcasm labels differ, using only gold labels and label-free models. (a) Share of Reddit
-comments labelled sarcastic, per subreddit, among comments that a sentiment model calls negative. (b) Mean AUC of four
-derision cues and four playful cues for the gold sarcasm label in the same comments (details in
+comments labelled sarcastic, per subreddit, among archive-matched comments that a sentiment model calls negative
+(1,221 en-AU, 883 en-UK). (b) Mean AUC of four
+derision cues and four playful cues for the gold sarcasm label among all comments the sentiment model calls negative (details in
 Figure~\ref{fig:cues}); 0.5 means no signal.}
 \label{fig:headline}
 \end{figure}
@@ -61,8 +62,8 @@ and a binary sarcasm label. For each task, the official score takes the macro-F1
 call the \emph{binding} variety, and then averages the two tasks.
 
 This paper makes two points. First, a small ensemble chosen under a strict protocol was enough to share first place.
-Second, and more useful for anyone working with this data, the en-AU and en-UK sarcasm labels behave like different
-constructs, which limits what a model trained across both can do. Figure~\ref{fig:headline} summarises the evidence:
+Second, and more useful for anyone working with this data, the en-AU and en-UK sarcasm labels differ markedly in rate
+and in the cues they follow, which matters for any model that must transfer between them. Figure~\ref{fig:headline} summarises the evidence:
 the en-AU labels call far more negative comments sarcastic, in every subreddit, and the cues that go with an en-AU
 sarcasm label point the other way in en-UK.
 
@@ -70,13 +71,13 @@ Our findings, in order:
 \begin{enumerate}
 \item A three-model ensemble scored 0.867 on the test set, second on the leaderboard and one of six teams the organisers
 declared joint winners (\S\ref{sec:results}).
-\item Within the range we could test, more training data and more random seeds help little; the gains come from
+\item Going from half to all of the training data, or from three to ten seeds, helps little; the gains come from
 combining different model families (\S\ref{sec:capacity}).
 \item The two varieties' sarcasm labels differ in rate and in which cues they follow: derision predicts an en-AU
-sarcasm label but the absence of an en-UK one, and for contempt and anger this holds in every subreddit
+sarcasm label, while contempt and anger predict the absence of an en-UK one in every subreddit
 (\S\ref{sec:constructs}).
-\item Agreement on en-AU sarcasm is low even between humans, and our ensemble's remaining errors concentrate on which
-negative comments count as sarcastic (\S\ref{sec:ceiling}).
+\item Agreement on en-AU sarcasm is low even between humans, and our ensemble is weakest at telling which negative
+en-AU comments are labelled sarcastic (\S\ref{sec:ceiling}).
 \end{enumerate}
 We also report what did not help (\S\ref{sec:negative}) and, as an exploratory check, a blind re-annotation by an
 LLM (Appendix~\ref{app:readers}).
@@ -154,7 +155,8 @@ thresholds held fixed. We report $\pboot$, the share of resamples in which one b
 only, not retraining or selection, and it is not a $p$-value: two seeds of the same MLP probe reach $\pboot\geq0.9$ in 18\% of pairs. We call $\pboot<0.8$ no
 evidence and $0.8\leq\pboot<0.95$ suggestive, and compare neural models by averages over at least two seeds
 \citep{dodge2020finetuning}.
-\item \textbf{Leakage in our pipeline.} Every trained model is re-run with shuffled labels and must fall to chance level.
+\item \textbf{Leakage in our pipeline.} Models are re-run with shuffled labels and must fall to the no-information
+score; all three members of the final system do (0.63--0.64, against a floor of 0.64).
 \item \textbf{Selection on one lucky split.} Neural recipes are screened on one fold; anything promising is confirmed on
 an untouched fold, with the success criterion written down beforehand \citep{nosek2018preregistration,gorman-bedrick-2019-need}.
 \end{itemize}
@@ -166,7 +168,7 @@ an untouched fold, with the success criterion written down beforehand \citep{nos
 \centering
 \includegraphics[width=\columnwidth]{fig_system.pdf}
 \caption{The submitted system. Three models score each text; their logits are averaged with equal weights, and a
-cross-fitted threshold for each task and segment turns the average into labels.}
+threshold for each task and segment, learned from out-of-fold predictions, turns the average into labels.}
 \label{fig:system}
 \end{figure}
 
@@ -220,15 +222,17 @@ the pool, with cross-fitted thresholds. The baseline is the organisers' fine-tun
 \end{table}
 
 \paragraph{The test score fell inside the predicted range.} The ensemble scored 0.8668 on the test set
-(Table~\ref{tab:main}), 0.002 below its OOF estimate and inside the 90\% interval we predicted before submitting
-(0.844--0.895, i.e.\ the OOF score $\pm1.645$ bootstrap standard deviations, widened by 20\%). No component moved by more than 0.004. En-AU had the lower F1 in both tasks, so en-AU set the official
-score. With a test-sampling standard deviation of about 0.013, the closeness is partly luck.
+(Table~\ref{tab:main}), 0.002 below its OOF estimate and inside the heuristic 90\% band we computed before
+submitting (0.844--0.895: the OOF score $\pm1.645$ bootstrap standard deviations, widened by 20\% as a margin for
+selection, as our red-team review recommended). No component moved by more than 0.004. En-AU had the lower F1 in both tasks, so en-AU set the official
+score. With a sampling standard deviation of about 0.013 (from resampling pool predictions at test size), the closeness is
+partly luck.
 
 \paragraph{It shares first place.} Our run placed second on the leaderboard, 0.0007 behind the top run. After an
 approximate randomisation test with 10{,}000 swaps \citep{dror-etal-2018-hitchhikers} did not separate the top six
 teams, the organisers declared all six joint winners. A non-significant difference does not show that the runs are
-equivalent; it shows that this test set cannot rank them. On the 1,573 test texts, our run and
-the top run disagree on 2.1\% of sentiment and 4.7\% of sarcasm labels.
+equivalent; it shows that this test set cannot rank them. According to the organisers, our run and
+the top run disagree on 2.1\% of sentiment and 4.7\% of sarcasm labels among the 1,573 test texts.
 
 \paragraph{The probes helped on test.} As an ablation we also submitted the DeBERTa models alone. They scored 0.854,
 against 0.867 for the ensemble. The paired bootstrap on the pool had predicted a gain of +0.005 (90\% band $-$0.010 to
@@ -245,8 +249,8 @@ asks why, one question at a time.
 \centering
 \includegraphics[width=\textwidth]{fig_gains.pdf}
 \caption{Where gains run out. (a) OOF score when each model is trained on a nested, segment-stratified share of the
-training folds (DeBERTa: mean of two seeds; probes: three subset draws; error bars: standard deviation). (b) Averaging
-more DeBERTa seeds adds little beyond three; adding the two probes adds about 0.007 at any number of seeds. Note the
+training folds (DeBERTa: mean of two seeds; probes: three subset draws below 100\%; error bars: standard deviation). (b) Averaging
+more DeBERTa seeds adds little beyond three (each point averages over sampled subsets of ten seeds); adding the two probes adds about 0.007 at any number of seeds. Note the
 narrow y-axis: the 0.003 gain from one to three seeds is below the 0.004 difference between two five-seed sets of the
 same recipe.}
 \label{fig:gains}
@@ -254,11 +258,11 @@ same recipe.}
 
 \subsection{Is it a data or seed limit?}
 \label{sec:capacity}
-Within the range we can test, more data and more seeds both help little (Figure~\ref{fig:gains}).
+Beyond half of the training data and three seeds, more of either helps little (Figure~\ref{fig:gains}).
 
 \paragraph{More data.} With matched seeds, DeBERTa scores 0.858, 0.859 and 0.862 at 50, 75 and 100\% of the training
-data, a gain of 0.004; the LLM probe scores 0.853, 0.854 and 0.853. These curves use a fixed number of epochs, which, if
-anything, understates the smaller-data points. Sarcasm AUC still rises slightly in both varieties, and more for en-UK,
+data, a gain of 0.004; the LLM probe scores 0.853, 0.854 and 0.853. These curves use a fixed number of epochs, so smaller
+subsets also get fewer updates. Sarcasm AUC still rises slightly in both varieties, and more for en-UK,
 which has only 248 sarcastic Reddit comments (DeBERTa, 50 to 100\%: en-UK 0.845 to 0.867, en-AU 0.833 to 0.845). The
 e5 probe still gains 0.010 from 50 to 100\%. These curves show diminishing returns within the pool; they cannot say
 what new data or larger models would do.
@@ -294,7 +298,8 @@ negative Reddit comments sarcastic, against 24\% in en-UK. The gap is not driven
 classifier \citep{laurer2023zeroshot} and an emotion classifier \citep{hartmann2022emotion}, and measured how well each
 predicts the gold sarcasm label (Figure~\ref{fig:cues}). To avoid conditioning on the annotator's own labels, we restrict
 to comments that a separate sentiment model calls negative, and also report the unfiltered result. Derision cues predict an en-AU sarcasm label (mocking 0.73,
-contempt 0.72, anger 0.69, cynicism 0.66) but predict its absence in en-UK (AUC 0.38--0.49). Playful cues predict en-UK sarcasm more
+contempt 0.72, anger 0.69, cynicism 0.66). In en-UK, contempt and anger predict its absence (0.41 and 0.38), and
+mocking and cynicism carry little signal (0.49 and 0.45). Playful cues predict en-UK sarcasm more
 strongly (joking 0.77, praise 0.68, ironic praise 0.69, joy 0.69) than en-AU sarcasm (0.50--0.61). The same contrast
 holds over all Reddit comments without any filter (derision 0.76--0.80 for en-AU, 0.40--0.51 for en-UK) and within each
 subreddit (three en-AU, four en-UK): all four en-AU derision cues score 0.62--0.74 in every en-AU subreddit, and en-UK
@@ -310,20 +315,23 @@ and our data cannot separate them: the two annotators may apply the guideline di
 communities may use sarcasm more aggressively, as jocular mockery is a described feature of Australian interaction
 \citep{haugh2012mock}; or the comments themselves may differ, since each annotator labelled different texts. A crossed
 design, in which native annotators of both varieties label the same comments, would settle it. Whatever the cause, the
-contrast fits the poor cross-variety transfer that BESSTIE reported: a fine-tuned DeBERTa trained on one variety and
-tested on the other loses 0.14 to 0.16 sarcasm AUC, while sentiment transfers fully. A single rule cannot fit cues whose
-sign differs between varieties, but a model told the variety can, which is what our per-variety outputs do.
+contrast is consistent with the poor cross-variety transfer that BESSTIE reported. In our own experiment, a three-seed
+DeBERTa trained on one variety's pool folds and evaluated on the other's Reddit comments loses 0.14 to 0.16 sarcasm AUC
+(0.840 to 0.678 for en-AU, 0.859 to 0.715 for en-UK), while sentiment, evaluated on both sources, loses at most 0.011
+AUC. Training on both varieties with
+the variety prefix does not hurt (0.845 and 0.861): a model told the variety can fit both label sets, which is what our
+per-variety outputs do.
 
 \subsection{How far can en-AU sarcasm go?}
 \label{sec:ceiling}
 Agreement on en-AU sarcasm is low even between humans. BESSTIE reports a second annotator for 50 items per variety:
-$\kappa=0.47$ for en-AU sarcasm (by our parametric estimate, a 95\% interval of about 0.2--0.7), against 0.61 and 0.79
-for sentiment. Our ensemble agrees with the gold en-AU sarcasm labels at $\kappa=0.56$ (0.53--0.60) over all 2,004
-en-AU Reddit comments. The samples differ, so this is not a ceiling estimate, but it shows how little room an
-annotator-independent notion of sarcasm leaves. The remaining errors sit where \S\ref{sec:constructs} locates the
-difference between the varieties: among comments the annotator labelled negative, our ensemble's sarcasm AUC is 0.77
-for en-AU against 0.91 for en-UK. Further gains on the binding component therefore depend on modelling which negative
-comments this annotator calls sarcastic, rather than on detecting sarcasm better in general.
+$\kappa=0.47$ for en-AU sarcasm, against 0.61 and 0.79 for sentiment; an illustrative parametric interval, assuming the
+pool's sarcasm prevalence, spans about 0.2--0.7. Our submitted ensemble agrees with the gold en-AU sarcasm labels at
+$\kappa=0.56$ (95\% bootstrap interval 0.52--0.59) over all 2,004 en-AU Reddit comments. The samples differ, so the two numbers cannot be compared directly, and neither is a ceiling
+estimate; together they show that en-AU sarcasm labels are hard to reproduce, for humans as for models. The hardest
+slice is where \S\ref{sec:constructs} locates the difference between the varieties: among comments the annotator
+labelled negative, our ensemble's sarcasm AUC is 0.77 for en-AU against 0.91 for en-UK. Why these comments are hard,
+whether through the labels, missing context or model limits, remains open.
 
 \section{What Did Not Help}
 \label{sec:negative}
@@ -340,9 +348,8 @@ confirmation on an untouched fold ($-$0.006).
 \label{sec:conclusion}
 A small ensemble, chosen under a strict protocol, shared first place. The more useful finding concerns the labels: the
 en-AU and en-UK sarcasm labels differ in rate and in the cues they follow, consistently across subreddits, and agreement
-on en-AU sarcasm is low even between humans. Because the metric takes the weaker variety, we expect gains on this
-benchmark to come mostly from modelling the en-AU labels' treatment of negative comments rather than from detecting
-sarcasm better in general. We suggest that variety-sensitive benchmarks state explicitly whether mockery alone counts as
+on en-AU sarcasm is low even between humans. Because the metric takes the weaker variety, progress on this benchmark
+hinges on en-AU sarcasm, and in particular on the negative comments where its labels are hardest to predict. We suggest that variety-sensitive benchmarks state explicitly whether mockery alone counts as
 sarcasm, have native annotators of each variety label a shared set of items, and report agreement per variety.
 
 \section*{Limitations}
@@ -351,7 +358,7 @@ BESSTIE's annotators could consider context we do not see. The exploratory LLM r
 and text differences, so ``the en-AU labels'' should not be read as ``Australian English''. Our comparison with BESSTIE's
 second annotator uses different samples. The cue analyses are exploratory, use automatic classifiers as proxies for derision and play, and do not correct for
 multiple comparisons. We did not test models larger
-than 9B parameters, so our curves do not rule out a capacity limit. The test set gives a sampling standard deviation of
+than 9B parameters, so our curves do not rule out a capacity limit. Resampling pool predictions at test size gives a sampling standard deviation of
 about 0.013 on the official score, larger than most differences we report; we therefore lean on OOF estimates and paired
 resampling. The DeBERTa epoch count was fixed on the fold later used for screening, which makes those screens slightly
 optimistic. En-UK reviews are handled by a rule.
@@ -380,7 +387,8 @@ Srirag, for running the shared task and for their careful significance analysis.
 \section{What Did Not Help: Full Results}
 \label{app:negative}
 Table~\ref{tab:negative} lists the main interventions tried after the three-model ensemble was fixed, under the protocol
-of \S\ref{sec:protocol}. One-fold deltas compare three-seed averages; five-fold deltas compare full OOF scores.
+of \S\ref{sec:protocol}. One-fold DeBERTa deltas compare three-seed prediction averages, LoRA deltas compare mean scores over two seeds, and
+five-fold deltas compare full OOF scores.
 
 \begin{table}[!ht]
 \centering\small
@@ -399,7 +407,7 @@ Intervention (protocol) & $\Delta$ \\
 \quad \texttt{/s}-labelled sarcasm pre-training & $-$.011 \\
 \midrule
 \multicolumn{2}{l}{\emph{LLMs} (Qwen3.5-4B, one fold)} \\
-\quad LoRA, alone / in ensemble & $-$.018 / .000 \\
+\quad LoRA, alone / in ensemble & $-$.02 / .000 \\
 \quad EVA initialisation & $-$.04 \\
 \quad EVA + DoRA + Riemannian & $-$.10 \\
 \midrule
@@ -411,8 +419,8 @@ Intervention (protocol) & $\Delta$ \\
 \quad LLM-reader label, en-UK (pre-reg.) & .000 \\
 \bottomrule
 \end{tabular}
-\caption{Change in official score against the matching baseline (one-fold rows: the three-seed DeBERTa or plain-LoRA
-baseline on the same fold, fold 4 for pseudo-labels; five-fold rows: the full ensemble, or for thread context the same
+\caption{Change in official score against the matching baseline (DeBERTa rows and LoRA alone: three-seed DeBERTa on the
+same fold; LoRA variants: plain LoRA; pseudo-labels: the unchanged ensemble on fold 4; other five-fold rows: the full ensemble, or for thread context the same
 stacker without context features). Methods: weight averaging (EMA); layer-wise learning-rate decay
 \citep{howard-ruder-2018-universal}; NLI-tuned DeBERTa \citep{laurer2024less}; ELECTRA \citep{clark2020electra};
 ModernBERT \citep{warner2024modernbert}; domain-adaptive pre-training \citep{gururangan-etal-2020-dont}; \texttt{/s}-labelled

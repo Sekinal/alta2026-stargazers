@@ -254,3 +254,15 @@ and disjoint items. The blind LLM re-annotation (R6) moved to an appendix as exp
 guideline, not a native speaker; the low AU reader rate may reflect the reader as much as the annotator. The "ceiling"
 claim was dropped; the main text uses lead-vs-gold AU sarcasm kappa .56 [.53,.60] on all 2,004 AU Reddit rows
 (kappa_vs_gold.csv, stk_v5) next to BESSTIE's human .47, with the samples-differ caveat.
+
+## Second external review (two GPT-6 Astra reviewers via Codex, 2026-10-26)
+- Shuffled-label canaries re-checked for the three final members (validate canary): enc_deb_l_s13 .631, cls_e5me5_lr
+  .638, llm_q35_9b_probe .642, all at the no-information floor .641 -> passed. Paper claim narrowed to these.
+- Submitted ensemble stk_v5r, segment+ukg OOF decisions, Reddit sarcasm kappa vs gold: AU .558 [.522,.592] (n 2004),
+  UK .630 [.567,.686] (n 1143); stk_v5 (earlier lead): AU .562, UK .609. Paper uses stk_v5r.
+- 2.1% / 4.7% disagreement with the top run: organisers' email (33 and 74 of 1,573 labels).
+- Joint training (both varieties, prefix) vs within-variety, Reddit sarcasm AUC: AU .845 vs .840, UK .861 vs .859
+  (transfer_matrix.csv): pooling with the variety prefix does not hurt. Sentiment transfer loses at most .011 AUC.
+- Per-subreddit analysis covers archive-matched model-negative comments only (1,221 AU, 883 UK of 1,271 / 912).
+- UK mocking is uninformative (AUC .49 [.45,.54]; unfiltered .51); only contempt and anger reverse in UK.
+- LoRA alone vs 3-seed DeBERTa on fold 0: mean of two seeds .851 vs .871 = -.02.

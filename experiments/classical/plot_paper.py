@@ -134,8 +134,8 @@ def cue_flip_figure() -> None:
                 fontsize=7, color=INK2, weight="bold")
     # identity carried by the legend above the plot
     from matplotlib.lines import Line2D
-    ax.legend(handles=[Line2D([], [], marker="o", color=BLUE, mec="white", lw=0, ms=5, label="en-AU annotator"),
-                       Line2D([], [], marker="s", color=ORANGE, mec="white", lw=0, ms=5, label="en-UK annotator")],
+    ax.legend(handles=[Line2D([], [], marker="o", color=BLUE, mec="white", lw=0, ms=5, label="en-AU labels"),
+                       Line2D([], [], marker="s", color=ORANGE, mec="white", lw=0, ms=5, label="en-UK labels")],
               loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=2, frameon=False, fontsize=7.3, handletextpad=0.2,
               columnspacing=1.2, borderaxespad=0.0)
     ax.grid(axis="x", color=GRID, lw=0.5, zorder=0)
@@ -183,7 +183,7 @@ def headline_figure() -> None:
         col = BLUE if r["variety"] == "en-AU" else ORANGE
         a1.barh(y, r["sarc_rate"], height=0.72, color=col, zorder=3,
                 label=r["variety"] if r["variety"] != prev else None)
-        a1.text(r["sarc_rate"] + 0.012, y, f"{r['sarc_rate']:.0%}", va="center", fontsize=6.8, color=INK)
+        a1.text(r["sarc_rate"] + 0.012, y, f"{int(r['sarc_rate'] * 100 + 0.5 + 1e-9)}%", va="center", fontsize=6.8, color=INK)
         ys.append(y)
         labs.append(names.get(r["subreddit"], r["subreddit"]))
         prev = r["variety"]
