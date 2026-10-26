@@ -199,10 +199,10 @@ def headline_figure() -> None:
     _style(a1, "x")
     c = pl.read_csv(ROOT / "results" / "paper" / "cue_flip.csv")
     for x0, v in enumerate(("en-AU", "en-UK")):
-        for grp, col, dx, lab in (("derision", "#4a3aa7", -0.17, "derision"), ("irony", AQUA, 0.17, "playful")):
+        for grp, col, dx, lab in (("derision", "#4a3aa7", -0.19, "derision"), ("irony", AQUA, 0.19, "playful")):
             m = c.filter((pl.col("variety") == v) & (pl.col("group") == grp))["auc"].mean()
-            a2.bar(x0 + dx, m - 0.5, bottom=0.5, width=0.3, color=col, zorder=3, label=lab if v == "en-AU" else None)
-            a2.text(x0 + dx, m + (0.012 if m > 0.5 else -0.012), f"{m:.2f}", ha="center",
+            a2.bar(x0 + dx, m - 0.5, bottom=0.5, width=0.34, color=col, zorder=3, label=lab if v == "en-AU" else None)
+            a2.text(x0 + dx, m + (0.012 if m > 0.5 else -0.012), f"{m:.2f}"[1:], ha="center",
                     va="bottom" if m > 0.5 else "top", fontsize=6.8, color=INK)
     a2.axhline(0.5, color=INK2, lw=0.7, zorder=4)
     a2.set_xticks([0, 1])
