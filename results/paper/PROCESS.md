@@ -85,3 +85,23 @@ Thread context (audit only): Arctic Shift day dumps (95% of Reddit rows matched)
   while they existed. Readers in R6/R8 were Claude Opus 5.5 sub-agents.
 - Acknowledgements: Lium GPU-credit grant; Claude Code with Claude Opus 5 and Opus 5.5. The author must review the paper
   before submission (responsibility statement in the acknowledgements).
+
+## Everything explored but not used in any reported result (moved out of the paper, 2026-10-26)
+- Encoders: RoBERTa-large (Liu et al. 2019); Twitter-RoBERTa models (Barbieri et al. 2020, TweetEval; Loureiro et al.
+  2022, TimeLMs; Loureiro et al. 2023, Tweet Insights), incl. cardiffnlp/twitter-roberta-large-2022-154m.
+- Embedding models: intfloat/e5-base-v2; BAAI/bge-large-en-v1.5 (Xiao et al. 2024, C-Pack); thenlper/gte-large
+  (Li et al. 2023); mixedbread-ai/mxbai-embed-large-v1; sentence-transformers/all-mpnet-base-v2 (Reimers & Gurevych
+  2019); Qwen3-Embedding 0.6B/4B (Zhang et al. 2025).
+- LLMs: Qwen3.5-4B (probes, LoRA); Qwen3-8B 4-bit (Qwen3 technical report 2025); Qwen2.5-1.5B for surprisal (2024).
+- Zero-shot feature models: facebook/bart-large-mnli (Lewis et al. 2020; Williams et al. 2018); SiEBERT; nlptown star
+  rating; cardiffnlp irony, Elron irony, w11wo iSarcasm classifiers; SamLowe go_emotions; unitary toxicity; a formality
+  classifier; cardiffnlp tweet-topic (Antypas et al. 2022).
+- Classical: TF-IDF + LR / SVM, NB-SVM (Wang & Manning 2012), feature augmentation (Daume III 2007), XGBoost
+  (Chen & Guestrin 2016), LightGBM (Ke et al. 2017), CatBoost (Prokhorenkova et al. 2018), xRFM (Beaglehole et al. 2025).
+- Data-exploration tools: VADER (Hutto & Gilbert 2014), NRC Emotion Lexicon (Mohammad & Turney 2013), weighted
+  log-odds (Monroe et al. 2008), confident learning (Northcutt et al. 2021), UMAP (McInnes et al. 2018).
+- Corpora collected but not used in any reported run: SARC (Khodak et al. 2018), MUStARD (Castro et al. 2019), News
+  Headlines sarcasm (Misra & Arora 2023); sentiment: GoEmotions (Demszky et al. 2020), TweetEval sentiment, DynaSent
+  (Potts et al. 2021), SST-2 (Socher et al. 2013), Rotten Tomatoes (Pang & Lee 2005), IMDB (Maas et al. 2011), Yelp and
+  Amazon polarity (Zhang et al. 2015), Sentiment140 (Go et al. 2009); QUT AusVotes2025 (collected, excluded).
+Full BibTeX for all of these is in paper/references.bib (verified; see paper/bib_report.txt).

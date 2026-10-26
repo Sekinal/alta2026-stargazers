@@ -565,33 +565,20 @@ scikit-learn \citep{pedregosa2011sklearn}. Trained only on the shared-task train
 \paragraph{Analyses.} \path{MoritzLaurer/deberta-v3-large-zeroshot-v2.0} \citep{laurer2023zeroshot},
 \path{siebert/sentiment-roberta-large-english} \citep{hartmann2023siebert} and
 \path{j-hartmann/emotion-english-distilroberta-base} \citep{hartmann2022emotion} for the cues of Figure~\ref{fig:cues};
-VADER \citep{hutto2014vader}, the NRC Emotion Lexicon \citep{mohammad2013emolex}, weighted log-odds
-\citep{monroe2008fightin}, confident learning \citep{northcutt2021confident} and UMAP \citep{mcinnes2018umap} in the data
-exploration; Reddit thread context matched through Arctic Shift \citep{arcticshift} for the split audit.
+Reddit thread metadata matched through Arctic Shift \citep{arcticshift} for the split audit.
 
-\paragraph{Explored, not in the final system.} Encoders: RoBERTa-large \citep{liu2019roberta}, Twitter-RoBERTa models
-\citep{barbieri-etal-2020-tweeteval,loureiro-etal-2022-timelms,loureiro2023tweet}, ELECTRA-large, ModernBERT-large and
-NLI-tuned DeBERTa (Table~\ref{tab:negative}). Embedding models: e5-base, BGE \citep{xiao2023cpack}, GTE-large
-\citep{li2023gte}, mxbai-embed-large-v1, all-mpnet-base-v2 \citep{reimers-gurevych-2019-sentence}, Qwen3-Embedding (0.6B,
-4B; \citealp{qwen3emb}). LLMs: Qwen3.5-4B (probes, LoRA), Qwen3-8B in 4 bits \citep{qwen3report}, Qwen2.5-1.5B for
-surprisal features \citep{qwen25report}. Zero-shot feature models: BART-MNLI \citep{lewis-etal-2020-bart,
-williams-etal-2018-broad}, SiEBERT, a star-rating model, irony and sarcasm classifiers, toxicity and formality
-classifiers, and a topic classifier \citep{antypas-etal-2022-twitter}. Classical models: TF-IDF with logistic regression,
-SVMs, NB-SVM \citep{wang-manning-2012-baselines}, feature augmentation \citep{daume-iii-2007-frustratingly}, and
-gradient-boosted trees. Exact model identifiers are listed in the released code.
+\paragraph{External data in the reported negative results.} The \texttt{/s} sarcasm pre-training of
+Table~\ref{tab:negative} used Reddit comments tagged \texttt{/s} from AU and UK subreddits (via Arctic Shift, ConvoKit
+\citealp{chang-etal-2020-convokit}, and \citealp{redditusuk}) together with EPIC \citep{frenda-etal-2023-epic},
+iSarcasmEval \citep{abu-farha-etal-2022-semeval}, SemEval-2018 Task~3 \citep{van-hee-etal-2018-semeval}, FigLang 2020
+\citep{ghosh-etal-2020-report} and \citet{wallace-etal-2014-humans}. Domain-adaptive pre-training and pseudo-labelling used
+unlabelled in-domain text: AU and UK Reddit via Arctic Shift (Reddit's terms), Google Local reviews
+\citep{he2017translation,pasricha2018translation}, Booking.com reviews (CC BY-SA 4.0), NHS GP reviews (Open Government
+Licence) and Inside Airbnb (CC BY 4.0). All external data were deduplicated against the task data, and none is used by
+the final system.
 
-\paragraph{External data (exploration only).} Sarcasm and irony: Reddit comments tagged \texttt{/s} from AU and UK
-subreddits (via Arctic Shift, ConvoKit \citealp{chang-etal-2020-convokit}, and \citealp{redditusuk}), SARC
-\citep{khodak-etal-2018-large}, EPIC \citep{frenda-etal-2023-epic}, iSarcasmEval \citep{abu-farha-etal-2022-semeval},
-SemEval-2018 Task~3 \citep{van-hee-etal-2018-semeval}, FigLang 2020 \citep{ghosh-etal-2020-report},
-\citet{wallace-etal-2014-humans}, MUStARD \citep{castro-etal-2019-towards} and news-headline sarcasm
-\citep{misra2023headlines}. Sentiment: GoEmotions \citep{demszky-etal-2020-goemotions}, TweetEval
-\citep{barbieri-etal-2020-tweeteval}, DynaSent \citep{potts-etal-2021-dynasent}, SST-2 \citep{socher-etal-2013-recursive},
-Rotten Tomatoes \citep{pang-lee-2005-seeing}, IMDB \citep{maas-etal-2011-learning}, Yelp and Amazon polarity
-\citep{zhang2015character} and Sentiment140 \citep{go2009sentiment140}. Unlabelled in-domain text (about 236M tokens):
-AU and UK Reddit via Arctic Shift (Reddit's terms), Google Local reviews \citep{he2017translation,pasricha2018translation},
-Booking.com reviews (CC BY-SA 4.0), NHS GP reviews (Open Government Licence) and Inside Airbnb (CC BY 4.0). All external
-data were deduplicated against the task data; none is used by the final system, and every experiment using it was a tie
-or worse (Table~\ref{tab:negative}).
+\paragraph{Other exploration.} We also screened other encoders, embedding models, LLMs, zero-shot feature models and
+classical models (TF-IDF, SVMs, gradient-boosted trees), and collected further sarcasm and sentiment corpora. None
+contributed to the final system or to any result reported here; the release lists them all with their sources.
 
 \end{document}
