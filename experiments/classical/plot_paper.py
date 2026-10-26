@@ -105,8 +105,8 @@ def cue_flip_figure() -> None:
             y += 0.9
         ypos[c] = y
         y += 1.0
-    plt.rcParams.update({"font.family": "serif", "font.size": 7.5})
-    fig, ax = plt.subplots(figsize=(3.3, 2.7))
+    plt.rcParams.update({"font.family": "serif", "font.size": 8.3})
+    fig, ax = plt.subplots(figsize=(3.3, 2.9))
     lo_x, hi_x = 0.28, 0.86
     ax.axvspan(lo_x, 0.5, color="#f0efec", zorder=0, lw=0)
     ax.axvline(0.5, color=INK2, lw=0.8, zorder=1)
@@ -126,17 +126,17 @@ def cue_flip_figure() -> None:
     ax.set_xticks([0.3, 0.4, 0.5, 0.6, 0.7, 0.8])
     ax.set_xlabel("AUC for the gold sarcasm label (model-negative comments)", color=INK2)
     # region captions and group headers (text in ink tokens, never series colour)
-    ax.text(0.49, y - 0.05, "\u2190 predicts not sarcastic", ha="right", va="center", fontsize=6.3, color=INK2, style="italic")
-    ax.text(0.51, y - 0.05, "predicts sarcastic \u2192", ha="left", va="center", fontsize=6.3, color=INK2, style="italic")
+    ax.text(0.49, y - 0.05, "\u2190 predicts not sarcastic", ha="right", va="center", fontsize=7, color=INK2, style="italic")
+    ax.text(0.51, y - 0.05, "predicts sarcastic \u2192", ha="left", va="center", fontsize=7, color=INK2, style="italic")
     first = {g: min(ypos[c] for c, gg in zip(cues, groups) if gg == g) for g in set(groups)}
     for g, label in (("derision", "DERISION"), ("irony", "PLAYFUL")):
         ax.text(-0.02, first[g] - 0.62, label, transform=ax.get_yaxis_transform(), ha="right", va="center",
-                fontsize=6.3, color=INK2, weight="bold")
+                fontsize=7, color=INK2, weight="bold")
     # identity carried by the legend above the plot
     from matplotlib.lines import Line2D
     ax.legend(handles=[Line2D([], [], marker="o", color=BLUE, mec="white", lw=0, ms=5, label="en-AU annotator"),
                        Line2D([], [], marker="s", color=ORANGE, mec="white", lw=0, ms=5, label="en-UK annotator")],
-              loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=2, frameon=False, fontsize=6.5, handletextpad=0.2,
+              loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=2, frameon=False, fontsize=7.3, handletextpad=0.2,
               columnspacing=1.2, borderaxespad=0.0)
     ax.grid(axis="x", color=GRID, lw=0.5, zorder=0)
     ax.tick_params(axis="y", length=0)
@@ -181,8 +181,8 @@ def headline_figure() -> None:
         h = z * np.sqrt(p * (1 - p) / n + z * z / (4 * n * n))
         return p, (c - h) / d, (c + h) / d
 
-    plt.rcParams.update({"font.family": "serif", "font.size": 7.5})
-    fig, (a1, a2) = plt.subplots(1, 2, figsize=(3.35, 1.8))
+    plt.rcParams.update({"font.family": "serif", "font.size": 8.3})
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(3.35, 2.05))
     u = s.filter(pl.col("stratum") == "U")
     for x0, v in enumerate(("en-AU", "en-UK")):
         d = u.filter(pl.col("variety") == v)
@@ -193,14 +193,14 @@ def headline_figure() -> None:
             a1.bar(x0 + dx, val[0], width=0.3, color=col, zorder=3, label=lab if v == "en-AU" else None)
             a1.errorbar(x0 + dx, val[0], yerr=[[val[0] - val[1]], [val[2] - val[0]]], color=INK2, lw=0.7, capsize=1.5,
                         zorder=4)
-            a1.text(x0 + dx, val[2] + 0.025, f"{val[0]:.0%}", ha="center", va="bottom", fontsize=6.5, color=INK)
+            a1.text(x0 + dx, val[2] + 0.025, f"{val[0]:.0%}", ha="center", va="bottom", fontsize=6.8, color=INK)
     a1.set_xticks([0, 1])
     a1.set_xticklabels(["en-AU", "en-UK"], color=INK)
-    a1.set_ylim(0, 0.68)
+    a1.set_ylim(0, 0.78)
     a1.set_yticks([0, 0.2, 0.4, 0.6])
     a1.set_yticklabels(["0", "20", "40", "60%"])
-    a1.set_title("(a) comments labelled\nsarcastic", fontsize=7, color=INK, loc="left")
-    a1.legend(frameon=False, fontsize=6, loc="upper right", handlelength=1, borderaxespad=0)
+    a1.set_title("(a) comments labelled\nsarcastic", fontsize=8, color=INK, loc="left")
+    a1.legend(frameon=False, fontsize=7, loc="upper right", handlelength=1, borderaxespad=0)
     _style(a1, "y")
     c = pl.read_csv(ROOT / "results" / "paper" / "cue_flip.csv")
     for x0, v in enumerate(("en-AU", "en-UK")):
@@ -208,14 +208,14 @@ def headline_figure() -> None:
             m = c.filter((pl.col("variety") == v) & (pl.col("group") == grp))["auc"].mean()
             a2.bar(x0 + dx, m - 0.5, bottom=0.5, width=0.3, color=col, zorder=3, label=lab if v == "en-AU" else None)
             a2.text(x0 + dx, m + (0.012 if m > 0.5 else -0.012), f"{m:.2f}", ha="center",
-                    va="bottom" if m > 0.5 else "top", fontsize=6.5, color=INK)
+                    va="bottom" if m > 0.5 else "top", fontsize=7.3, color=INK)
     a2.axhline(0.5, color=INK2, lw=0.7, zorder=4)
     a2.set_xticks([0, 1])
     a2.set_xticklabels(["en-AU", "en-UK"], color=INK)
-    a2.set_ylim(0.36, 0.84)
+    a2.set_ylim(0.36, 0.92)
     a2.set_yticks([0.4, 0.5, 0.6, 0.7, 0.8])
-    a2.set_title("(b) cue AUC for the\nsarcasm label", fontsize=7, color=INK, loc="left")
-    a2.legend(frameon=False, fontsize=6, loc="upper center", handlelength=1, borderaxespad=0, ncol=1)
+    a2.set_title("(b) cue AUC for the\nsarcasm label", fontsize=8, color=INK, loc="left")
+    a2.legend(frameon=False, fontsize=7, loc="upper center", handlelength=1, borderaxespad=0, ncol=1)
     _style(a2, "y")
     fig.tight_layout(w_pad=1.2)
     out = ROOT / "paper" / "fig_headline.pdf"
@@ -227,19 +227,19 @@ def headline_figure() -> None:
 def system_figure() -> None:
     """System overview: input -> three members -> logit mean -> cross-fitted per-segment thresholds."""
     from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
-    plt.rcParams.update({"font.family": "serif", "font.size": 6.6})
+    plt.rcParams.update({"font.family": "serif", "font.size": 7.2})
     fig, ax = plt.subplots(figsize=(3.35, 1.5))
-    ax.set_xlim(-0.15, 10.75)
+    ax.set_xlim(-0.15, 11.0)
     ax.set_ylim(0.05, 4.45)
     ax.axis("off")
 
     def box(x, y, w, h, text, fc, sub=None):
         ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.02,rounding_size=0.18", fc=fc, ec=INK2, lw=0.7, clip_on=False))
         if sub:
-            ax.text(x + w / 2, y + h * 0.63, text, ha="center", va="center", fontsize=6.6, color=INK, weight="bold")
-            ax.text(x + w / 2, y + h * 0.3, sub, ha="center", va="center", fontsize=5.8, color=INK2)
+            ax.text(x + w / 2, y + h * 0.63, text, ha="center", va="center", fontsize=7.2, color=INK, weight="bold")
+            ax.text(x + w / 2, y + h * 0.3, sub, ha="center", va="center", fontsize=6.4, color=INK2)
         else:
-            ax.text(x + w / 2, y + h / 2, text, ha="center", va="center", fontsize=6.4, color=INK, linespacing=1.15)
+            ax.text(x + w / 2, y + h / 2, text, ha="center", va="center", fontsize=7, color=INK, linespacing=1.15)
 
     def arrow(x0, y0, x1, y1):
         ax.add_patch(FancyArrowPatch((x0, y0), (x1, y1), arrowstyle="-|>", mutation_scale=6, lw=0.7, color=INK2,
@@ -251,12 +251,12 @@ def system_figure() -> None:
                ("Qwen3.5-9B", "frozen; linear probe", "#fbe1d6")]
     ys = [3.15, 1.7, 0.25]
     for (t, sub, c), y in zip(members, ys):
-        box(2.3, y, 3.35, 1.1, t, c, sub)
+        box(2.3, y, 3.6, 1.1, t, c, sub)
         arrow(1.75, 2.25, 2.3, y + 0.55)
-        arrow(5.65, y + 0.55, 6.2, 2.25)
-    box(6.2, 1.7, 1.55, 1.1, "average\nlogits", "#f4f3ef")
-    arrow(7.75, 2.25, 8.2, 2.25)
-    box(8.2, 1.4, 2.35, 1.7, "per-segment\nthresholds\n(cross-fitted)", "#f4f3ef")
+        arrow(5.9, y + 0.55, 6.45, 2.25)
+    box(6.45, 1.7, 1.55, 1.1, "average\nlogits", "#f4f3ef")
+    arrow(8.0, 2.25, 8.45, 2.25)
+    box(8.45, 1.4, 2.4, 1.7, "per-segment\nthresholds\n(cross-fitted)", "#f4f3ef")
     fig.tight_layout(pad=0.1)
     out = ROOT / "paper" / "fig_system.pdf"
     fig.savefig(out, bbox_inches="tight", pad_inches=0.01)

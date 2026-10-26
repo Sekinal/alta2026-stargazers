@@ -231,3 +231,17 @@ These supersede the readings above where they conflict. The paper (paper/main.te
   100% point used 10 seeds); paper/fig_gains.pdf. DeBERTa sarcasm AUC AU .833/.845/.845, UK .845/.856/.867.
 - **R12**: no-prefix result is "suggestive" (P .84), not evidence; the shared-head hint is dropped.
 - **R2 transfer**: BESSTIE already reported weak cross-variety sarcasm transfer; ours is "consistent with" it.
+
+## External review (GPT-6 Astra via Codex, 2026-10-26) — checks and corrections
+- R8 reader feature: pooled official score is unchanged (sarc-UK .841 -> .843; AU stays binding). The "+.001 on one fold"
+  wording was a fold-level reading; paper now reports .000.
+- Table 4 pre-training rows re-verified as 3-seed blends on fold 0 (segment+ukg): base enc_deb_l_x3 .871, DAPT x3 .867
+  (-.004, P .74), /s pre-FT x3 .860 (-.011, P .84). R4's .863/.860 are seed means (base seed mean .864), not blends.
+- Predicted test interval [.8438, .8949] = OOF .8693 +- 1.645 x 1.2 x bootstrap SD (results/reports/stk_v5r.md).
+- Ensemble test components (official scorer output, pasted by the author): sent-AU .932, sent-UK .976, sarc-AU .801,
+  sarc-UK .837, score .8668. Joint winners: organiser email of 2026-10-20 (six teams share the prize; approximate
+  randomisation, R = 10,000, Dror et al. 2018).
+- Thread audit is for the 3-seed DeBERTa ensemble: .8706 -> .8694.
+- Reader positive-sentiment rate AU: mean of .260/.267 = .26 (was printed .27).
+- BESSTIE's kappa .47 has no published interval; [.19, .72] is our parametric estimate (human_kappa_ci.csv).
+- Bootstrap: B = 2000 test-sized resamples stratified by variety x source x labels, predictions/thresholds fixed.
