@@ -266,3 +266,15 @@ claim was dropped; the main text uses lead-vs-gold AU sarcasm kappa .56 [.53,.60
 - Per-subreddit analysis covers archive-matched model-negative comments only (1,221 AU, 883 UK of 1,271 / 912).
 - UK mocking is uninformative (AUC .49 [.45,.54]; unfiltered .51); only contempt and anger reverse in UK.
 - LoRA alone vs 3-seed DeBERTa on fold 0: mean of two seeds .851 vs .871 = -.02.
+
+## Third external review (three GPT-6 Astra reviewers via Codex, 2026-10-26): all 4/5
+- LLM probe prompts are variety-specific (llm_common.py: SARC_DEF_LOOSE for en-AU includes "derisive jabs, snark";
+  SARC_DEF_UK = strict irony-centred + British dry-sarcasm note). Chosen on OOF results during development
+  (zero-shot AU-reddit AUC .65 -> .78); now disclosed in section 4/6.2 and Appendix C as consistent but not independent.
+- Haugh & Bousfield 2012 cover BOTH Australian and British jocular mockery; text no longer implies an AU-only feature.
+- Added Oprea & Magdy 2020 (sociocultural variables, CSCW, doi 10.1145/3392834); Nek Minit now cites ALTA 2025
+  (2025.alta-main.2).
+- Disputed-item direction: AU strong (28:4 / 10:3); UK mixed (26:16 / 5:1, small cell).
+- Pseudo-label confirmation: P(baseline better) = .95, now listed among negative results reaching P >= .8.
+- Cue bootstrap: 1,000 comment-level replicates; thread dependence not modelled (Limitations).
+- Synthetic BESSTIE kappa interval dropped from the main text.

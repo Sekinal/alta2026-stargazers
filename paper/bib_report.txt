@@ -64,7 +64,8 @@ OK  geva-etal-2019-modeling: doi 10.18653/v1/d19-1107 (title sim 1.00)
 OK  pavlovic-poesio-2024-effectiveness: ACL 2024.nlperspectives-1.11
 OK  haugh2012mock: doi 10.1016/j.pragma.2012.02.003 (title sim 1.00)
 OK  joshi2025dialects: doi 10.1145/3712060 (title sim 1.00)
-OK  singh2025nekminit: arXiv 2505.15095 (official bibtex)
+OK  singh2025nekminit: ACL 2025.alta-main.2
+OK  oprea-magdy-2020-sociocultural: doi 10.1145/3392834 (title sim 1.00)
 OK  gorman-bedrick-2019-need: doi 10.18653/v1/p19-1267 (title sim 1.00)
 OK  koehn-2004-statistical: ACL W04-3250
 OK  reimers-gurevych-2019-sentence: doi 10.18653/v1/d19-1410 (title sim 1.00)

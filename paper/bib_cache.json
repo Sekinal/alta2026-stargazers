@@ -263,10 +263,6 @@
   "bib": "@article{joshi2025dialects, title={Natural Language Processing for Dialects of a Language: A Survey}, volume={57}, ISSN={1557-7341}, url={http://dx.doi.org/10.1145/3712060}, DOI={10.1145/3712060}, number={6}, journal={ACM Computing Surveys}, publisher={Association for Computing Machinery (ACM)}, author={Joshi, Aditya and Dabre, Raj and Kanojia, Diptesh and Li, Zhuang and Zhan, Haolan and Haffari, Gholamreza and Dippold, Doris}, year={2025}, month=feb, pages={1\u201337} }",
   "report": "OK  joshi2025dialects: doi 10.1145/3712060 (title sim 1.00)"
  },
- "singh2025nekminit": {
-  "bib": "@misc{singh2025nekminit,\n      title={Nek Minit: Harnessing Pragmatic Metacognitive Prompting for Explainable Sarcasm Detection of Australian and Indian English}, \n      author={Ishmanbir Singh and Dipankar Srirag and Aditya Joshi},\n      year={2025},\n      eprint={2505.15095},\n      archivePrefix={arXiv},\n      primaryClass={cs.CL},\n      url={https://arxiv.org/abs/2505.15095}, \n}",
-  "report": "OK  singh2025nekminit: arXiv 2505.15095 (official bibtex)"
- },
  "gorman-bedrick-2019-need": {
   "bib": "@inproceedings{gorman-bedrick-2019-need,\n    title = \"We Need to Talk about Standard Splits\",\n    author = \"Gorman, Kyle  and\n      Bedrick, Steven\",\n    editor = \"Korhonen, Anna  and\n      Traum, David  and\n      M{\\`a}rquez, Llu{\\'i}s\",\n    booktitle = \"Proceedings of the 57th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics\",\n    month=jul,\n    year = \"2019\",\n    address = \"Florence, Italy\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/P19-1267/\",\n    doi = \"10.18653/v1/P19-1267\",\n    pages = \"2786--2791\"\n}",
   "report": "OK  gorman-bedrick-2019-need: doi 10.18653/v1/p19-1267 (title sim 1.00)"
@@ -334,5 +330,13 @@
  "rottger-etal-2022-two": {
   "bib": "@inproceedings{rottger-etal-2022-two,\n    title = \"Two Contrasting Data Annotation Paradigms for Subjective {NLP} Tasks\",\n    author = {R{\\\"o}ttger, Paul  and\n      Vidgen, Bertie  and\n      Hovy, Dirk  and\n      Pierrehumbert, Janet},\n    editor = \"Carpuat, Marine  and\n      de Marneffe, Marie-Catherine  and\n      Meza Ruiz, Ivan Vladimir\",\n    booktitle = \"Proceedings of the 2022 Conference of the {N}orth {A}merican Chapter of the {A}ssociation for {C}omputational {L}inguistics: Human Language Technologies\",\n    month=jul,\n    year = \"2022\",\n    address = \"Seattle, United States\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/2022.naacl-main.13/\",\n    doi = \"10.18653/v1/2022.naacl-main.13\",\n    pages = \"175--190\"\n}",
   "report": "OK  rottger-etal-2022-two: ACL 2022.naacl-main.13"
+ },
+ "oprea-magdy-2020-sociocultural": {
+  "bib": "@article{oprea-magdy-2020-sociocultural, title={The Effect of Sociocultural Variables on Sarcasm Communication Online}, volume={4}, ISSN={2573-0142}, url={http://dx.doi.org/10.1145/3392834}, DOI={10.1145/3392834}, number={CSCW1}, journal={Proceedings of the ACM on Human-Computer Interaction}, publisher={Association for Computing Machinery (ACM)}, author={Oprea, Silviu Vlad and Magdy, Walid}, year={2020}, month=may, pages={1\u201322} }",
+  "report": "OK  oprea-magdy-2020-sociocultural: doi 10.1145/3392834 (title sim 1.00)"
+ },
+ "singh2025nekminit": {
+  "bib": "@inproceedings{singh2025nekminit,\n    title = \"{N}ek Minit: Harnessing Pragmatic Metacognitive Prompting for Explainable Sarcasm Detection of {A}ustralian and {I}ndian {E}nglish\",\n    author = \"Singh, Ishmanbir  and\n      Srirag, Dipankar  and\n      Joshi, Aditya\",\n    editor = \"Kummerfeld, Jonathan K.  and\n      Joshi, Aditya  and\n      Dras, Mark\",\n    booktitle = \"Proceedings of the 23rd Annual Workshop of the Australasian Language Technology Association\",\n    month=nov,\n    year = \"2025\",\n    address = \"Sydney, Australia\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/2025.alta-main.2/\",\n    pages = \"13--27\",\n    ISBN = \"1834-7037\"\n}",
+  "report": "OK  singh2025nekminit: ACL 2025.alta-main.2"
  }
 }

@@ -96,7 +96,8 @@ REFS = [
     ("pavlovic-poesio-2024-effectiveness", "The Effectiveness of LLMs as Annotators: A Comparative Overview and Empirical Analysis of Direct Representation", "Pavlovic", 2024, "manual", ""),
     ("haugh2012mock", "Mock impoliteness, jocular mockery and jocular abuse in Australian and British English", "Haugh", 2012, "doi", ""),
     ("joshi2025dialects", "Natural Language Processing for Dialects of a Language: A Survey", "Joshi", 2025, "doi", ""),
-    ("singh2025nekminit", "Nek Minit: Harnessing Pragmatic Metacognitive Prompting for Explainable Sarcasm Detection of Australian and Indian English", "Singh", 2025, "arxiv", ""),
+    ("singh2025nekminit", "Nek Minit: Harnessing Pragmatic Metacognitive Prompting for Explainable Sarcasm Detection of Australian and Indian English", "Singh", 2025, "manual", ""),
+    ("oprea-magdy-2020-sociocultural", "The Effect of Sociocultural Variables on Sarcasm Communication Online", "Oprea", 2020, "doi", ""),
     ("gorman-bedrick-2019-need", "We Need to Talk about Standard Splits", "Gorman", 2019, "doi", ""),
     ("koehn-2004-statistical", "Statistical Significance Tests for Machine Translation Evaluation", "Koehn", 2004, "manual", ""),
     ("reimers-gurevych-2019-sentence", "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks", "Reimers", 2019, "doi", ""),
@@ -191,7 +192,7 @@ MANUAL_BIB = {
   note         = {Agentic coding tool; models Claude Opus 5 and Claude Opus 5.5}
 }""",
 }
-ACL_IDS = {"rottger-etal-2022-two": "2022.naacl-main.13", "dror-etal-2018-hitchhikers": "P18-1128", "khodak-etal-2018-large": "L18-1102", "warner2024modernbert": "2025.acl-long.127", "pavlovic-poesio-2024-effectiveness": "2024.nlperspectives-1.11", "koehn-2004-statistical": "W04-3250", "antypas-etal-2022-twitter": "2022.coling-1.299", "wang-manning-2012-baselines": "P12-2018", "pang-lee-2005-seeing": "P05-1015", "daume-iii-2007-frustratingly": "P07-1033",
+ACL_IDS = {"singh2025nekminit": "2025.alta-main.2", "rottger-etal-2022-two": "2022.naacl-main.13", "dror-etal-2018-hitchhikers": "P18-1128", "khodak-etal-2018-large": "L18-1102", "warner2024modernbert": "2025.acl-long.127", "pavlovic-poesio-2024-effectiveness": "2024.nlperspectives-1.11", "koehn-2004-statistical": "W04-3250", "antypas-etal-2022-twitter": "2022.coling-1.299", "wang-manning-2012-baselines": "P12-2018", "pang-lee-2005-seeing": "P05-1015", "daume-iii-2007-frustratingly": "P07-1033",
            "socher-etal-2013-recursive": "D13-1170", "maas-etal-2011-learning": "P11-1015"}
 URL_ONLY = {  # classic papers with neither DOI nor anthology id: title/author verified via proceedings page
     "lee2013pseudo": """@inproceedings{lee2013pseudo,
@@ -289,7 +290,7 @@ ARXIV_IDS = {"he2023debertav": "2111.09543", "wang2022e5": "2212.03533", "wang20
              "dodge2020finetuning": "2002.06305", "mosbach2021stability": "2006.04884", "zhang2015character": "1509.01626",
              "beaglehole2025xrfm": "2508.10053", "loureiro2023tweet": "2308.02142", "paszke2019pytorch": "1912.01703",
              "sanh2019distilbert": "1910.01108", "qwen3report": "2505.09388", "qwen3emb": "2506.05176",
-             "qwen25report": "2412.15115", "li2023gte": "2308.03281", "singh2025nekminit": "2505.15095"}
+             "qwen25report": "2412.15115", "li2023gte": "2308.03281"}
 
 
 def arxiv_official(key: str, title: str, first: str, venue: str) -> str | None:
