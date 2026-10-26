@@ -82,7 +82,9 @@ def stage() -> None:
         shutil.rmtree(STAGE)
     fl = files()
     for r in fl:
-        dst = STAGE / ("PROJECT_README.md" if r == "README.md" else "README.md" if r == "hf/README.md" else r)
+        if r == "README.md":  # the GitHub landing page; the Hub uses hf/README.md as its model card
+            continue
+        dst = STAGE / ("README.md" if r == "hf/README.md" else r)
         dst.parent.mkdir(parents=True, exist_ok=True)
         if r == ".gitignore":
             dst.write_text(release_gitignore())
