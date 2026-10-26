@@ -1,17 +1,17 @@
-variety,cue,group,auc,lo,hi,n,n_sarc
-en-AU,mocking,derision,0.6782,0.6508,0.7066,1364,812
-en-AU,contempt,derision,0.6544,0.6261,0.6842,1364,812
-en-AU,anger,derision,0.6103,0.5818,0.639,1364,812
-en-AU,cynicism,derision,0.5949,0.5647,0.6239,1364,812
-en-AU,playful joking,irony,0.6503,0.6208,0.6778,1364,812
-en-AU,praise,irony,0.5816,0.5508,0.613,1364,812
-en-AU,ironic praise,irony,0.6225,0.5949,0.6524,1364,812
-en-AU,joy,irony,0.571,0.5391,0.6034,1364,812
-en-UK,mocking,derision,0.45,0.4096,0.4908,1012,245
-en-UK,contempt,derision,0.357,0.315,0.3956,1012,245
-en-UK,anger,derision,0.324,0.2858,0.3637,1012,245
-en-UK,cynicism,derision,0.3971,0.3569,0.4427,1012,245
-en-UK,playful joking,irony,0.7892,0.7576,0.8179,1012,245
-en-UK,praise,irony,0.7249,0.6904,0.7618,1012,245
-en-UK,ironic praise,irony,0.7101,0.6719,0.7466,1012,245
-en-UK,joy,irony,0.7311,0.6948,0.767,1012,245
+variety,cue,group,auc,auc_all,lo,hi,n,n_sarc
+en-AU,mocking,derision,0.7349,0.8001,0.7061,0.7616,1271,685
+en-AU,contempt,derision,0.7239,0.7903,0.6953,0.7514,1271,685
+en-AU,anger,derision,0.6855,0.7648,0.6551,0.7145,1271,685
+en-AU,cynicism,derision,0.6616,0.7619,0.6331,0.6925,1271,685
+en-AU,playful joking,irony,0.6002,0.5601,0.5676,0.6301,1271,685
+en-AU,praise,irony,0.5426,0.395,0.5102,0.5735,1271,685
+en-AU,ironic praise,irony,0.606,0.6155,0.576,0.6361,1271,685
+en-AU,joy,irony,0.496,0.3814,0.4644,0.5283,1271,685
+en-UK,mocking,derision,0.4909,0.5092,0.4469,0.5364,912,186
+en-UK,contempt,derision,0.4051,0.4295,0.3613,0.4515,912,186
+en-UK,anger,derision,0.3772,0.3982,0.3372,0.4219,912,186
+en-UK,cynicism,derision,0.4491,0.4653,0.3981,0.4989,912,186
+en-UK,playful joking,irony,0.7668,0.7447,0.7292,0.8,912,186
+en-UK,praise,irony,0.6754,0.6369,0.6289,0.7206,912,186
+en-UK,ironic praise,irony,0.6865,0.6841,0.6421,0.7273,912,186
+en-UK,joy,irony,0.6915,0.6535,0.6512,0.7306,912,186

@@ -207,3 +207,27 @@ Ensemble (stk_v5r) test .8668 (OOF .869). Test gain of the two probes: +.0127; O
   components (sent-AU .931 -> .916, sarc-AU .803 -> .793). Matches the valid-subset diagnostic (DeBERTa alone .819 vs
   ensemble .851 on valid.csv rows).
 - Submission 2 was an accidental duplicate of submission 1 (identical file, identical score).
+
+## Corrections after internal review (2026-10-25; three reviewer sub-agents + a provenance audit)
+These supersede the readings above where they conflict. The paper (paper/main.tex) uses the corrected versions.
+- **R6 disputed (D) stratum is a direction artefact, not evidence that the model is right.** Split by direction, the
+  readers side with whichever label says "not sarcastic": AU gold=1/lead=0: 28 lead : 4 gold; AU gold=0/lead=1: 3 lead :
+  10 gold; UK gold=1/lead=0: 26 : 16; UK gold=0/lead=1: 5 : 1. U-stratum control (lead decision != gold): AU 18 lead : 13
+  gold, UK 8 : 16. The D result reflects the readers' stricter threshold. The "2:1, real noise floor" reading is withdrawn.
+- **R6 reader guideline is narrower than BESSTIE's** (requires non-literal meaning; plain complaints = 0; BESSTIE: "irony
+  or mockery to express contempt or ridicule"). Disagreement with readers measures distance from that reading, not error.
+  The readers are two runs of one LLM (Claude Opus 5.5), not independent. Pre-registered criterion 2 (lead-A >= lead-gold)
+  failed in both varieties; now reported in the paper.
+- **R6 unconditional rates** used as headline: AU gold .43 vs readers .16; UK .29 vs .27. Among reader-negative comments:
+  AU .52 vs .22, UK .29 vs .32. Lead-gold AU kappa .56 vs BESSTIE second human .47 [.19,.72].
+- **R9 cue analysis had a collider** (filtered on gold-negative). Re-run (experiments/classical/cue_flip.py) on comments a
+  label-free sentiment model (SiEBERT) calls negative; results/paper/cue_flip.csv (auc = filtered, auc_all = unfiltered)
+  and cue_flip_subreddit.csv. The flip survives: AU derision .66-.73 vs UK .38-.49; playful UK .68-.77 vs AU .50-.61;
+  unfiltered AU derision .76-.80, UK .40-.51; within every subreddit (AU derision .62-.74; UK contempt/anger .33-.47).
+  Cues are 8 interpretable picks from 18 NLI hypotheses + an emotion model: exploratory.
+- **R10 retracted.** The "30% of AU sentiment errors" pattern is a base-rate artefact: AU sentiment error rate is 8.1% on
+  sarcastic vs 8.0% overall, and the sarcastic share of errors (60%) equals the base rate (60%).
+- **R11 learning curves now use matched seeds (13/14) at every share**: DeBERTa .858/.859/.862 at 50/75/100% (the old
+  100% point used 10 seeds); paper/fig_gains.pdf. DeBERTa sarcasm AUC AU .833/.845/.845, UK .845/.856/.867.
+- **R12**: no-prefix result is "suggestive" (P .84), not evidence; the shared-head hint is dropped.
+- **R2 transfer**: BESSTIE already reported weak cross-variety sarcasm transfer; ours is "consistent with" it.

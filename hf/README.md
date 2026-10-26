@@ -18,7 +18,7 @@ Code, predictions, cached features, model checkpoints and paper for our system i
 [ALTA 2026 shared task](https://www.alta.asn.au/events/sharedtask2026/) on sentiment and sarcasm classification in
 Australian and British English (BESSTIE en-AU / en-UK subsets).
 
-Paper: *Two Annotators, Two Sarcasms: A Validation-First Ensemble for Sentiment and Sarcasm in Australian and British
+Paper: *Two Annotators, Two Sarcasms: What Limits a Well-Validated Ensemble on Australian and British
 English* — Irving Ernesto Quezada Ramírez (`paper/main.tex`, `paper/main.pdf`).
 
 ## Results
@@ -28,7 +28,7 @@ Official score = ½ [min(sent-AU, sent-UK) + min(sarc-AU, sarc-UK)], macro-F1 pe
 | System | sent-AU | sent-UK | sarc-AU | sarc-UK | score |
 |---|---|---|---|---|---|
 | Ensemble `stk_v5r`, pooled 5-fold OOF (dev estimate) | .934 | .976 | .805 | .841 | .869 |
-| **Ensemble `stk_v5r`, official test** (2nd on the leaderboard; one of six runs statistically tied for first) | .932 | .976 | .801 | .837 | **.867** |
+| **Ensemble `stk_v5r`, official test** (2nd on the leaderboard; one of six runs not significantly different from the top run) | .932 | .976 | .801 | .837 | **.867** |
 | DeBERTa-v3-large ×5 alone, official test (ablation) | .916 | .975 | .793 | .820 | .854 |
 | Organisers' baseline, official test | .866 | .931 | .680 | .696 | .773 |
 
@@ -112,7 +112,7 @@ for research reproducibility; check the BESSTIE terms before other uses.
 ## Citation
 ```bibtex
 @inproceedings{quezada-2026-thermostatic,
-  title     = {Two Annotators, Two Sarcasms: A Validation-First Ensemble for Sentiment and Sarcasm in Australian and British English},
+  title     = {Two Annotators, Two Sarcasms: What Limits a Well-Validated Ensemble on Australian and British English},
   author    = {Quezada Ram{\'i}rez, Irving Ernesto},
   booktitle = {Proceedings of the 24th Annual Workshop of the Australasian Language Technology Association (ALTA 2026)},
   year      = {2026},

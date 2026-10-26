@@ -37,7 +37,7 @@ REFS = [
     # sarcasm background
     ("riloff-etal-2013-sarcasm", "Sarcasm as Contrast between a Positive Sentiment and Negative Situation", "Riloff", 2013, "doi", ""),
     ("joshi2017survey", "Automatic Sarcasm Detection: A Survey", "Joshi", 2017, "doi", ""),
-    ("khodak-etal-2018-large", "A Large Self-Annotated Corpus for Sarcasm", "Khodak", 2018, "arxiv", "LREC 2018"),
+    ("khodak-etal-2018-large", "A Large Self-Annotated Corpus for Sarcasm", "Khodak", 2018, "manual", ""),
     ("van-hee-etal-2018-semeval", "SemEval-2018 Task 3: Irony Detection in English Tweets", "Van Hee", 2018, "doi", ""),
     ("abu-farha-etal-2022-semeval", "SemEval-2022 Task 6: iSarcasmEval, Intended Sarcasm Detection in English and Arabic", "Abu Farha", 2022, "doi", ""),
     ("frenda-etal-2023-epic", "EPIC: Multi-Perspective Annotation of a Corpus of Irony", "Frenda", 2023, "doi", ""),
@@ -48,12 +48,12 @@ REFS = [
     ("hu2022lora", "LoRA: Low-Rank Adaptation of Large Language Models", "Hu", 2021, "arxiv", "ICLR 2022"),
     ("kalajdzievski2023rslora", "A Rank Stabilization Scaling Factor for Fine-Tuning with LoRA", "Kalajdzievski", 2023, "arxiv", ""),
     ("liu2024dora", "DoRA: Weight-Decomposed Low-Rank Adaptation", "Liu", 2024, "arxiv", "ICML 2024"),
-    ("paischer2024eva", "Parameter Efficient Fine-tuning via Explained Variance Adaptation", "Paischer", 2025, "arxiv", ""),
+    ("paischer2024eva", "Parameter Efficient Fine-tuning via Explained Variance Adaptation", "Paischer", 2025, "doi", ""),
     ("zhang2024riemannian", "Riemannian Preconditioned LoRA for Fine-Tuning Foundation Models", "Zhang", 2024, "arxiv", "ICML 2024"),
     ("gururangan-etal-2020-dont", "Don't Stop Pretraining: Adapt Language Models to Domains and Tasks", "Gururangan", 2020, "doi", ""),
     ("howard-ruder-2018-universal", "Universal Language Model Fine-tuning for Text Classification", "Howard", 2018, "doi", ""),
     ("clark2020electra", "ELECTRA: Pre-training Text Encoders as Discriminators Rather Than Generators", "Clark", 2020, "arxiv", "ICLR 2020"),
-    ("warner2024modernbert", "Smarter, Better, Faster, Longer: A Modern Bidirectional Encoder for Fast, Memory Efficient, and Long Context Finetuning and Inference", "Warner", 2024, "arxiv", ""),
+    ("warner2024modernbert", "Smarter, Better, Faster, Longer: A Modern Bidirectional Encoder for Fast, Memory Efficient, and Long Context Finetuning and Inference", "Warner", 2025, "manual", ""),
     ("liu2019roberta", "RoBERTa: A Robustly Optimized BERT Pretraining Approach", "Liu", 2019, "arxiv", ""),
     ("barbieri-etal-2020-tweeteval", "TweetEval: Unified Benchmark and Comparative Evaluation for Tweet Classification", "Barbieri", 2020, "doi", ""),
     ("lee2013pseudo", "Pseudo-Label: The Simple and Efficient Semi-Supervised Learning Method for Deep Neural Networks", "Lee", 2013, "manual", ""),
@@ -62,7 +62,7 @@ REFS = [
     ("chen2016xgboost", "XGBoost: A Scalable Tree Boosting System", "Chen", 2016, "doi", ""),
     ("prokhorenkova2018catboost", "CatBoost: unbiased boosting with categorical features", "Prokhorenkova", 2017, "arxiv", "NeurIPS 2018"),
     ("wang-manning-2012-baselines", "Baselines and Bigrams: Simple, Good Sentiment and Topic Classification", "Wang", 2012, "manual", ""),
-    ("xiao2023cpack", "C-Pack: Packed Resources For General Chinese Embeddings", "Xiao", 2023, "arxiv", ""),
+    ("xiao2023cpack", "C-Pack: Packed Resources For General Chinese Embeddings", "Xiao", 2024, "doi", ""),
     # analysis methods
     ("monroe2008fightin", "Fightin' Words: Lexical Feature Selection and Evaluation for Identifying the Content of Political Conflict", "Monroe", 2008, "doi", ""),
     ("northcutt2021confident", "Confident Learning: Estimating Uncertainty in Dataset Labels", "Northcutt", 2021, "doi", ""),
@@ -84,6 +84,35 @@ REFS = [
     ("zhang2015character", "Character-level Convolutional Networks for Text Classification", "Zhang", 2015, "arxiv", "NeurIPS 2015"),
     ("chang-etal-2020-convokit", "ConvoKit: A Toolkit for the Analysis of Conversations", "Chang", 2020, "doi", ""),
     ("he2017translation", "Translation-based Recommendation", "He", 2017, "doi", ""),
+    # added after peer review (2026-10-25)
+    ("laurer2024less", "Less Annotating, More Classifying: Addressing the Data Scarcity Issue of Supervised Machine Learning with Deep Transfer Learning and BERT-NLI", "Laurer", 2024, "doi", ""),
+    ("loureiro2023tweet", "Tweet Insights: A Visualization Platform to Extract Temporal Insights from Twitter", "Loureiro", 2023, "arxiv", ""),
+    ("loureiro-etal-2022-timelms", "TimeLMs: Diachronic Language Models from Twitter", "Loureiro", 2022, "doi", ""),
+    ("plank-2022-problem", "The 'Problem' of Human Label Variation: On Ground Truth in Data, Modeling and Evaluation", "Plank", 2022, "doi", ""),
+    ("basile-etal-2021-need", "We Need to Consider Disagreement in Evaluation", "Basile", 2021, "doi", ""),
+    ("rottger-etal-2022-two", "Two Contrasting Data Annotation Paradigms for Subjective NLP Tasks", "Röttger", 2022, "manual", ""),
+    ("oprea-magdy-2020-isarcasm", "iSarcasm: A Dataset of Intended Sarcasm", "Oprea", 2020, "doi", ""),
+    ("geva-etal-2019-modeling", "Are We Modeling the Task or the Annotator? An Investigation of Annotator Bias in Natural Language Understanding Datasets", "Geva", 2019, "doi", ""),
+    ("pavlovic-poesio-2024-effectiveness", "The Effectiveness of LLMs as Annotators: A Comparative Overview and Empirical Analysis of Direct Representation", "Pavlovic", 2024, "manual", ""),
+    ("haugh2012mock", "Mock impoliteness, jocular mockery and jocular abuse in Australian and British English", "Haugh", 2012, "doi", ""),
+    ("joshi2025dialects", "Natural Language Processing for Dialects of a Language: A Survey", "Joshi", 2025, "doi", ""),
+    ("singh2025nekminit", "Nek Minit: Harnessing Pragmatic Metacognitive Prompting for Explainable Sarcasm Detection of Australian and Indian English", "Singh", 2025, "arxiv", ""),
+    ("gorman-bedrick-2019-need", "We Need to Talk about Standard Splits", "Gorman", 2019, "doi", ""),
+    ("koehn-2004-statistical", "Statistical Significance Tests for Machine Translation Evaluation", "Koehn", 2004, "manual", ""),
+    ("reimers-gurevych-2019-sentence", "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks", "Reimers", 2019, "doi", ""),
+    ("wolf-etal-2020-transformers", "Transformers: State-of-the-Art Natural Language Processing", "Wolf", 2020, "doi", ""),
+    ("paszke2019pytorch", "PyTorch: An Imperative Style, High-Performance Deep Learning Library", "Paszke", 2019, "arxiv", ""),
+    ("sanh2019distilbert", "DistilBERT, a distilled version of BERT: smaller, faster, cheaper and lighter", "Sanh", 2019, "arxiv", ""),
+    ("qwen3report", "Qwen3 Technical Report", "Yang", 2025, "arxiv", ""),
+    ("qwen3emb", "Qwen3 Embedding: Advancing Text Embedding and Reranking Through Foundation Models", "Zhang", 2025, "arxiv", ""),
+    ("qwen25report", "Qwen2.5 Technical Report", "Qwen", 2024, "arxiv", ""),
+    ("li2023gte", "Towards General Text Embeddings with Multi-stage Contrastive Learning", "Li", 2023, "arxiv", ""),
+    ("lewis-etal-2020-bart", "BART: Denoising Sequence-to-Sequence Pre-training for Natural Language Generation, Translation, and Comprehension", "Lewis", 2020, "doi", ""),
+    ("williams-etal-2018-broad", "A Broad-Coverage Challenge Corpus for Sentence Understanding through Inference", "Williams", 2018, "doi", ""),
+    ("antypas-etal-2022-twitter", "Twitter Topic Classification", "Antypas", 2022, "manual", ""),
+    ("wolpert1992stacked", "Stacked generalization", "Wolpert", 1992, "doi", ""),
+    ("misra2023headlines", "Sarcasm Detection using News Headlines Dataset", "Misra", 2023, "doi", ""),
+    ("pasricha2018translation", "Translation-based factorization machines for sequential recommendation", "Pasricha", 2018, "doi", ""),
     ("dror-etal-2018-hitchhikers", "The Hitchhiker's Guide to Testing Statistical Significance in Natural Language Processing", "Dror", 2018, "manual", ""),
 ]
 
@@ -91,11 +120,11 @@ REFS = [
 # ACL Anthology / proceedings pages are fetched below
 MANUAL_BIB = {
     "qwen35": """@misc{qwen35,
-  title        = {{Qwen3.5-9B}},
-  author       = {{Qwen Team}},
-  year         = {2026},
-  howpublished = {\\url{https://huggingface.co/Qwen/Qwen3.5-9B}},
-  note         = {Model card}
+  title  = {{Qwen3.5}: Towards Native Multimodal Agents},
+  author = {{Qwen Team}},
+  month  = feb,
+  year   = {2026},
+  howpublished = {\\url{https://qwen.ai/blog?id=qwen3.5}}
 }""",
     "unsloth": """@misc{unsloth,
   title        = {{Unsloth}},
@@ -105,9 +134,54 @@ MANUAL_BIB = {
 }""",
     "arcticshift": """@misc{arcticshift,
   title        = {{Arctic Shift}: Reddit data archive and API},
-  author       = {{Arctic Shift contributors}},
+  author       = {Heitmann, Arthur},
   year         = {2024},
   howpublished = {\\url{https://github.com/ArthurHeitmann/arctic_shift}}
+}""",
+    "pedregosa2011sklearn": """@article{pedregosa2011sklearn,
+  title   = {Scikit-learn: Machine Learning in {P}ython},
+  author  = {Pedregosa, Fabian and Varoquaux, Ga{\\"e}l and Gramfort, Alexandre and Michel, Vincent and Thirion, Bertrand and Grisel, Olivier and Blondel, Mathieu and Prettenhofer, Peter and Weiss, Ron and Dubourg, Vincent and Vanderplas, Jake and Passos, Alexandre and Cournapeau, David and Brucher, Matthieu and Perrot, Matthieu and Duchesnay, {\\'E}douard},
+  journal = {Journal of Machine Learning Research},
+  volume  = {12},
+  pages   = {2825--2830},
+  year    = {2011}
+}""",
+    "go2009sentiment140": """@techreport{go2009sentiment140,
+  title       = {Twitter Sentiment Classification using Distant Supervision},
+  author      = {Go, Alec and Bhayani, Richa and Huang, Lei},
+  institution = {Stanford University},
+  note        = {CS224N project report},
+  year        = {2009}
+}""",
+    "hartmann2022emotion": """@misc{hartmann2022emotion,
+  title        = {Emotion {E}nglish {DistilRoBERTa}-base},
+  author       = {Hartmann, Jochen},
+  year         = {2022},
+  howpublished = {\\url{https://huggingface.co/j-hartmann/emotion-english-distilroberta-base}}
+}""",
+    "peft": """@misc{peft,
+  title        = {{PEFT}: State-of-the-art Parameter-Efficient Fine-Tuning methods},
+  author       = {Mangrulkar, Sourab and Gugger, Sylvain and Debut, Lysandre and Belkada, Younes and Paul, Sayak and Bossan, Benjamin},
+  year         = {2022},
+  howpublished = {\\url{https://github.com/huggingface/peft}}
+}""",
+    "alta2026task": """@misc{alta2026task,
+  title        = {{ALTA} 2026 Shared Task: Sentiment and Sarcasm Classification in {A}ustralian and {B}ritish {E}nglish},
+  author       = {{Moll\\'{a}-Aliod}, Diego and Joshi, Aditya and Srirag, Dipankar},
+  year         = {2026},
+  howpublished = {\\url{https://www.alta.asn.au/events/sharedtask2026/}}
+}""",
+    "alta2026baseline": """@misc{alta2026baseline,
+  title        = {{ALTA} 2026 shared task baseline},
+  author       = {Srirag, Dipankar},
+  year         = {2026},
+  howpublished = {\\url{https://github.com/dipankarsrirag/alta2026-sharedtask-baseline}}
+}""",
+    "redditusuk": """@misc{redditusuk,
+  title        = {{Reddit-US-UK}},
+  author       = {{alujjdnd}},
+  year         = {2023},
+  howpublished = {Hugging Face dataset \\url{https://huggingface.co/datasets/alujjdnd/Reddit-US-UK}}
 }""",
     "claudecode": """@misc{claudecode,
   title        = {{Claude Code}},
@@ -117,7 +191,7 @@ MANUAL_BIB = {
   note         = {Agentic coding tool; models Claude Opus 5 and Claude Opus 5.5}
 }""",
 }
-ACL_IDS = {"dror-etal-2018-hitchhikers": "P18-1128", "wang-manning-2012-baselines": "P12-2018", "pang-lee-2005-seeing": "P05-1015", "daume-iii-2007-frustratingly": "P07-1033",
+ACL_IDS = {"rottger-etal-2022-two": "2022.naacl-main.13", "dror-etal-2018-hitchhikers": "P18-1128", "khodak-etal-2018-large": "L18-1102", "warner2024modernbert": "2025.acl-long.127", "pavlovic-poesio-2024-effectiveness": "2024.nlperspectives-1.11", "koehn-2004-statistical": "W04-3250", "antypas-etal-2022-twitter": "2022.coling-1.299", "wang-manning-2012-baselines": "P12-2018", "pang-lee-2005-seeing": "P05-1015", "daume-iii-2007-frustratingly": "P07-1033",
            "socher-etal-2013-recursive": "D13-1170", "maas-etal-2011-learning": "P11-1015"}
 URL_ONLY = {  # classic papers with neither DOI nor anthology id: title/author verified via proceedings page
     "lee2013pseudo": """@inproceedings{lee2013pseudo,
@@ -208,12 +282,14 @@ def arxiv(title: str, first: str):
 # arXiv ids for preprint-only / non-DOI venues; each is accepted only if arXiv's official BibTeX has the expected title
 ARXIV_IDS = {"he2023debertav": "2111.09543", "wang2022e5": "2212.03533", "wang2024me5": "2402.05672",
              "dettmers2023qlora": "2305.14314", "alain2017probes": "1610.01644", "laurer2023zeroshot": "2312.17543",
-             "khodak-etal-2018-large": "1704.05579", "hu2022lora": "2106.09685", "kalajdzievski2023rslora": "2312.03732",
+             "hu2022lora": "2106.09685", "kalajdzievski2023rslora": "2312.03732",
              "liu2024dora": "2402.09353", "paischer2024eva": "2410.07170", "zhang2024riemannian": "2402.02347",
-             "clark2020electra": "2003.10555", "warner2024modernbert": "2412.13663", "liu2019roberta": "1907.11692",
-             "prokhorenkova2018catboost": "1706.09516", "xiao2023cpack": "2309.07597", "mcinnes2018umap": "1802.03426",
+             "clark2020electra": "2003.10555", "liu2019roberta": "1907.11692",
+             "prokhorenkova2018catboost": "1706.09516", "mcinnes2018umap": "1802.03426",
              "dodge2020finetuning": "2002.06305", "mosbach2021stability": "2006.04884", "zhang2015character": "1509.01626",
-             "beaglehole2025xrfm": "2508.10053"}
+             "beaglehole2025xrfm": "2508.10053", "loureiro2023tweet": "2308.02142", "paszke2019pytorch": "1912.01703",
+             "sanh2019distilbert": "1910.01108", "qwen3report": "2505.09388", "qwen3emb": "2506.05176",
+             "qwen25report": "2412.15115", "li2023gte": "2308.03281", "singh2025nekminit": "2505.15095"}
 
 
 def arxiv_official(key: str, title: str, first: str, venue: str) -> str | None:
@@ -242,6 +318,34 @@ def arxiv_bib(key: str, t: str, authors: list[str], year: str, aid: str, venue: 
     note = f",\n  note      = {{{venue}}}" if venue else ""
     return (f"@article{{{key},\n  title     = {{{t_b}}},\n  author    = {{{' and '.join(fmt(a) for a in authors)}}},\n"
             f"  journal   = {{arXiv preprint arXiv:{aid}}},\n  year      = {{{year}}}{note}\n}}")
+
+
+# arXiv-only BibTeX carries the latest version's year; peer-reviewed venues get proper entries
+VENUES = {"he2023debertav": ("International Conference on Learning Representations (ICLR)", 2023),
+          "dettmers2023qlora": ("Advances in Neural Information Processing Systems 36 (NeurIPS)", 2023),
+          "alain2017probes": ("International Conference on Learning Representations (ICLR), Workshop Track", 2017),
+          "hu2022lora": ("International Conference on Learning Representations (ICLR)", 2022),
+          "liu2024dora": ("Proceedings of the 41st International Conference on Machine Learning (ICML)", 2024),
+          "zhang2024riemannian": ("Proceedings of the 41st International Conference on Machine Learning (ICML)", 2024),
+          "clark2020electra": ("International Conference on Learning Representations (ICLR)", 2020),
+          "mosbach2021stability": ("International Conference on Learning Representations (ICLR)", 2021),
+          "prokhorenkova2018catboost": ("Advances in Neural Information Processing Systems 31 (NeurIPS)", 2018),
+          "zhang2015character": ("Advances in Neural Information Processing Systems 28 (NeurIPS)", 2015),
+          "paszke2019pytorch": ("Advances in Neural Information Processing Systems 32 (NeurIPS)", 2019)}
+
+
+def normalise(bib: str) -> str:
+    key = re.match(r"@\w+\{([^,]+),", bib).group(1)
+    if key in VENUES:
+        venue, year = VENUES[key]
+        bib = re.sub(r"^@misc\{", "@inproceedings{", bib)
+        bib = re.sub(r"\n\s*note=\{[^}]*\}", "", bib)
+        bib = re.sub(r"year=\{\d{4}\}", f"year={{{year}}},\n      booktitle={{{venue}}}", bib)
+    elif key in ARXIV_IDS:  # preprint: year of first submission, from the arXiv id (YYMM.NNNNN)
+        bib = re.sub(r"year=\{\d{4}\}", "year={20" + ARXIV_IDS[key][:2] + "}", bib)
+    if key == "mohammad2013emolex":
+        bib = re.sub(r"title=\{[^}]*\}", "title={Crowdsourcing a Word-Emotion Association Lexicon}", bib)
+    return bib
 
 
 def resolve(key: str, title: str, first: str, year: int, src: str, venue: str) -> tuple[str | None, str]:
@@ -292,6 +396,7 @@ def main() -> None:
                 report.append(line)
                 continue
         out.append(cache[key]["bib"]); report.append(cache[key]["report"])
+    out = [normalise(e) for e in out]
     out += list(MANUAL_BIB.values())
     (HERE / "references.bib").write_text("% Generated by paper/build_bib.py from Crossref / ACL Anthology / arXiv "
                                          "(see bib_report.txt)\n\n" + "\n\n".join(out) + "\n")

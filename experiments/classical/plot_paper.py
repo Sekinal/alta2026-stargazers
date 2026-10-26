@@ -124,19 +124,15 @@ def cue_flip_figure() -> None:
     ax.set_xlim(lo_x, hi_x)
     ax.set_ylim(y + 0.3, -0.95)
     ax.set_xticks([0.3, 0.4, 0.5, 0.6, 0.7, 0.8])
-    ax.set_xlabel("AUC for gold sarcasm, negative Reddit comments", color=INK2)
+    ax.set_xlabel("AUC for the gold sarcasm label (model-negative comments)", color=INK2)
     # region captions and group headers (text in ink tokens, never series colour)
     ax.text(0.49, y - 0.05, "\u2190 predicts not sarcastic", ha="right", va="center", fontsize=6.3, color=INK2, style="italic")
     ax.text(0.51, y - 0.05, "predicts sarcastic \u2192", ha="left", va="center", fontsize=6.3, color=INK2, style="italic")
     first = {g: min(ypos[c] for c, gg in zip(cues, groups) if gg == g) for g in set(groups)}
-    for g, label in (("derision", "DERISION"), ("irony", "IRONY")):
+    for g, label in (("derision", "DERISION"), ("irony", "PLAYFUL")):
         ax.text(-0.02, first[g] - 0.62, label, transform=ax.get_yaxis_transform(), ha="right", va="center",
                 fontsize=6.3, color=INK2, weight="bold")
-    # direct labels above the top row's markers + a legend above the plot (identity never by colour alone)
-    top = cues[0]
-    for var, dy in (("en-AU", -0.13), ("en-UK", 0.13)):
-        ax.annotate(var.split("-")[1], (get[(var, top)]["auc"], ypos[top] + dy), xytext=(0, 5.5), textcoords="offset points",
-                    ha="center", va="bottom", fontsize=6.3, color=INK, weight="bold")
+    # identity carried by the legend above the plot
     from matplotlib.lines import Line2D
     ax.legend(handles=[Line2D([], [], marker="o", color=BLUE, mec="white", lw=0, ms=5, label="en-AU annotator"),
                        Line2D([], [], marker="s", color=ORANGE, mec="white", lw=0, ms=5, label="en-UK annotator")],
@@ -167,8 +163,9 @@ def _style(ax, grid_axis="x"):
 
 
 def headline_figure() -> None:
-    """Figure 1: (a) share of NEGATIVE Reddit comments labelled sarcastic by the gold annotator vs two blind readers
-    (R6 uniform sample, Wilson 95% CIs); (b) on disputed items, whom the agreeing readers side with."""
+    """Figure 1. (a) Share of Reddit comments labelled sarcastic by the gold annotator vs two blind LLM readers (R6 uniform
+    sample, 150 per variety, no conditioning; Wilson 95% CIs). (b) Mean AUC of four derision cues vs four playful cues for
+    the gold sarcasm label, among comments a label-free sentiment model calls negative (results/paper/cue_flip.csv)."""
     import json
     import glob
     s = pl.read_csv(ROOT / "experiments" / "reannot" / "sample.csv")
@@ -185,46 +182,42 @@ def headline_figure() -> None:
         return p, (c - h) / d, (c + h) / d
 
     plt.rcParams.update({"font.family": "serif", "font.size": 7.5})
-    fig, (a1, a2) = plt.subplots(1, 2, figsize=(3.35, 1.75), gridspec_kw={"width_ratios": [1.15, 1]})
-    # (a)
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(3.35, 1.8))
     u = s.filter(pl.col("stratum") == "U")
-    xs = {"en-AU": 0, "en-UK": 1}
-    for v, x0 in xs.items():
-        d = u.filter((pl.col("variety") == v) & (pl.col("sentiment") == 0))
+    for x0, v in enumerate(("en-AU", "en-UK")):
+        d = u.filter(pl.col("variety") == v)
         n = d.height
         g = wilson(int(d["sarcasm"].sum()), n)
         r = wilson(int(round((d["a1_sarc"].sum() + d["a2_sarc"].sum()) / 2)), n)
-        for val, col, dx, lab in ((g, BLUE, -0.17, "gold label"), (r, ORANGE, 0.17, "blind readers")):
+        for val, col, dx, lab in ((g, BLUE, -0.17, "gold label"), (r, ORANGE, 0.17, "LLM readers")):
             a1.bar(x0 + dx, val[0], width=0.3, color=col, zorder=3, label=lab if v == "en-AU" else None)
             a1.errorbar(x0 + dx, val[0], yerr=[[val[0] - val[1]], [val[2] - val[0]]], color=INK2, lw=0.7, capsize=1.5,
                         zorder=4)
-            a1.text(x0 + dx, val[2] + 0.03, f"{val[0]:.0%}", ha="center", va="bottom", fontsize=6.5, color=INK)
+            a1.text(x0 + dx, val[2] + 0.025, f"{val[0]:.0%}", ha="center", va="bottom", fontsize=6.5, color=INK)
     a1.set_xticks([0, 1])
     a1.set_xticklabels(["en-AU", "en-UK"], color=INK)
-    a1.set_ylim(0, 0.85)
-    a1.set_yticks([0, 0.2, 0.4, 0.6, 0.8])
-    a1.set_yticklabels(["0", "20", "40", "60", "80%"])
-    a1.set_title("(a) negative comments\nlabelled sarcastic", fontsize=7, color=INK, loc="left")
+    a1.set_ylim(0, 0.68)
+    a1.set_yticks([0, 0.2, 0.4, 0.6])
+    a1.set_yticklabels(["0", "20", "40", "60%"])
+    a1.set_title("(a) comments labelled\nsarcastic", fontsize=7, color=INK, loc="left")
     a1.legend(frameon=False, fontsize=6, loc="upper right", handlelength=1, borderaxespad=0)
     _style(a1, "y")
-    # (b) disputed items, readers agreeing with each other: side with model vs gold
-    side = {"en-AU": (31, 14), "en-UK": (31, 17)}
-    for i, (v, (m, g)) in enumerate(side.items()):
-        tot = m + g
-        a2.barh(i, m / tot, color=AQUA, height=0.5, zorder=3)
-        a2.barh(i, g / tot, left=m / tot, color=BLUE, height=0.5, zorder=3)
-        a2.text(m / tot / 2, i, f"model\n{m}", ha="center", va="center", fontsize=6, color="white", weight="bold")
-        a2.text(m / tot + g / tot / 2, i, f"gold\n{g}", ha="center", va="center", fontsize=6, color="white", weight="bold")
-    a2.set_yticks([0, 1])
-    a2.set_yticklabels(["en-AU", "en-UK"], color=INK)
-    a2.invert_yaxis()
-    a2.set_xlim(0, 1)
-    a2.set_xticks([0, 0.5, 1])
-    a2.set_xticklabels(["0", "50", "100%"])
-    a2.axvline(0.5, color=INK2, lw=0.6, ls=(0, (2, 2)), zorder=4)
-    a2.set_title("(b) disputed items: readers\nside with", fontsize=7, color=INK, loc="left")
-    _style(a2, "x")
-    fig.tight_layout(w_pad=1.0)
+    c = pl.read_csv(ROOT / "results" / "paper" / "cue_flip.csv")
+    for x0, v in enumerate(("en-AU", "en-UK")):
+        for grp, col, dx, lab in (("derision", "#4a3aa7", -0.17, "derision cues"), ("irony", AQUA, 0.17, "playful cues")):
+            m = c.filter((pl.col("variety") == v) & (pl.col("group") == grp))["auc"].mean()
+            a2.bar(x0 + dx, m - 0.5, bottom=0.5, width=0.3, color=col, zorder=3, label=lab if v == "en-AU" else None)
+            a2.text(x0 + dx, m + (0.012 if m > 0.5 else -0.012), f"{m:.2f}", ha="center",
+                    va="bottom" if m > 0.5 else "top", fontsize=6.5, color=INK)
+    a2.axhline(0.5, color=INK2, lw=0.7, zorder=4)
+    a2.set_xticks([0, 1])
+    a2.set_xticklabels(["en-AU", "en-UK"], color=INK)
+    a2.set_ylim(0.36, 0.84)
+    a2.set_yticks([0.4, 0.5, 0.6, 0.7, 0.8])
+    a2.set_title("(b) cue AUC for the\nsarcasm label", fontsize=7, color=INK, loc="left")
+    a2.legend(frameon=False, fontsize=6, loc="upper center", handlelength=1, borderaxespad=0, ncol=1)
+    _style(a2, "y")
+    fig.tight_layout(w_pad=1.2)
     out = ROOT / "paper" / "fig_headline.pdf"
     fig.savefig(out, bbox_inches="tight", pad_inches=0.02)
     fig.savefig(out.with_suffix(".png"), dpi=220, bbox_inches="tight", pad_inches=0.02)
@@ -252,7 +245,7 @@ def system_figure() -> None:
         ax.add_patch(FancyArrowPatch((x0, y0), (x1, y1), arrowstyle="-|>", mutation_scale=6, lw=0.7, color=INK2,
                                      shrinkA=0, shrinkB=0))
 
-    box(0.0, 1.55, 1.75, 1.4, "comment\n[variety]\n[source]", "#f4f3ef")
+    box(0.0, 1.55, 1.75, 1.4, "text\n[variety]\n[source]", "#f4f3ef")
     members = [("DeBERTa-v3-large", "fine-tuned, 5 seeds", "#dbe8f9"),
                ("e5 + mE5", "frozen; linear probe", "#d6f2e7"),
                ("Qwen3.5-9B", "frozen; linear probe", "#fbe1d6")]
@@ -274,12 +267,12 @@ def system_figure() -> None:
 def gains_figure() -> None:
     """Two panels: (a) learning curves, (b) ensemble size (DeBERTa seeds alone vs inside the three-family ensemble)."""
     df = pool()
-    deb = pl.read_csv(ROOT / "results" / "paper" / "learning_curve_deberta.csv")
+    deb = pl.read_csv(ROOT / "results" / "paper" / "learning_curve_deberta.csv").filter(pl.col("seed").is_in([13, 14]))
     probes = pl.read_csv(ROOT / "results" / "paper" / "learning_curve_probes.csv")
     ens = pl.read_csv(ROOT / "results" / "paper" / "ensemble_curve.csv")
     plt.rcParams.update({"font.family": "serif", "font.size": 7.5})
     fig, (a, b) = plt.subplots(1, 2, figsize=(6.6, 2.15))
-    for name, col, mk, d in (("DeBERTa (1 seed)", BLUE, "o", deb),
+    for name, col, mk, d in (("DeBERTa (seeds 13, 14)", BLUE, "o", deb),
                              ("9B LLM probe", ORANGE, "s", probes.filter(pl.col("member") == "llm")),
                              ("e5 probe", AQUA, "^", probes.filter(pl.col("member") == "e5"))):
         g = d.group_by("frac").agg(pl.col("score").mean().alias("m"), pl.col("score").std().fill_null(0).alias("sd")).sort("frac")
@@ -293,7 +286,7 @@ def gains_figure() -> None:
     a.set_xticklabels(["10%", "25%", "50%", "75%", "100%"])
     a.set_xlabel("share of training data", color=INK2)
     a.set_ylabel("official score (OOF)", color=INK2)
-    a.set_title("(a) more data stops helping at half the data", fontsize=7.5, color=INK, loc="left")
+    a.set_title("(a) more data helps little beyond half", fontsize=7.5, color=INK, loc="left")
     _style(a, "y")
     g = ens.group_by("n").agg(pl.col("deb_score").mean().alias("deb"), pl.col("lead_score").mean().alias("lead")).sort("n")
     n = g["n"].to_numpy()
@@ -309,7 +302,7 @@ def gains_figure() -> None:
     b.set_xlim(0.5, 14.8)
     b.set_xticks([1, 2, 3, 5, 10])
     b.set_xlabel("number of DeBERTa seeds averaged", color=INK2)
-    b.set_title("(b) more seeds stop helping at three", fontsize=7.5, color=INK, loc="left")
+    b.set_title("(b) more seeds help little beyond three", fontsize=7.5, color=INK, loc="left")
     _style(b, "y")
     fig.tight_layout(w_pad=1.5)
     out = ROOT / "paper" / "fig_gains.pdf"

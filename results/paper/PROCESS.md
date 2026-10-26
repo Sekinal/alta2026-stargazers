@@ -45,7 +45,7 @@ history. Facts only; paraphrases rather than quotes of the author's chat message
 - Test submissions (uploaded by the author): stk_v5r 0.8668; an accidental duplicate (deleted by the organiser);
   DeBERTa x5 ablation 0.8541.
 - Paper analyses: learning curves, ensemble-size curve, architecture ablations, blind LLM re-annotation (pre-registered),
-  reader feature (pre-registered, failed), construct analysis (cue flip), coupled errors.
+  reader feature (pre-registered, failed), construct analysis (cue flip), coupled errors (later retracted, see below).
 - Author decisions: no paid human annotation study; paper figure/table choices; release plan (private HF repo).
 - Release: text scan with positive control; one tracked EDA table containing competition text found, removed and the
   git history rewritten.
@@ -66,3 +66,18 @@ Amazon polarity, Sentiment140 (+ QUT election data and Google Local, excluded). 
 Reddit AU/UK (Arctic Shift), Google Local 2018, Booking.com, NHS GP reviews, Inside Airbnb. All deduplicated against the
 labelled pool (and scripted against the test file). Used only in pre-training / pseudo-labelling screens that failed.
 Thread context (audit only): Arctic Shift day dumps (95% of Reddit rows matched).
+
+## Phase 2b (2026-09-25 .. 2026-10-25): paper
+- Verified bibliography (paper/build_bib.py): 95 entries, 82 retrieved and title/author-checked against Crossref, the
+  ACL Anthology or official arXiv BibTeX; 13 entered by hand (software, model cards, web pages, papers without DOI/arXiv).
+- Literature: after the system was fixed the agent read the BESSTIE paper and related work; none of it changed the
+  submitted system.
+- Internal review (three Claude Opus 5.5 reviewer sub-agents + one provenance-audit sub-agent) found two base-rate
+  artefacts (R10 coupled errors; R6 disputed-item direction), a collider in the cue analysis, mismatched learning-curve
+  seeds and an unreported failed pre-registered criterion. All corrected (results/paper/NOTES.md, last section).
+- Pre-registration sequence for R6/R8: the documents were written before annotation started, but committed together with
+  the results (commits b1b89dd/0cb9b59, 181280b/2ddd699, minutes apart); the order rests on the session record.
+- Phase-1 session transcripts were later removed by the tool's retention policy; this record relies on extracts made
+  while they existed. Readers in R6/R8 were Claude Opus 5.5 sub-agents.
+- Acknowledgements: Lium GPU-credit grant; Claude Code with Claude Opus 5 and Opus 5.5. The author must review the paper
+  before submission (responsibility statement in the acknowledgements).
