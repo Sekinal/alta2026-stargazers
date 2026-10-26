@@ -76,7 +76,7 @@ comments; our ensemble reproduces the en-AU annotator, not the readers (\S\ref{s
 \item The en-AU labels count derision as sarcasm and the en-UK labels largely do not, in every subreddit. Both readings fit
 the task guideline (\S\ref{sec:constructs}).
 \end{enumerate}
-We also report what did not help (\S\ref{sec:negative}) and how the system was built with AI agents (\S\ref{sec:process}).
+We also report what did not help (\S\ref{sec:negative}).
 
 \paragraph{Related work.} Sarcasm detection has moved from incongruity cues \citep{riloff-etal-2013-sarcasm} to large
 self-labelled Reddit corpora \citep{khodak-etal-2018-large} and to shared tasks on irony and intended sarcasm
@@ -353,8 +353,60 @@ can, which is what our per-variety outputs do.
 
 \section{What Did Not Help}
 \label{sec:negative}
-Table~\ref{tab:negative} lists what we tried once the three-model ensemble was in place. Nothing cleared the protocol's
-bar, and the one idea that looked best on a single fold, pseudo-labelling, failed its pre-registered confirmation.
+Once the three-model ensemble was in place, nothing we tried cleared the protocol's bar; Appendix~\ref{app:negative}
+lists every intervention and its effect. Alternative backbones (ELECTRA, ModernBERT, an NLI-tuned DeBERTa) scored 0.009
+to 0.016 below DeBERTa-v3-large and did not improve the ensemble. Training tweaks (weight averaging, layer-wise
+learning-rate decay), domain-adaptive pre-training and pre-training on self-labelled \texttt{/s} sarcasm were ties or
+losses. A LoRA-tuned Qwen3.5-4B was weaker than the frozen probe and added nothing to the ensemble. Context did not help
+either: recovered thread text, the labels of other comments in the same thread, and a nearest-neighbour label vote moved
+the score by $-$0.005 to +0.001. The idea that looked best on a single fold, pseudo-labelling, failed its pre-registered
+confirmation on an untouched fold ($-$0.006).
+
+\section{Conclusion}
+\label{sec:conclusion}
+A small ensemble, chosen under a strict protocol, shared first place. The more useful finding concerns the labels. On
+the binding en-AU sarcasm component, our ensemble already agrees with the annotator about as well as a second human did,
+and the en-AU labels follow an inclusive reading of BESSTIE's guideline in which derision counts as sarcasm, while the
+en-UK labels follow a narrower, irony-centred reading. Because the metric takes the weaker variety, gains on this
+benchmark will come mostly from modelling the en-AU labelling convention, not from detecting sarcasm better in general.
+We suggest that variety-sensitive benchmarks state explicitly whether mockery alone counts as sarcasm, collect several
+annotators per item, and report agreement per variety.
+
+\section*{Limitations}
+Our blind readers are two runs of one LLM from the family that built the system; they behave like a single reader, may
+share our models' notion of sarcasm, and are not native speakers of either variety. Their guideline was narrower than
+BESSTIE's, so disagreement with them is not evidence of annotation error. BESSTIE's annotators could consider context we
+do not see. With one annotator per variety we cannot separate individual from variety-level differences, so ``the en-AU
+labels'' should not be read as ``Australian English''. The cue analyses are exploratory. We did not test models larger
+than 9B parameters, so our curves do not rule out a capacity limit. The test set gives a sampling standard deviation of
+about 0.013 on the official score, larger than most differences we report; we therefore lean on OOF estimates and paired
+resampling. The DeBERTa epoch count was fixed on the fold later used for screening, which makes those screens slightly
+optimistic. En-UK reviews are handled by a rule.
+
+\section*{Ethics and Data}
+We redistribute no competition text: Table~\ref{tab:examples} is paraphrased, and our released code, predictions and
+models exclude the data. To audit the data split we matched Reddit comments to a public archive; we stored only
+subreddit, thread and timing fields, no usernames, and release none of it. External data used in exploration came from
+publicly available sources under their own terms (Appendix~\ref{app:resources}); none is redistributed.
+
+\section*{Acknowledgements}
+All code, experiments and analyses, and the first draft of every section of this paper, were produced by Claude Code \citep{claudecode},
+running Claude Opus~5 and Claude Opus~5.5, under the author's direction; sub-agents of the same model also served as the blind
+readers (\S\ref{sec:readers}) and as internal reviewers. The design was not guided by a literature review; the
+citations were added while writing this paper. A full account of the development process, including mistakes found
+and corrected, is released with our code. The author reviewed and edited the paper and takes full
+responsibility for its content; AI systems are not authors of this work. We thank Lium for a generous grant of GPU
+credits that made this and other work possible, and the organisers, Diego Moll\'{a}-Aliod, Aditya Joshi and Dipankar
+Srirag, for running the shared task and for their careful significance analysis.
+
+\bibliography{references}
+
+\appendix
+
+\section{What Did Not Help: Full Results}
+\label{app:negative}
+Table~\ref{tab:negative} lists every intervention tried after the three-model ensemble was fixed, under the protocol of
+\S\ref{sec:protocol}.
 
 \begin{table}[t]
 \centering\small
@@ -395,113 +447,6 @@ Reddit \citep{khodak-etal-2018-large}; LoRA \citep{hu2022lora} with rsLoRA \cite
 alternative backbones, \texttt{/s} pre-training and the LoRA variants reach $\pboot\geq0.8$, all in the negative direction.}
 \label{tab:negative}
 \end{table}
-
-\section{How the System Was Built}
-\label{sec:process}
-This system was built with AI coding agents. Claude Code \citep{claudecode}, running Claude Opus~5 in the first phase and
-Claude Opus~5.5 in the second, wrote all the code, ran every experiment and analysis, and drafted this paper. The author
-set the goals and constraints, provided compute, uploaded the test submissions and made the final decisions. The first
-phase used an orchestrating agent and 16 sub-agents for data exploration, red-teaming of the validation code, modelling,
-data collection and feature engineering.
-
-The design was not guided by a literature review. Apart from dataset searches and one paper fetched at the author's
-request, no literature was consulted before the system was chosen; methods came from the models' prior knowledge, the
-author's suggestions, an earlier project of the author's, and a ChatGPT-generated recommendation for LoRA variants that
-the author pasted in. The citations in this paper were added afterwards. What protected the result was the protocol of
-\S\ref{sec:protocol}: red-team agents showed that deliberately injected leaks passed the first version of the checks, and
-those gaps were closed before modelling results were used; and the idea that looked best on one fold failed its
-pre-registered confirmation. Appendix~\ref{app:process} gives the full account, including mistakes, and
-Appendix~\ref{app:resources} lists every model and dataset used.
-
-\section{Conclusion}
-\label{sec:conclusion}
-A small ensemble, chosen under a strict protocol, shared first place. The more useful finding concerns the labels. On
-the binding en-AU sarcasm component, our ensemble already agrees with the annotator about as well as a second human did,
-and the en-AU labels follow an inclusive reading of BESSTIE's guideline in which derision counts as sarcasm, while the
-en-UK labels follow a narrower, irony-centred reading. Because the metric takes the weaker variety, gains on this
-benchmark will come mostly from modelling the en-AU labelling convention, not from detecting sarcasm better in general.
-We suggest that variety-sensitive benchmarks state explicitly whether mockery alone counts as sarcasm, collect several
-annotators per item, and report agreement per variety.
-
-\section*{Limitations}
-Our blind readers are two runs of one LLM from the family that built the system; they behave like a single reader, may
-share our models' notion of sarcasm, and are not native speakers of either variety. Their guideline was narrower than
-BESSTIE's, so disagreement with them is not evidence of annotation error. BESSTIE's annotators could consider context we
-do not see. With one annotator per variety we cannot separate individual from variety-level differences, so ``the en-AU
-labels'' should not be read as ``Australian English''. The cue analyses are exploratory. We did not test models larger
-than 9B parameters, so our curves do not rule out a capacity limit. The test set gives a sampling standard deviation of
-about 0.013 on the official score, larger than most differences we report; we therefore lean on OOF estimates and paired
-resampling. The DeBERTa epoch count was fixed on the fold later used for screening, which makes those screens slightly
-optimistic. En-UK reviews are handled by a rule.
-
-\section*{Ethics and Data}
-We redistribute no competition text: Table~\ref{tab:examples} is paraphrased, and our released code, predictions and
-models exclude the data. To audit the data split we matched Reddit comments to a public archive; we stored only
-subreddit, thread and timing fields, no usernames, and release none of it. External data used in exploration came from
-publicly available sources under their own terms (Appendix~\ref{app:resources}); none is redistributed.
-
-\section*{Acknowledgements}
-All code, experiments and analyses, and the first draft of every section of this paper, were produced by Claude Code
-(Claude Opus~5 and Claude Opus~5.5) under the author's direction; sub-agents of the same model also served as the blind
-readers (\S\ref{sec:readers}) and as internal reviewers. The author reviewed and edited the paper and takes full
-responsibility for its content; AI systems are not authors of this work. We thank Lium for a generous grant of GPU
-credits that made this and other work possible, and the organisers, Diego Moll\'{a}-Aliod, Aditya Joshi and Dipankar
-Srirag, for running the shared task and for their careful significance analysis.
-
-\bibliography{references}
-
-\appendix
-
-\section{Development Process in Detail}
-\label{app:process}
-\paragraph{Roles.} Phase~1 (17--19 September 2026) was run by a Claude Opus~5 orchestrating agent, which spawned 15
-sub-agents (a 16th was spawned by one of them): three for data exploration, three red teams (statistics and leakage,
-software and submission path, calibration of the validation estimates), three modelling agents (encoders, LLMs, classical
-models and stacking), four for external data, two for feature engineering and one for recovering Reddit context. Phase~2
-(23 September -- 25 October 2026, Claude Opus~5.5) rebuilt the system after the machine holding its checkpoints was lost,
-ran the screens, curves and ablations of \S\ref{sec:analysis}, and used sub-agents as the blind readers, to reconstruct
-this account from the session transcripts, and to review the paper. The phase-1 transcripts were later deleted by the
-tool's retention policy; this account relies on extracts made from them while they existed. Compute: a laptop RTX~4070
-(8~GB), an A100 (80~GB) spot instance that was pre-empted, a 2$\times$RTX~3090 machine (phase~1) and one RTX~3090
-(phase~2).
-
-\paragraph{Author decisions and suggestions.} The author fixed the tooling (polars, lets-plot, a multi-agent setup,
-version control from the start); made generalisation the overriding criterion, which became the protocol of
-\S\ref{sec:protocol}; asked for a thorough validation stack and for adversarial red-teaming of it; asked for agents to
-collect external pre-training data and to engineer features; chose single-fold screening for neural models and five
-folds for the rest; required local models only; named Qwen3.5-4B as the preferred LLM size and later ruled out larger
-LLMs and paid human annotation; asked whether the literature had been consulted, which triggered the first literature
-search; and challenged an agent's claim that other teams' development scores were contaminated, which led to its
-retraction. The author also suggested gradient-boosted trees on CPU \citep{chen2016xgboost,ke2017lightgbm,
-prokhorenkova2018catboost}, TF-IDF models and SVMs, embeddings as tree features, xRFM \citep{beaglehole2025xrfm}, Unsloth
-\citep{unsloth}, PiSSA (dropped before it was run), recipes from the author's earlier AstroCLIMB project (a separate linear
-head with a higher learning rate, and a pseudo-label adaptation stage), and a ladder of LoRA variants from a pasted
-ChatGPT recommendation (EVA, DoRA, rsLoRA, Riemannian preconditioning; three further suggestions were not run: one was not
-available in the fine-tuning library, one needed far more GPUs than we had, and one was an optional final rung).
-
-\paragraph{Agent decisions.} The agents chose not to use the public BESSTIE release in any form; designed the validation
-harness (cross-fitted thresholds, paired test-sized bootstrap, label-shuffling canaries, test-file fingerprints); chose the
-three-model ensemble under the protocol; and designed the LLM hidden-state probe (layer and regularisation chosen on OOF
-predictions). The multi-task head with per-variety sarcasm outputs and the \texttt{[variety] [source]} prefix were proposed
-by the orchestrating agent. The
-in-sample development predictions (which would have scored about 0.95 on the development leaderboard) were deliberately
-not submitted. Of the 95 references, 82 were retrieved and checked against Crossref, the ACL Anthology or arXiv; the other 13
-(software, model cards, web pages and papers without a DOI or arXiv record) were entered by hand from official pages.
-
-\paragraph{Mistakes found and corrected.} Red teams showed that test predictions were not bound to the test file they were
-made for, that the submission path did not run the integrity checks, that source and variety values were not validated,
-that plain $k$-fold splits went undetected, and that a deliberately injected leak (feature selection on all labels,
-+0.043) passed every existing check; the label-shuffling canary was added in response. Other corrections: raw competition
-text committed early (removed, and later purged from the version history); a version-control rule that silently excluded
-a code directory; a text-normalisation bug and a missed column in the deduplication of external data against the task data;
-a non-deterministic row order in pseudo-label sampling; domain-adaptive pre-training that started from a randomly
-initialised language-model head; an EVA initialisation that had not converged; an agent deleting probe runs that other
-runs depended on (restored); an agent running five-fold LoRA against the protocol (stopped); a table that mixed logit and
-probability averaging; a canary result reused across seeds; the retracted contamination claim above; an LLM feature cache
-keyed by split rather than by test file (fixed before any test prediction); a relative file path given to the author
-for a test upload, which cost one submission that the organiser restored; and, during the writing of this paper, two
-analyses that internal review showed to be base-rate artefacts and that we removed (an apparent link between en-AU
-sarcasm and sentiment errors, and a reading of the disputed comments as evidence that the model was right).
 
 \section{Blind Reader Guideline}
 \label{app:readers}
