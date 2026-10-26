@@ -33,9 +33,13 @@ history. Facts only; paraphrases rather than quotes of the author's chat message
   source prefix — head design and prefix suggested by the orchestrator's prompt), e5-large-v2 + multilingual-e5-large-
   instruct LR probe, Qwen3.5-9B NF4 hidden-state probe (the probe design is the agent's own), weight-free logit mean,
   cross-fitted per-segment thresholds.
-- No literature review guided the design: the orchestrator stated so when asked (2026-09-19); the first literature
-  search happened after the final system was chosen. Method knowledge came from the models' prior knowledge, the
-  author's suggestions and the pasted recommendation.
+- Where the design came from (corrected 2026-10-26): the author's Kaggle competition experience (validation-first
+  selection, gradient-boosted trees and embedding features, the AstroCLIMB Kaggle system whose head and pseudo-label
+  recipes were adapted) and a targeted search for methods to push performance before the system was fixed: the PiSSA
+  paper (fetched at the author's request), a literature-backed ChatGPT recommendation of LoRA variants with paper links
+  (EVA, DoRA, rsLoRA, Riemannian preconditioning, FARSS, Super-Tuning, HD-PiSSA), and xRFM. On 2026-09-19 the
+  orchestrator said it had not itself searched prior work on BESSTIE or sarcasm detection; that search followed. Other
+  method knowledge came from the models' prior knowledge.
 
 ## Phase 2 (2026-09-23/24)
 - The GPU box holding all checkpoints was lost; the author provided a 1x RTX 3090 box; the lead was retrained
