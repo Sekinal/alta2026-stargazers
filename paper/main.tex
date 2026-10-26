@@ -48,11 +48,11 @@ lie: deciding which negative comments count as sarcastic.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{fig_headline.pdf}
-\caption{The two varieties' sarcasm labels differ, using only gold labels and label-free models. (a) Share of Reddit
-comments labelled sarcastic, per subreddit, among archive-matched comments that a sentiment model calls negative
-(1,221 en-AU, 883 en-UK). (b) Mean AUC of four
-derision cues and four playful cues for the gold sarcasm label among all comments the sentiment model calls negative (details in
-Figure~\ref{fig:cues}); 0.5 means no signal.}
+\caption{The two varieties' sarcasm labels differ. (a) Among Reddit comments that an off-the-shelf sentiment model
+(SiEBERT) rates negative, the share that the dataset's annotator labelled sarcastic, per subreddit (archive-matched
+comments: 1,221 en-AU, 883 en-UK). (b) How well four derision cues and four playful cues predict the annotator's sarcasm
+label, as mean AUC (0.5 = no better than chance); the cues are scores from off-the-shelf classifiers that never saw this
+task's labels (details in Figure~\ref{fig:cues}). Neither panel uses the LLM re-annotation of Appendix~\ref{app:readers}.}
 \label{fig:headline}
 \end{figure}
 
