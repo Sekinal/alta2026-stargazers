@@ -65,7 +65,9 @@ for sentiment and 0.801 and 0.837 for sarcasm give $(0.932+0.801)/2\approx0.867$
 
 This paper makes two points. First, a small ensemble chosen under a strict protocol was enough to share first place.
 Second, and more useful for anyone working with this data, the en-AU and en-UK sarcasm labels differ markedly in rate
-and in the cues they follow, which matters for any model that must transfer between them. Figure~\ref{fig:headline} summarises the evidence:
+and in the cues they follow. This matters for how the benchmark is used: when a model trained on one variety fails on
+the other, part of the failure may reflect different labelling conventions rather than a failure to understand the
+variety. Figure~\ref{fig:headline} summarises the evidence:
 the en-AU labels call far more negative comments sarcastic, in every subreddit, and contempt and anger, which go with
 an en-AU sarcasm label, go with its absence in en-UK. These analyses locate difficult cases and suggest hypotheses;
 they do not identify a single cause of the plateau.
@@ -360,7 +362,8 @@ confirmation on an untouched fold ($-$0.006).
 \label{sec:conclusion}
 A small ensemble, chosen under a strict protocol, shared first place. The more useful finding concerns the labels: the
 en-AU and en-UK sarcasm labels differ in rate and in the cues they follow, consistently across subreddits, and agreement
-on en-AU sarcasm is low even between humans. Because the metric takes the weaker variety, en-AU sets the score in both
+on en-AU sarcasm is low even between humans. Cross-variety results on this benchmark therefore mix two things: how
+well a model understands each variety, and how differently each variety's sarcasm was labelled. Because the metric takes the weaker variety, en-AU sets the score in both
 tasks; en-AU sarcasm is the weakest component and the clearest priority, especially the negative comments where its
 labels are hardest to predict. We suggest that variety-sensitive benchmarks state explicitly whether mockery alone counts as
 sarcasm, have native annotators of each variety label a shared set of items, and report agreement per variety.
