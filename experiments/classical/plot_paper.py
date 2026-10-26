@@ -229,12 +229,12 @@ def system_figure() -> None:
     from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
     plt.rcParams.update({"font.family": "serif", "font.size": 6.6})
     fig, ax = plt.subplots(figsize=(3.35, 1.5))
-    ax.set_xlim(0, 10.4)
-    ax.set_ylim(0, 4.5)
+    ax.set_xlim(-0.15, 10.75)
+    ax.set_ylim(0.05, 4.45)
     ax.axis("off")
 
     def box(x, y, w, h, text, fc, sub=None):
-        ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.02,rounding_size=0.18", fc=fc, ec=INK2, lw=0.7))
+        ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.02,rounding_size=0.18", fc=fc, ec=INK2, lw=0.7, clip_on=False))
         if sub:
             ax.text(x + w / 2, y + h * 0.63, text, ha="center", va="center", fontsize=6.6, color=INK, weight="bold")
             ax.text(x + w / 2, y + h * 0.3, sub, ha="center", va="center", fontsize=5.8, color=INK2)
@@ -251,12 +251,12 @@ def system_figure() -> None:
                ("Qwen3.5-9B", "frozen; linear probe", "#fbe1d6")]
     ys = [3.15, 1.7, 0.25]
     for (t, sub, c), y in zip(members, ys):
-        box(2.35, y, 3.0, 1.1, t, c, sub)
-        arrow(1.75, 2.25, 2.35, y + 0.55)
-        arrow(5.35, y + 0.55, 6.0, 2.25)
-    box(6.0, 1.7, 1.55, 1.1, "average\nlogits", "#f4f3ef")
-    arrow(7.55, 2.25, 8.0, 2.25)
-    box(8.0, 1.4, 2.35, 1.7, "per-segment\nthresholds\n(cross-fitted)", "#f4f3ef")
+        box(2.3, y, 3.35, 1.1, t, c, sub)
+        arrow(1.75, 2.25, 2.3, y + 0.55)
+        arrow(5.65, y + 0.55, 6.2, 2.25)
+    box(6.2, 1.7, 1.55, 1.1, "average\nlogits", "#f4f3ef")
+    arrow(7.75, 2.25, 8.2, 2.25)
+    box(8.2, 1.4, 2.35, 1.7, "per-segment\nthresholds\n(cross-fitted)", "#f4f3ef")
     fig.tight_layout(pad=0.1)
     out = ROOT / "paper" / "fig_system.pdf"
     fig.savefig(out, bbox_inches="tight", pad_inches=0.01)
