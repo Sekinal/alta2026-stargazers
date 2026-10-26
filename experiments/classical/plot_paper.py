@@ -163,52 +163,47 @@ def _style(ax, grid_axis="x"):
 
 
 def headline_figure() -> None:
-    """Figure 1. (a) Share of Reddit comments labelled sarcastic by the gold annotator vs two blind LLM readers (R6 uniform
-    sample, 150 per variety, no conditioning; Wilson 95% CIs). (b) Mean AUC of four derision cues vs four playful cues for
-    the gold sarcasm label, among comments a label-free sentiment model calls negative (results/paper/cue_flip.csv)."""
-    import json
-    import glob
-    s = pl.read_csv(ROOT / "experiments" / "reannot" / "sample.csv")
-    for w in ("a1", "a2"):
-        rows = [json.loads(x) for f in sorted(glob.glob(str(ROOT / f"experiments/reannot/labels/{w}_batch_*.jsonl")))
-                for x in open(f)]
-        s = s.join(pl.DataFrame(rows).rename({"sarcasm": f"{w}_sarc", "sentiment": f"{w}_sent"}), on="item")
-
-    def wilson(k, n, z=1.96):
-        p = k / n
-        d = 1 + z * z / n
-        c = p + z * z / (2 * n)
-        h = z * np.sqrt(p * (1 - p) / n + z * z / (4 * n * n))
-        return p, (c - h) / d, (c + h) / d
-
+    """Figure 1, gold labels and label-free models only. (a) Share of Reddit comments labelled sarcastic, per subreddit,
+    among comments a label-free sentiment model (SiEBERT) calls negative. (b) Mean AUC of four derision cues vs four
+    playful cues for the gold sarcasm label in the same comments (results/paper/cue_flip*.csv)."""
     plt.rcParams.update({"font.family": "serif", "font.size": 8.3})
-    fig, (a1, a2) = plt.subplots(1, 2, figsize=(3.35, 2.05))
-    u = s.filter(pl.col("stratum") == "U")
-    for x0, v in enumerate(("en-AU", "en-UK")):
-        d = u.filter(pl.col("variety") == v)
-        n = d.height
-        g = wilson(int(d["sarcasm"].sum()), n)
-        r = wilson(int(round((d["a1_sarc"].sum() + d["a2_sarc"].sum()) / 2)), n)
-        for val, col, dx, lab in ((g, BLUE, -0.17, "gold label"), (r, ORANGE, 0.17, "LLM readers")):
-            a1.bar(x0 + dx, val[0], width=0.3, color=col, zorder=3, label=lab if v == "en-AU" else None)
-            a1.errorbar(x0 + dx, val[0], yerr=[[val[0] - val[1]], [val[2] - val[0]]], color=INK2, lw=0.7, capsize=1.5,
-                        zorder=4)
-            a1.text(x0 + dx, val[2] + 0.025, f"{val[0]:.0%}", ha="center", va="bottom", fontsize=6.8, color=INK)
-    a1.set_xticks([0, 1])
-    a1.set_xticklabels(["en-AU", "en-UK"], color=INK)
-    a1.set_ylim(0, 0.78)
-    a1.set_yticks([0, 0.2, 0.4, 0.6])
-    a1.set_yticklabels(["0", "20", "40", "60%"])
-    a1.set_title("(a) comments labelled\nsarcastic", fontsize=8, color=INK, loc="left")
-    a1.legend(frameon=False, fontsize=7, loc="upper right", handlelength=1, borderaxespad=0)
-    _style(a1, "y")
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(3.35, 2.15), gridspec_kw={"width_ratios": [1.25, 1]})
+    sub = pl.read_csv(ROOT / "results" / "paper" / "cue_flip_subreddit.csv").sort(["variety", "sarc_rate"],
+                                                                                    descending=[True, False])
+    names = {"AustralianPolitics": "AusPolitics", "AskAnAustralian": "AskAnAus", "melbourne": "melbourne",
+             "unitedkingdom": "unitedkingdom", "england": "england", "Britain": "Britain",
+             "GreatBritishMemes": "GBMemes"}
+    rows = sub.iter_rows(named=True)
+    ys, labs = [], []
+    y = 0.0
+    prev = None
+    for r in rows:
+        if prev is not None and r["variety"] != prev:
+            y += 0.6
+        col = BLUE if r["variety"] == "en-AU" else ORANGE
+        a1.barh(y, r["sarc_rate"], height=0.72, color=col, zorder=3,
+                label=r["variety"] if r["variety"] != prev else None)
+        a1.text(r["sarc_rate"] + 0.012, y, f"{r['sarc_rate']:.0%}", va="center", fontsize=6.8, color=INK)
+        ys.append(y)
+        labs.append(names.get(r["subreddit"], r["subreddit"]))
+        prev = r["variety"]
+        y += 1
+    a1.set_yticks(ys)
+    a1.set_yticklabels(labs, fontsize=7)
+    a1.set_xlim(0, 0.8)
+    a1.set_xticks([0, 0.25, 0.5, 0.75])
+    a1.set_xticklabels(["0", "25", "50", "75%"])
+    a1.set_title("(a) negative comments\nlabelled sarcastic", fontsize=8, color=INK, loc="left")
+    h, l = a1.get_legend_handles_labels()
+    a1.legend(h[::-1], l[::-1], frameon=False, fontsize=7, loc="lower right", handlelength=1, borderaxespad=0)
+    _style(a1, "x")
     c = pl.read_csv(ROOT / "results" / "paper" / "cue_flip.csv")
     for x0, v in enumerate(("en-AU", "en-UK")):
-        for grp, col, dx, lab in (("derision", "#4a3aa7", -0.17, "derision cues"), ("irony", AQUA, 0.17, "playful cues")):
+        for grp, col, dx, lab in (("derision", "#4a3aa7", -0.17, "derision"), ("irony", AQUA, 0.17, "playful")):
             m = c.filter((pl.col("variety") == v) & (pl.col("group") == grp))["auc"].mean()
             a2.bar(x0 + dx, m - 0.5, bottom=0.5, width=0.3, color=col, zorder=3, label=lab if v == "en-AU" else None)
             a2.text(x0 + dx, m + (0.012 if m > 0.5 else -0.012), f"{m:.2f}", ha="center",
-                    va="bottom" if m > 0.5 else "top", fontsize=7.3, color=INK)
+                    va="bottom" if m > 0.5 else "top", fontsize=6.8, color=INK)
     a2.axhline(0.5, color=INK2, lw=0.7, zorder=4)
     a2.set_xticks([0, 1])
     a2.set_xticklabels(["en-AU", "en-UK"], color=INK)
@@ -217,7 +212,7 @@ def headline_figure() -> None:
     a2.set_title("(b) cue AUC for the\nsarcasm label", fontsize=8, color=INK, loc="left")
     a2.legend(frameon=False, fontsize=7, loc="upper center", handlelength=1, borderaxespad=0, ncol=1)
     _style(a2, "y")
-    fig.tight_layout(w_pad=1.2)
+    fig.tight_layout(w_pad=1.0)
     out = ROOT / "paper" / "fig_headline.pdf"
     fig.savefig(out, bbox_inches="tight", pad_inches=0.02)
     fig.savefig(out.with_suffix(".png"), dpi=220, bbox_inches="tight", pad_inches=0.02)

@@ -18,7 +18,7 @@ Code, predictions, cached features, model checkpoints and paper for our system i
 [ALTA 2026 shared task](https://www.alta.asn.au/events/sharedtask2026/) on sentiment and sarcasm classification in
 Australian and British English (BESSTIE en-AU / en-UK subsets).
 
-Paper: *Two Annotators, Two Sarcasms: What Limits a Well-Validated Ensemble on Australian and British
+Paper: *Two Varieties, Two Sarcasms: What Limits a Well-Validated Ensemble on Australian and British
 English* — Irving Ernesto Quezada Ramírez (`paper/main.tex`, `paper/main.pdf`).
 
 ## Results
@@ -112,7 +112,7 @@ for research reproducibility; check the BESSTIE terms before other uses.
 ## Citation
 ```bibtex
 @inproceedings{quezada-2026-thermostatic,
-  title     = {Two Annotators, Two Sarcasms: What Limits a Well-Validated Ensemble on Australian and British English},
+  title     = {Two Varieties, Two Sarcasms: What Limits a Well-Validated Ensemble on Australian and British English},
   author    = {Quezada Ram{\'i}rez, Irving Ernesto},
   booktitle = {Proceedings of the 24th Annual Workshop of the Australasian Language Technology Association (ALTA 2026)},
   year      = {2026},

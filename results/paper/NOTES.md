@@ -245,3 +245,12 @@ These supersede the readings above where they conflict. The paper (paper/main.te
 - Reader positive-sentiment rate AU: mean of .260/.267 = .26 (was printed .27).
 - BESSTIE's kappa .47 has no published interval; [.19, .72] is our parametric estimate (human_kappa_ci.csv).
 - Bootstrap: B = 2000 test-sized resamples stratified by variety x source x labels, predictions/thresholds fixed.
+
+## Framing decision (2026-10-26)
+The paper's analysis is now descriptive: the en-AU and en-UK sarcasm labels differ in rate (every AU subreddit 44-64%
+sarcastic among SiEBERT-negative comments vs every UK subreddit 12-33%; cue_flip_subreddit.csv) and in cue direction.
+Causes (annotator convention vs community usage vs text differences) are not separable with one annotator per variety
+and disjoint items. The blind LLM re-annotation (R6) moved to an appendix as exploratory: one model, a narrower
+guideline, not a native speaker; the low AU reader rate may reflect the reader as much as the annotator. The "ceiling"
+claim was dropped; the main text uses lead-vs-gold AU sarcasm kappa .56 [.53,.60] on all 2,004 AU Reddit rows
+(kappa_vs_gold.csv, stk_v5) next to BESSTIE's human .47, with the samples-differ caveat.
