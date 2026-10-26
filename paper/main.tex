@@ -58,8 +58,10 @@ Figure~\ref{fig:cues}); 0.5 means no signal.}
 
 The ALTA 2026 shared task \citep{alta2026task} uses the Australian (en-AU) and British (en-UK) English portions of
 BESSTIE \citep{srirag-etal-2025-besstie}. Each text is a Google review or a Reddit comment with a binary sentiment label
-and a binary sarcasm label. For each task, the official score takes the macro-F1 of the \emph{weaker} variety, which we
-call the \emph{binding} variety, and then averages the two tasks.
+and a binary sarcasm label. Each task is scored by macro-F1, computed separately for each variety. The official score
+keeps the lower of the two varieties for each task and averages the two tasks. We call the variety with the lower score
+the \emph{binding} variety, since only its score counts. For example, our test scores of 0.932 (en-AU) and 0.976 (en-UK)
+for sentiment and 0.801 and 0.837 for sarcasm give $(0.932+0.801)/2\approx0.867$.
 
 This paper makes two points. First, a small ensemble chosen under a strict protocol was enough to share first place.
 Second, and more useful for anyone working with this data, the en-AU and en-UK sarcasm labels differ markedly in rate
