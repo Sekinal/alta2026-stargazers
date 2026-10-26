@@ -88,12 +88,14 @@ We also report what did not help (\S\ref{sec:negative}) and, as an exploratory c
 LLM (Appendix~\ref{app:readers}).
 
 \paragraph{Related work.} Two findings on sarcasm bear directly on ours: \citet{oprea-magdy-2020-isarcasm} show that intended and perceived sarcasm differ, and
-\citet{oprea-magdy-2020-sociocultural} that country, age and native language affect how sarcasm is understood online. Work on language varieties
-\citep{faisal-etal-2024-dialectbench,joshi2025dialects} motivates BESSTIE, whose authors already reported that sarcasm
-transfers poorly across varieties \citep{srirag-etal-2025-besstie}; \citet{singh2025nekminit} add explanations to its
-sarcasm data and evaluate pragmatic prompting. Our analysis belongs to the literature on label variation and annotator effects
+\citet{oprea-magdy-2020-sociocultural} report differences in how sarcasm is interpreted associated with country, age and
+whether English is the reader's native language. BESSTIE extends variety benchmarks such as DIALECTBENCH
+\citep{faisal-etal-2024-dialectbench} to sentiment and sarcasm in English varieties, and its authors already reported
+that sarcasm transfers poorly across varieties \citep{srirag-etal-2025-besstie}; \citet{singh2025nekminit} add
+explanations to BESSTIE's Australian and Indian English sarcasm data and evaluate pragmatic metacognitive prompting. Our analysis belongs to the literature on label variation and annotator effects
 \citep{geva-etal-2019-modeling,basile-etal-2021-need,plank-2022-problem}: \citet{rottger-etal-2022-two} distinguish
-annotation that records annotators' own beliefs from annotation that applies one shared guideline, and the EPIC corpus
+descriptive annotation, which elicits annotators' own judgements, from prescriptive annotation, which asks them to
+apply one specified interpretation, and the EPIC corpus
 found and modelled systematic differences between irony annotators from five English-speaking countries, including the
 UK and Australia \citep{frenda-etal-2023-epic}. On the linguistic side, jocular mockery and abuse, which combine
 apparent hostility with affiliation, have been described in both Australian and British interaction
@@ -160,12 +162,14 @@ thresholds are fitted on all OOF predictions and applied to the average of the f
 koehn-2004-statistical}: 2,000 test-sized resamples of the pool, stratified by segment and labels, with predictions and
 thresholds held fixed. We report $\pboot$, the share of resamples in which one beats the other. It covers test sampling
 only, not retraining or selection, and it is not a $p$-value: two seeds of the same MLP probe reach $\pboot\geq0.9$ in 18\% of pairs. We call $\pboot<0.8$ no
-evidence and $0.8\leq\pboot<0.95$ suggestive, and compare neural models by averages over at least two seeds
-\citep{dodge2020finetuning}.
+evidence and $0.8\leq\pboot<0.95$ suggestive. Because fine-tuning results vary with the random seed
+\citep{dodge2020finetuning}, we compare neural models by averages over at least two seeds.
 \item \textbf{Leakage in our pipeline.} Models are re-run with shuffled labels and must fall to the no-information
 score; all three members of the final system do (0.63--0.64, against a floor of 0.64).
-\item \textbf{Selection on one lucky split.} Neural recipes are screened on one fold; anything promising is confirmed on
-an untouched fold, with the success criterion written down beforehand \citep{nosek2018preregistration,gorman-bedrick-2019-need}.
+\item \textbf{Selection on one lucky split.} System rankings can depend on the split \citep{gorman-bedrick-2019-need}.
+Neural recipes are therefore screened on one fold, and anything promising is confirmed on an untouched fold, with the
+success criterion written down beforehand in the spirit of pre-registration \citep{nosek2018preregistration}; these
+plans are internal documents, not entries in a public registry.
 \end{itemize}
 
 \section{System}
@@ -224,7 +228,7 @@ Organisers' baseline, test & .866 & .931 & .680 & .696 & .773 \\
 \end{tabular}
 \caption{Macro-F1 per component; score $=\frac12[\min(\text{sent})+\min(\text{sarc})]$. OOF: out-of-fold predictions on
 the pool, with cross-fitted thresholds. The baseline is the organisers' fine-tuned DistilBERT
-\citep{sanh2019distilbert,alta2026baseline}.}
+\citep{sanh2019distilbert,alta2026baseline}; its test scores are from the official leaderboard.}
 \label{tab:main}
 \end{table}
 
@@ -336,7 +340,7 @@ per-variety outputs do.
 
 \subsection{How far can en-AU sarcasm go?}
 \label{sec:ceiling}
-Agreement on en-AU sarcasm is low even between humans. BESSTIE reports a second annotator for 50 items per variety:
+Agreement on en-AU sarcasm is low even between humans. BESSTIE reports a second annotator for 50 items per variety \citep[\S2.3]{srirag-etal-2025-besstie}:
 $\kappa=0.47$ for en-AU sarcasm, against 0.61 and 0.79 for sentiment; with 50 items, its uncertainty is large. Our submitted ensemble agrees with the gold en-AU sarcasm labels at
 $\kappa=0.56$ (95\% bootstrap interval 0.52--0.59) over all 2,004 en-AU Reddit comments. The samples differ, so the two numbers cannot be compared directly, and neither is a ceiling
 estimate; together they show that en-AU sarcasm labels are hard to reproduce, for humans as for models. The hardest
@@ -349,10 +353,10 @@ whether through the labels, missing context or model limits, remains open.
 Once the three-model ensemble was in place, nothing we tried cleared the protocol's bar; Appendix~\ref{app:negative}
 lists the main interventions, their baselines and their effects. Alternative backbones (ELECTRA, ModernBERT, an NLI-tuned DeBERTa) scored 0.009
 to 0.016 below DeBERTa-v3-large and did not improve the ensemble. Training tweaks (weight averaging, layer-wise
-learning-rate decay), domain-adaptive pre-training and pre-training on self-labelled \texttt{/s} sarcasm were ties or
+learning-rate decay), domain-adaptive pre-training and sarcasm pre-training on external data were ties or
 losses. A LoRA-tuned Qwen3.5-4B was weaker than the frozen probe and added nothing to the ensemble. Context did not help
 either: recovered thread text, the labels of other comments in the same thread, and a nearest-neighbour label vote moved
-the score by $-$0.005 to +0.001, within noise. The idea that looked best on a single fold, pseudo-labelling, failed its pre-registered
+the score by $-$0.005 to +0.001, within noise. The idea that looked best on a single fold, pseudo-labelling, failed its pre-specified
 confirmation on an untouched fold ($-$0.006).
 
 \section{Conclusion}
@@ -390,8 +394,10 @@ All code, experiments and analyses, and the first draft of every section of this
 running Claude Opus~5 and Claude Opus~5.5, under the author's direction; sub-agents of the same model also served as the blind
 readers (Appendix~\ref{app:readers}) and as internal reviewers, and OpenAI's GPT-6 Astra, run through the Codex
 CLI, reviewed the paper independently in several rounds. The design drew on the author's experience in Kaggle
-competitions, including recipes adapted from an earlier competition system, and on a search for methods to push
-performance (such as LoRA variants); most citations on sarcasm and annotation were added while writing this paper. A full account of the development process, including mistakes found
+competitions, including recipes adapted from the author's earlier AstroCLIMB system, and on a ChatGPT-generated list
+of LoRA variants with links to their papers that the author supplied; the agents contributed the ensemble, output-head,
+prefix and probe designs from their prior knowledge. The sarcasm and annotation literature was read after the system was
+fixed and did not change it. A full account of the development process, including mistakes found
 and corrected, is released with our code. The author reviewed and edited the paper and takes full
 responsibility for its content; AI systems are not authors of this work. We thank Lium for a generous grant of GPU
 credits that made this and other work possible, and the organisers, Diego Moll\'{a}-Aliod, Aditya Joshi and Dipankar
@@ -421,30 +427,30 @@ Intervention (protocol) & $\Delta$ \\
 \quad ModernBERT-large & $-$.012 \\
 \quad any of these inside the ensemble & $-$.007 to +.002 \\
 \quad domain-adaptive pre-training & $-$.004 \\
-\quad \texttt{/s}-labelled sarcasm pre-training & $-$.011 \\
+\quad sarcasm pre-training (external data) & $-$.011 \\
 \midrule
-\multicolumn{2}{l}{\emph{LLMs} (Qwen3.5-4B, one fold)} \\
-\quad LoRA, alone / in ensemble & $-$.02 / .000 \\
-\quad EVA initialisation & $-$.04 \\
-\quad EVA + DoRA + Riemannian & $-$.10 \\
+\multicolumn{2}{l}{\emph{LLMs} (Qwen3.5-4B \citealp{qwen35}, one fold)} \\
+\quad LoRA + rsLoRA, alone / in ensemble & $-$.02 / .000 \\
+\quad EVA + rsLoRA & $-$.04 \\
+\quad EVA + DoRA + rsLoRA + Riemannian & $-$.10 \\
 \midrule
 \multicolumn{2}{l}{\emph{Data and context} (five folds unless noted)} \\
-\quad pseudo-labels (pre-reg., fold 4) & $-$.006 \\
+\quad pseudo-labels (pre-spec., fold 4) & $-$.006 \\
 \quad recovered thread context (stacker) & $-$.001 \\
 \quad same-thread label features & +.001 \\
 \quad $k$NN label vote & $-$.005 \\
-\quad LLM-reader label, en-UK (pre-reg.) & .000 \\
+\quad LLM-reader label, en-UK (pre-spec.) & .000 \\
 \bottomrule
 \end{tabular}
 \caption{Change in official score against the matching baseline (DeBERTa rows and LoRA alone: three-seed DeBERTa on the
-same fold; LoRA variants: plain LoRA; pseudo-labels: the unchanged ensemble on fold 4; other five-fold rows: the full ensemble, or for thread context the same
+same fold; LoRA variants: LoRA + rsLoRA; pseudo-labels: the unchanged ensemble on fold 4; other five-fold rows: the full ensemble, or for thread context the same
 stacker without context features). Methods: weight averaging (EMA); layer-wise learning-rate decay
 \citep{howard-ruder-2018-universal}; NLI-tuned DeBERTa \citep{laurer2024less}; ELECTRA \citep{clark2020electra};
-ModernBERT \citep{warner2024modernbert}; domain-adaptive pre-training \citep{gururangan-etal-2020-dont}; \texttt{/s}-labelled
-Reddit \citep{khodak-etal-2018-large}; LoRA \citep{hu2022lora} with rsLoRA \citep{kalajdzievski2023rslora}, EVA
+ModernBERT \citep{warner2024modernbert}; domain-adaptive pre-training \citep{gururangan-etal-2020-dont}; sarcasm pre-training data (Appendix~\ref{app:resources}); LoRA \citep{hu2022lora} with rsLoRA \citep{kalajdzievski2023rslora}, EVA
 \citep{paischer2024eva}, DoRA \citep{liu2024dora} and Riemannian preconditioning \citep{zhang2024riemannian}, via PEFT
-\citep{peft} (the EVA initialisation had not fully converged); pseudo-labelling \citep{lee2013pseudo}. Only the
-alternative backbones, \texttt{/s} pre-training, the LoRA variants and pseudo-labelling ($\pboot=0.95$ for the
+\citep{peft} (the EVA initialisation was capped at 32 batches and had not converged in 115 of 248 layers); pseudo-labelling
+\citep{lee2013pseudo}, following a recipe from the author's earlier AstroCLIMB system. Only the
+alternative backbones, sarcasm pre-training, the LoRA variants and pseudo-labelling ($\pboot=0.95$ for the
 baseline) reach $\pboot\geq0.8$, all in the negative direction.}
 \label{tab:negative}
 \end{table}
@@ -483,7 +489,8 @@ or positive sentiment; R is the mean of the two readers). The 95\% interval for 
 \end{table}
 
 \paragraph{Results.} The two readers agree with each other at $\kappa=0.90$--0.98, so they behave like one reader; this
-shows repeatability, not validity \citep{pavlovic-poesio-2024-effectiveness}. On en-AU comments the gold labels call 43\%
+shows repeatability, not validity. LLM labels can also differ systematically from human judgements on subjective
+tasks \citep{pavlovic-poesio-2024-effectiveness}. On en-AU comments the gold labels call 43\%
 sarcastic and the readers 16\%; on en-UK comments, 29\% and 27\% (Table~\ref{tab:reannot}). Our ensemble agrees with the
 gold en-AU sarcasm labels ($\kappa=0.56$) far more than with the readers (0.30--0.34).
 
@@ -516,7 +523,7 @@ $\ell(p)=\log\frac{p}{1-p}$, the ensemble probability is $\sigma\big(\tfrac13[\e
 
 \paragraph{DeBERTa.} First-token pooling, one sentiment logit and one sarcasm logit per variety (the row's variety
 selects the head); loss = binary cross-entropy for sentiment + binary cross-entropy for sarcasm, equal weights;
-AdamW, learning rate $10^{-5}$, batch 16, 10\% warmup, bf16, 4 epochs, maximum length 256 tokens (longer texts keep
+AdamW \citep{loshchilov2019adamw}, learning rate $10^{-5}$, batch 16, 10\% warmup, bf16, 4 epochs, maximum length 256 tokens (longer texts keep
 head and tail); seeds 13--17.
 
 \paragraph{Embedding probe.} e5-large-v2 embeddings with the prefix ``query: '' are concatenated with
@@ -557,21 +564,26 @@ interpretable markers of derision and play. AUC intervals resample comments (1,0
 \citep{wang2022e5}; \path{intfloat/multilingual-e5-large-instruct} \citep{wang2024me5}; \path{Qwen/Qwen3.5-9B}
 \citep{qwen35} with bitsandbytes 4-bit (NF4) quantisation \citep{dettmers2023qlora}; PyTorch \citep{paszke2019pytorch},
 Transformers \citep{wolf-etal-2020-transformers}, sentence-transformers \citep{reimers-gurevych-2019-sentence} and
-scikit-learn \citep{pedregosa2011sklearn}. Trained only on the shared-task training and development data.
+scikit-learn \citep{pedregosa2011sklearn}; data processing with Polars \citep{polars} and figures with Matplotlib
+\citep{hunter2007matplotlib}. Trained only on the shared-task training and development data. Checkpoints screened in
+Table~\ref{tab:negative}: \path{google/electra-large-discriminator}, \path{answerdotai/ModernBERT-large},
+\path{MoritzLaurer/DeBERTa-v3-large-}\linebreak[0]\path{mnli-fever-anli-ling-wanli} and \path{Qwen/Qwen3.5-4B}.
 
 \paragraph{Analyses.} \path{MoritzLaurer/deberta-v3-large-zeroshot-v2.0} \citep{laurer2023zeroshot},
 \path{siebert/sentiment-roberta-large-english} \citep{hartmann2023siebert} and
 \path{j-hartmann/emotion-english-distilroberta-base} \citep{hartmann2022emotion} for the cues of Figure~\ref{fig:cues};
 Reddit thread metadata matched through Arctic Shift \citep{arcticshift} for the split audit.
 
-\paragraph{External data in the reported negative results.} The \texttt{/s} sarcasm pre-training of
-Table~\ref{tab:negative} used Reddit comments tagged \texttt{/s} from AU and UK subreddits (via Arctic Shift, ConvoKit
-\citealp{chang-etal-2020-convokit}, and \citealp{redditusuk}) together with EPIC \citep{frenda-etal-2023-epic},
+\paragraph{External data in the reported negative results.} The sarcasm pre-training of Table~\ref{tab:negative}
+used Reddit comments tagged \texttt{/s} (tag removed) from about 25 AU and 25 UK subreddits, collected through Arctic
+Shift, ConvoKit's per-subreddit corpora \citep{chang-etal-2020-convokit} and the UK subreddit dumps of
+\citet{redditusuk}, with untagged comments from the same subreddits as negatives; it added EPIC \citep{frenda-etal-2023-epic},
 iSarcasmEval \citep{abu-farha-etal-2022-semeval}, SemEval-2018 Task~3 \citep{van-hee-etal-2018-semeval}, FigLang 2020
 \citep{ghosh-etal-2020-report} and \citet{wallace-etal-2014-humans}. Domain-adaptive pre-training and pseudo-labelling used
 unlabelled in-domain text: AU and UK Reddit via Arctic Shift (Reddit's terms), Google Local reviews
-\citep{he2017translation,pasricha2018translation}, Booking.com reviews (CC BY-SA 4.0), NHS GP reviews (Open Government
-Licence) and Inside Airbnb (CC BY 4.0). All external data were deduplicated against the task data, and none is used by
+\citep{he2017translation,pasricha2018translation}, Booking.com reviews (\path{huggingface.co/datasets/Booking-com/accommodation-reviews}, CC BY-SA 4.0), NHS GP reviews
+(\path{huggingface.co/datasets/janduplessis886/england-nhs-gp-reviews}, Open Government Licence) and Inside Airbnb
+reviews (\path{insideairbnb.com}, CC BY 4.0). All external data were deduplicated against the task data, and none is used by
 the final system.
 
 \paragraph{Other exploration.} We also screened other encoders, embedding models, LLMs, zero-shot feature models and

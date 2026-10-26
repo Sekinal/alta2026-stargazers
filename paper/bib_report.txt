@@ -42,6 +42,8 @@ OK  mcinnes2018umap: arXiv 1802.03426 (official bibtex)
 OK  daume-iii-2007-frustratingly: ACL P07-1033
 OK  dodge2020finetuning: arXiv 2002.06305 (official bibtex)
 OK  mosbach2021stability: arXiv 2006.04884 (official bibtex)
+OK  loshchilov2019adamw: arXiv 1711.05101 (official bibtex)
+OK  hunter2007matplotlib: doi 10.1109/mcse.2007.55 (title sim 1.00)
 OK  efron1979bootstrap: doi 10.1214/aos/1176344552 (title sim 1.00)
 OK  nosek2018preregistration: doi 10.1073/pnas.1708274114 (title sim 1.00)
 OK  hartmann2023siebert: doi 10.1016/j.ijresmar.2022.05.005 (title sim 1.00)
@@ -83,3 +85,15 @@ OK  wolpert1992stacked: doi 10.1016/s0893-6080(05)80023-1 (title sim 1.00)
 OK  misra2023headlines: doi 10.1016/j.aiopen.2023.01.001 (title sim 1.00)
 OK  pasricha2018translation: doi 10.1145/3240323.3240356 (title sim 1.00)
 OK  dror-etal-2018-hitchhikers: ACL P18-1128
+MAN polars: manual entry from the official page / model card / repository
+MAN qwen35: manual entry from the official page / model card / repository
+MAN unsloth: manual entry from the official page / model card / repository
+MAN arcticshift: manual entry from the official page / model card / repository
+MAN pedregosa2011sklearn: manual entry from the official page / model card / repository
+MAN go2009sentiment140: manual entry from the official page / model card / repository
+MAN hartmann2022emotion: manual entry from the official page / model card / repository
+MAN peft: manual entry from the official page / model card / repository
+MAN alta2026task: manual entry from the official page / model card / repository
+MAN alta2026baseline: manual entry from the official page / model card / repository
+MAN redditusuk: manual entry from the official page / model card / repository
+MAN claudecode: manual entry from the official page / model card / repository

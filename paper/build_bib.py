@@ -72,6 +72,8 @@ REFS = [
     ("daume-iii-2007-frustratingly", "Frustratingly Easy Domain Adaptation", "Daum", 2007, "manual", ""),
     ("dodge2020finetuning", "Fine-Tuning Pretrained Language Models: Weight Initializations, Data Orders, and Early Stopping", "Dodge", 2020, "arxiv", ""),
     ("mosbach2021stability", "On the Stability of Fine-tuning BERT: Misconceptions, Explanations, and Strong Baselines", "Mosbach", 2020, "arxiv", "ICLR 2021"),
+    ("loshchilov2019adamw", "Decoupled Weight Decay Regularization", "Loshchilov", 2019, "arxiv", ""),
+    ("hunter2007matplotlib", "Matplotlib: A 2D Graphics Environment", "Hunter", 2007, "doi", ""),
     ("efron1979bootstrap", "Bootstrap Methods: Another Look at the Jackknife", "Efron", 1979, "doi", ""),
     ("nosek2018preregistration", "The preregistration revolution", "Nosek", 2018, "doi", ""),
     ("hartmann2023siebert", "More than a Feeling: Accuracy and Application of Sentiment Analysis", "Hartmann", 2023, "doi", ""),
@@ -120,6 +122,12 @@ REFS = [
 # resources without a paper (URLs verified to exist when this file was written); plus classic papers without DOIs whose
 # ACL Anthology / proceedings pages are fetched below
 MANUAL_BIB = {
+    "polars": """@misc{polars,
+  title  = {Polars: Blazingly fast {DataFrames} in {Rust} and {Python}},
+  author = {Vink, Ritchie and others},
+  year   = {2024},
+  howpublished = {\\url{https://pola.rs}}
+}""",
     "qwen35": """@misc{qwen35,
   title  = {{Qwen3.5}: Towards Native Multimodal Agents},
   author = {{Qwen Team}},
@@ -162,7 +170,7 @@ MANUAL_BIB = {
 }""",
     "peft": """@misc{peft,
   title        = {{PEFT}: State-of-the-art Parameter-Efficient Fine-Tuning methods},
-  author       = {Mangrulkar, Sourab and Gugger, Sylvain and Debut, Lysandre and Belkada, Younes and Paul, Sayak and Bossan, Benjamin},
+  author       = {Mangrulkar, Sourab and Gugger, Sylvain and Debut, Lysandre and Belkada, Younes and Paul, Sayak and Bossan, Benjamin and Tietz, Marian},
   year         = {2022},
   howpublished = {\\url{https://github.com/huggingface/peft}}
 }""",
@@ -284,7 +292,7 @@ def arxiv(title: str, first: str):
 ARXIV_IDS = {"he2023debertav": "2111.09543", "wang2022e5": "2212.03533", "wang2024me5": "2402.05672",
              "dettmers2023qlora": "2305.14314", "alain2017probes": "1610.01644", "laurer2023zeroshot": "2312.17543",
              "hu2022lora": "2106.09685", "kalajdzievski2023rslora": "2312.03732",
-             "liu2024dora": "2402.09353", "paischer2024eva": "2410.07170", "zhang2024riemannian": "2402.02347",
+             "liu2024dora": "2402.09353", "paischer2024eva": "2410.07170", "loshchilov2019adamw": "1711.05101", "zhang2024riemannian": "2402.02347",
              "clark2020electra": "2003.10555", "liu2019roberta": "1907.11692",
              "prokhorenkova2018catboost": "1706.09516", "mcinnes2018umap": "1802.03426",
              "dodge2020finetuning": "2002.06305", "mosbach2021stability": "2006.04884", "zhang2015character": "1509.01626",
@@ -332,7 +340,36 @@ VENUES = {"he2023debertav": ("International Conference on Learning Representatio
           "mosbach2021stability": ("International Conference on Learning Representations (ICLR)", 2021),
           "prokhorenkova2018catboost": ("Advances in Neural Information Processing Systems 31 (NeurIPS)", 2018),
           "zhang2015character": ("Advances in Neural Information Processing Systems 28 (NeurIPS)", 2015),
-          "paszke2019pytorch": ("Advances in Neural Information Processing Systems 32 (NeurIPS)", 2019)}
+          "paszke2019pytorch": ("Advances in Neural Information Processing Systems 32 (NeurIPS)", 2019),
+          "loshchilov2019adamw": ("International Conference on Learning Representations (ICLR)", 2019)}
+
+
+PROTECT = ["DeBERTaV3", "DeBERTa", "ELECTRA", "QLoRA", "LLMs", "LoRA", "DoRA", "PyTorch", "DistilBERT", "BERT-NLI",
+           "BERT", "E5", "API", "Australian", "British", "English", "Indian", "SemEval", "iSarcasm", "EPIC",
+           "TweetEval", "DIALECTBENCH", "ConvoKit", "Matplotlib", "Reddit", "Qwen3", "GPT", "SARC"]
+
+
+def protect_caps(bib: str) -> str:
+    """Brace names in the title so BibTeX sentence-casing cannot lowercase them."""
+    m = re.search(r"(\btitle\s*=\s*)([{\"])", bib)
+    if not m:
+        return bib
+    start = m.end()
+    depth, i = 1, start
+    close = "}" if m.group(2) == "{" else '"'
+    while i < len(bib):
+        c = bib[i]
+        if close == "}" and c == "{":
+            depth += 1
+        elif c == close:
+            depth -= 1
+            if depth == 0:
+                break
+        i += 1
+    title = bib[start:i]
+    for tok in PROTECT:
+        title = re.sub(r"(?<![{\w-])" + re.escape(tok) + r"(?![\w}-])", "{" + tok + "}", title)
+    return bib[:start] + title + bib[i:]
 
 
 def normalise(bib: str) -> str:
@@ -344,6 +381,14 @@ def normalise(bib: str) -> str:
         bib = re.sub(r"year=\{\d{4}\}", f"year={{{year}}},\n      booktitle={{{venue}}}", bib)
     elif key in ARXIV_IDS:  # preprint: year of first submission, from the arXiv id (YYMM.NNNNN)
         bib = re.sub(r"year=\{\d{4}\}", "year={20" + ARXIV_IDS[key][:2] + "}", bib)
+    if key == "paischer2024eva":  # NeurIPS 2025 proceedings (Crossref record), not the 2024 preprint year
+        bib = re.sub(r"year\s*=\s*\{?\d{4}\}?", "year={2025}", bib)
+    if key == "laurer2024less":  # online 2023, issue 32(1) 2024: cite the issue year
+        bib = re.sub(r"year\s*=\s*\{?\d{4}\}?", "year={2024}", bib)
+    if key == "efron1979bootstrap" and "pages" not in bib:
+        bib = bib.rstrip().rstrip("}").rstrip().rstrip(",") + ", pages={1--26}\n}"
+    bib = bib.replace("&amp;", "\\&")  # Crossref HTML entity
+    bib = protect_caps(bib)
     if key == "mohammad2013emolex":
         bib = re.sub(r"title=\{[^}]*\}", "title={Crowdsourcing a Word-Emotion Association Lexicon}", bib)
     return bib
@@ -399,6 +444,7 @@ def main() -> None:
         out.append(cache[key]["bib"]); report.append(cache[key]["report"])
     out = [normalise(e) for e in out]
     out += list(MANUAL_BIB.values())
+    report += [f"MAN {k}: manual entry from the official page / model card / repository" for k in MANUAL_BIB]
     (HERE / "references.bib").write_text("% Generated by paper/build_bib.py from Crossref / ACL Anthology / arXiv "
                                          "(see bib_report.txt)\n\n" + "\n\n".join(out) + "\n")
     (HERE / "bib_report.txt").write_text("\n".join(report) + "\n")

@@ -338,5 +338,13 @@
  "singh2025nekminit": {
   "bib": "@inproceedings{singh2025nekminit,\n    title = \"{N}ek Minit: Harnessing Pragmatic Metacognitive Prompting for Explainable Sarcasm Detection of {A}ustralian and {I}ndian {E}nglish\",\n    author = \"Singh, Ishmanbir  and\n      Srirag, Dipankar  and\n      Joshi, Aditya\",\n    editor = \"Kummerfeld, Jonathan K.  and\n      Joshi, Aditya  and\n      Dras, Mark\",\n    booktitle = \"Proceedings of the 23rd Annual Workshop of the Australasian Language Technology Association\",\n    month=nov,\n    year = \"2025\",\n    address = \"Sydney, Australia\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/2025.alta-main.2/\",\n    pages = \"13--27\",\n    ISBN = \"1834-7037\"\n}",
   "report": "OK  singh2025nekminit: ACL 2025.alta-main.2"
+ },
+ "loshchilov2019adamw": {
+  "bib": "@misc{loshchilov2019adamw,\n      title={Decoupled Weight Decay Regularization}, \n      author={Ilya Loshchilov and Frank Hutter},\n      year={2019},\n      eprint={1711.05101},\n      archivePrefix={arXiv},\n      primaryClass={cs.LG},\n      url={https://arxiv.org/abs/1711.05101}, \n}",
+  "report": "OK  loshchilov2019adamw: arXiv 1711.05101 (official bibtex)"
+ },
+ "hunter2007matplotlib": {
+  "bib": "@article{hunter2007matplotlib, title={Matplotlib: A 2D Graphics Environment}, volume={9}, ISSN={1521-9615}, url={http://dx.doi.org/10.1109/mcse.2007.55}, DOI={10.1109/mcse.2007.55}, number={3}, journal={Computing in Science &amp; Engineering}, publisher={Institute of Electrical and Electronics Engineers (IEEE)}, author={Hunter, John D.}, year={2007}, pages={90\u201395} }",
+  "report": "OK  hunter2007matplotlib: doi 10.1109/mcse.2007.55 (title sim 1.00)"
  }
 }
