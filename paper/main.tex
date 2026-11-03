@@ -31,7 +31,7 @@ We describe the system of team Stargazers (CodaBench user \texttt{thermostatic})
 Association (ALTA) 2026 workshop: binary sentiment and sarcasm classification of Australian (\mbox{en-AU}) and British (\mbox{en-UK}) English Google reviews and Reddit
 comments, scored by averaging, over the two tasks, the lower of the two varieties' macro-F1. Using five-fold
 cross-validation, we selected a fine-tuned DeBERTa-v3-large classifier and two logistic-regression probes on frozen model
-representations, and we average their predicted log-odds. It scored 0.867 on the test set, ranked second, and was one of six joint winners.
+representations, and we average their predicted log-odds. The ensemble scored 0.867 on the test set, ranked second, and was one of six joint winners.
 Doubling the training data, or averaging more DeBERTa training runs, raises the cross-validated scores of our two
 strongest models by at most 0.004.
 The two varieties' sarcasm labels, however, differ. Among Reddit comments that a sentiment classifier labels negative,
@@ -217,7 +217,8 @@ with different random seeds, and we average the predicted probabilities of the 2
 
 \paragraph{Embedding probe.} Logistic regression \citep{pedregosa2011sklearn} on concatenated sentence embeddings from
 e5-large-v2 \citep{wang2022e5} and multilingual-e5-large-instruct \citep{wang2024me5}, which are not fine-tuned:
-one sentiment model for all segments, with segment indicators, and one sarcasm model per segment. The regularisation
+one sentiment model for all segments, with segment indicators, and one sarcasm model per segment except en-UK reviews, which receive the pool
+prevalence. The regularisation
 strength is chosen by three-fold cross-validation within each training fold.
 
 \paragraph{LLM probe.} Qwen3.5-9B \citep{qwen35}, a 9-billion-parameter LLM with weights quantised to 4 bits
@@ -315,7 +316,8 @@ to 0.847. For DeBERTa and the LLM probe, score gains are smaller above 50\% than
 the effect of data outside the pool or of models larger than 9 billion parameters.
 
 \paragraph{Averaging training runs.} We trained DeBERTa twice with each of seeds 13--17, giving ten training runs.
-Averaging their predictions yields 0.860 for one run, 0.863 for three and 0.864 for ten (Figure~\ref{fig:gains}b). Adding the two probes raises the score by 0.0069 at three runs and by 0.0058 at
+Averaging the predictions of subsets of runs, and then the scores across subsets, yields 0.860 for one run,
+0.863 for three and 0.864 for ten (Figure~\ref{fig:gains}b). Adding the two probes raises the score by 0.0069 at three runs and by 0.0058 at
 ten, more than the 0.0005 gained from three to ten runs. The two five-run ensembles (the original and the retrained runs of
 seeds 13--17) differ by 0.004, which illustrates how much retraining alone can change the score.
 
@@ -344,7 +346,7 @@ negative sentiment label, but the en-AU annotator labels 60\% of comments with t
 \citep{hartmann2023siebert} labels negative, each of the three en-AU subreddits has a higher share labelled sarcastic
 (44--64\%) than each of the four en-UK subreddits (12--33\%; Figure~\ref{fig:headline}a).
 
-\paragraph{Derision and playful cues.} We group our exploratory cues into two kinds, drawing on work showing that
+\paragraph{Derision and playful cues.} We group our exploratory cues into two kinds, drawing on work that shows that
 ridicule of a specific victim contributes more to perceived sarcasm than to irony \citep{lee1998ridicule}, that models one form of sarcasm as positive sentiment
 contrasted with a negative situation \citep{riloff-etal-2013-sarcasm}, and that analyses mockery framed as non-serious
 \citep{haugh2010jocular}. We measure each component with automatic cues. \emph{Derision cues} score whether a comment
@@ -445,14 +447,14 @@ from different samples. Our bootstrap intervals resample comments and do not mod
 same thread. The cue analyses are exploratory, use classifier scores as indirect measures of derision and playful
 language without manual validation in each variety, and are not corrected for multiple comparisons. We did not test
 models larger than 9 billion parameters, so our curves do not rule out gains from larger models. The bootstrap standard
-deviation of the official score at development-file size is about 0.013, larger than 13 of the 17 changes in
+deviation of the official score at development-file size is about 0.013, larger than the absolute size of 13 of the 17 changes in
 Table~\ref{tab:negative}, so we base comparisons on OOF predictions and paired resampling. The DeBERTa epoch count was chosen on
 the fold later used for screening, which may bias those screens upwards. The system always labels en-UK reviews not
 sarcastic.
 
 \section*{Ethics and Data}
 Our code is released at \url{https://github.com/Sekinal/alta2026-stargazers}, and a release with predictions, cached
-features and model checkpoints at \url{https://huggingface.co/Thermostatic/alta2026-thermostatic}. Neither release
+features and model checkpoints is available at \url{https://huggingface.co/Thermostatic/alta2026-thermostatic}. Neither release
 contains competition texts; Table~\ref{tab:examples} contains paraphrases. For the split audit and the thread-context experiments we
 matched Reddit comments to a public archive and used subreddit names, thread identifiers, timestamps and the text of
 parent comments and submissions, without usernames; we release none of this recovered material. Competition texts were processed by Anthropic's models through Claude Code during development.
@@ -472,7 +474,7 @@ of LoRA variants with links to their papers that the author supplied; the agents
 prefix and probe designs from their prior knowledge. The sarcasm and annotation literature was read after the system was
 fixed and did not change it. A full account of the development process, including mistakes found
 and corrected, is released with our code. The author reviewed and edited the paper and takes full
-responsibility for its content; artificial intelligence (AI) systems are not authors of this work. We thank Lium for a generous grant of GPU (graphics processing unit)
+responsibility for its content; AI systems are not authors of this work. We thank Lium for a generous grant of GPU
 credits that made this and other work possible, and the organisers, Diego Moll\'{a}-Aliod, Aditya Joshi and Dipankar
 Srirag, for running the shared task and for their careful significance analysis.
 
@@ -562,7 +564,7 @@ Sent UK & .85 & .81--.83 & .67--.69 & .17 / .15 / .22 \\
 \bottomrule
 \end{tabular}
 \caption{Agreement (Cohen's $\kappa$, \citealp{cohen1960kappa}) on 150 random Reddit comments per variety between the gold
-labels (G), our ensemble (O) and the two readers (R; ranges over readers), and the share each labels positive (sarcastic,
+labels (G), our ensemble (O) and the two LLM runs (R; ranges over runs), and the share each labels positive (sarcastic,
 or positive sentiment; R is the mean of the two runs). 95\% bootstrap intervals for G--O sarcasm: 0.43--0.70 (en-AU)
 and 0.44--0.72 (en-UK).}
 \label{tab:reannot}
@@ -576,7 +578,7 @@ in the gold data against 16\% by the LLM runs (mean), and 29\% against 27\% in e
 ensemble agrees with the gold en-AU sarcasm labels at $\kappa=0.56$ and with the two runs at 0.30 and 0.34.
 
 \paragraph{Pre-specified criteria.} We wrote down three criteria for the hypothesis that label
-disagreement limits further gains: evaluated on sarcasm, separately per variety: (i) the two runs agree with
+disagreement limits further gains, each evaluated on sarcasm separately for each variety: (i) the two runs agree with
 each other more than with gold on the uniform sample (met); (ii) our ensemble agrees with the runs at least as much as with gold on the uniform sample (not
 met in either variety); (iii) on the disputed comments where the runs agree, they agree with our ensemble more than 60\% of the
 time (met: 31 of 45 en-AU, 31 of 48 en-UK). Criterion (iii) does not distinguish agreement with the ensemble from a
@@ -598,7 +600,7 @@ we cannot separate these. The analyses in the main text do not use these labels.
 \label{app:repro}
 \paragraph{Folds and thresholds.} Five folds over the pool (fold-assignment seed 2026), stratified by segment and both labels, with
 identical texts kept in one fold. Thresholds: one per task and segment, chosen by coordinate ascent (one threshold at a
-time) to maximise the macro-F1 of the corresponding task and variety; en-UK reviews are always labelled not sarcastic. Reported OOF scores fit thresholds on four
+time) to maximise the macro-F1 of the corresponding task and variety; en-UK reviews are always labelled not sarcastic. For reported OOF scores, we fit thresholds on four
 folds and apply them to the fifth; test thresholds are fitted on all OOF predictions.
 
 \paragraph{Ensemble.} On the test set, the DeBERTa member's probability is the mean over its 25 models (5 seeds

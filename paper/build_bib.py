@@ -407,6 +407,7 @@ def normalise(bib: str) -> str:
     if key == "efron1979bootstrap" and "pages" not in bib:
         bib = bib.rstrip().rstrip("}").rstrip().rstrip(",") + ", pages={1--26}\n}"
     bib = bib.replace("&amp;", "\\&")  # Crossref HTML entity
+    bib = bib.replace("21th Annual Meeting", "21st Annual Meeting")  # ACL Anthology metadata typo
     bib = re.sub(r'(pages\s*=\s*[{"][^}"]*?)\u2013', r'\1--', bib)  # BibTeX range dash, so the style prints "pages"
     if key in EXTRA:
         for field, val in EXTRA[key].items():
