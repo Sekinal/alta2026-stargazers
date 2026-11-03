@@ -27,20 +27,17 @@
 \maketitle
 
 \begin{abstract}
-We describe the system of team Stargazers (CodaBench user \texttt{thermostatic}) for the ALTA 2026 shared task, which
-requires binary sentiment and sarcasm classification of Australian (en-AU) and British (en-UK) English Google reviews and
-Reddit comments. The official score averages, over the two tasks, the lower of the two varieties' macro-F1 scores. Our
-system averages a fine-tuned DeBERTa-v3-large classifier and two logistic-regression probes on frozen model
-representations, selected with five-fold cross-validation and paired bootstrap comparisons. It scored 0.867 on the test
-set, ranked second, and was one of six submissions the organisers declared joint winners. Further training data and
-random seeds change the score little: from half to all of the training data, the score rises by at most 0.004 for our two
-strongest models, and from three to ten DeBERTa seeds by 0.001. The two varieties' sarcasm labels, however, differ in
-rate and in the cues that predict them. Among Reddit comments that a sentiment classifier labels negative, each en-AU
-subreddit has a higher share labelled sarcastic (44--64\%) than each en-UK subreddit (12--33\%). Classifier scores for
-derision (mocking, contempt, anger, cynicism) are positively associated with the en-AU sarcasm label (mean AUC 0.70) and inversely with the en-UK
-label (0.43), whereas scores for playful language (joking, praise, ironic praise, joy) predict the en-UK label (0.71) better
-than the en-AU label (0.56). With one annotator per variety, we cannot attribute these differences to the annotators,
-the communities or the texts.
+We describe the system of team Stargazers (CodaBench user \texttt{thermostatic}) for the ALTA 2026 shared task: binary
+sentiment and sarcasm classification of Australian (en-AU) and British (en-UK) English Google reviews and Reddit
+comments, scored by averaging, over the two tasks, the lower of the two varieties' macro-F1. Our system averages a
+fine-tuned DeBERTa-v3-large classifier and two logistic-regression probes on frozen model representations, selected
+with five-fold cross-validation. It scored 0.867 on the test set, ranked second, and was one of six joint winners.
+Doubling the training data or averaging more random seeds raises our two strongest models' scores by at most 0.004.
+The two varieties' sarcasm labels, however, differ. Among Reddit comments that a sentiment classifier labels negative,
+each en-AU subreddit has a higher share labelled sarcastic (44--64\%) than each en-UK subreddit (12--33\%). Classifier
+scores for derision (mocking, contempt, anger, cynicism) are positively associated with the en-AU sarcasm label (mean
+AUC 0.70) and inversely with the en-UK label (0.43). With one annotator per variety, we cannot attribute these
+differences to the annotators, the communities or the texts.
 \end{abstract}
 
 \section{Introduction}
