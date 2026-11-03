@@ -37,8 +37,8 @@ random seeds change the score little: from half to all of the training data, the
 strongest models, and from three to ten DeBERTa seeds by 0.001. The two varieties' sarcasm labels, however, differ in
 rate and in the cues that predict them. Among Reddit comments that a sentiment classifier labels negative, each en-AU
 subreddit has a higher share labelled sarcastic (44--64\%) than each en-UK subreddit (12--33\%). Classifier scores for
-derision (mocking, contempt, anger, cynicism) predict the en-AU sarcasm label (mean AUC 0.70) but not the en-UK label
-(0.43), whereas scores for playful language (joking, praise, ironic praise, joy) predict the en-UK label (0.71) better
+derision (mocking, contempt, anger, cynicism) are positively associated with the en-AU sarcasm label (mean AUC 0.70) and inversely with the en-UK
+label (0.43), whereas scores for playful language (joking, praise, ironic praise, joy) predict the en-UK label (0.71) better
 than the en-AU label (0.56). With one annotator per variety, we cannot attribute these differences to the annotators,
 the communities or the texts.
 \end{abstract}
@@ -84,7 +84,8 @@ Our findings are:
 0.853; from three to ten DeBERTa seeds, the score rises from 0.863 to 0.864. Adding the two probes raises it by 0.006--0.007
 (\S\ref{sec:capacity}).
 \item Derision cues are associated with the sarcastic label in en-AU (AUC 0.66--0.73), whereas contempt and anger are
-associated with the non-sarcastic label in en-UK (0.41 and 0.38), within every subreddit (\S\ref{sec:constructs}).
+associated with the non-sarcastic label in en-UK (pooled AUCs 0.41 and 0.38; 0.33--0.47 within each en-UK subreddit)
+(\S\ref{sec:constructs}).
 \item BESSTIE reports human agreement of $\kappa=0.47$ for en-AU sarcasm; among Reddit comments labelled negative, our
 ensemble's sarcasm AUC is 0.77 in en-AU against 0.91 in en-UK (\S\ref{sec:ceiling}).
 \end{enumerate}
@@ -131,7 +132,7 @@ matched 95\% of the Reddit texts (95.0\% en-AU, 95.9\% en-UK) to the Arctic Shif
 2024, and 82\% of the matched development comments share a thread with a training comment. With cross-validation folds
 that keep each thread in one fold, the ensemble's score (with DeBERTa averaged over three seeds) falls by 0.0012, from
 0.8706 to 0.8694; the embedding probe falls by 0.008, and the other two members change by $-$0.001 and +0.007. In this
-audit, the comment-level split therefore has a negligible effect on our estimates.
+audit, the comment-level split changes the ensemble's estimate by 0.0012.
 
 \begin{table}[t]
 \centering\small
@@ -214,8 +215,8 @@ regularisation strength is chosen by three-fold cross-validation within each tra
 \paragraph{LLM probe.} Qwen3.5-9B \citep{qwen35}, a 9-billion-parameter LLM with weights quantised to 4 bits
 \citep{dettmers2023qlora}, processes each text inside a prompt that asks whether the text is sarcastic (or positive) and
 contains no labelled examples. The sarcasm prompt's definition differs by variety (Appendix~\ref{app:repro}). We train a
-logistic regression, i.e.\ a linear probe \citep{alain2017probes}, on two features: the layer-24 hidden state at the last
-prompt token, and the difference between the logits of the ``yes'' and ``no'' answer words. Each variety has its own
+logistic regression, i.e.\ a linear probe \citep{alain2017probes}, on the layer-24 hidden-state vector at the last prompt
+token, concatenated with the scalar difference between the logits of the ``yes'' and ``no'' answer words. Each variety has its own
 sarcasm probe.
 
 \paragraph{Combination.} We convert each member's probability to log-odds and average the three values with equal
@@ -284,17 +285,18 @@ turn: training-set size, seed averaging and the labels.
 \centering
 \includegraphics[width=\textwidth]{fig_gains.pdf}
 \caption{Official OOF score as a function of training-set size and of the number of averaged DeBERTa runs. (a) Each
-model is trained on nested subsets of every training fold, stratified by segment (DeBERTa: mean of seeds 13 and 14;
+model is trained on nested subsets of every training fold, stratified by segment (DeBERTa: mean of the scores of seeds 13 and 14, evaluated separately;
 probes: mean of three subset draws below 100\%; error bars: standard deviation). (b) Mean score over subsets of ten
-DeBERTa runs with different random seeds (up to 30 subsets per point), alone and with the two probes added. The y-axis
-spans 0.010: the 0.003 gain from one to three seeds is smaller than the 0.004 difference between two five-seed sets
+DeBERTa runs with different random seeds (up to 30 subsets per point), alone and with the two probes added. The labelled
+y-axis ticks run from 0.860 to 0.870: the 0.003 gain from one to three seeds is smaller than the 0.004 difference between two five-seed sets
 of the same configuration.}
 \label{fig:gains}
 \end{figure*}
 
 \subsection{Training-set size and seed averaging}
 \label{sec:capacity}
-\paragraph{Training-set size.} With the same two seeds (13 and 14) at every size, DeBERTa scores 0.858, 0.859 and 0.862
+\paragraph{Training-set size.} With the same two seeds (13 and 14) at every size, DeBERTa's
+mean score over the two seeds is 0.858, 0.859 and 0.862
 at 50, 75 and 100\% of each training fold, a gain of 0.004; the LLM probe scores 0.853, 0.854 and 0.853
 (Figure~\ref{fig:gains}a). DeBERTa is trained for four epochs at every size, so smaller subsets also receive fewer
 parameter updates. From 50 to 100\%, DeBERTa's Reddit sarcasm AUC rises by 0.022 in en-UK (0.845 to 0.867), which has
@@ -412,8 +414,9 @@ are labelled sarcastic in each en-AU subreddit against 12--33\% in each en-UK su
 are associated with the sarcastic label in en-AU but with the non-sarcastic label in en-UK; BESSTIE reports human
 agreement of $\kappa=0.47$ for en-AU sarcasm. Cross-variety performance differences on this benchmark may therefore
 reflect differences in labelling conventions and texts as well as model generalisation. For our submission, en-AU had
-the lower macro-F1 in both tasks, and en-AU sarcasm was the lowest of the four components (0.801), with the lowest
-discrimination among comments labelled negative (AUC 0.77). We suggest that benchmarks comparing varieties specify
+the lower macro-F1 in both tasks, and en-AU sarcasm had the lowest test macro-F1 of the four components (0.801). On
+the pool, among Reddit comments that the annotator labelled negative, our OOF sarcasm AUC was 0.77 in en-AU against
+0.91 in en-UK. We suggest that benchmarks comparing varieties specify
 whether literal mockery that expresses contempt or ridicule counts as sarcasm, have annotators from each variety label a
 shared set of items, and report agreement per variety.
 
@@ -625,6 +628,7 @@ replicates.
 
 \section{Resources}
 \label{app:resources}
+\raggedright
 \paragraph{Final system.} \path{microsoft/deberta-v3-large} \citep{he2023debertav}; \path{intfloat/e5-large-v2}
 \citep{wang2022e5}; \path{intfloat/multilingual-e5-large-instruct} \citep{wang2024me5}; \path{Qwen/Qwen3.5-9B}
 \citep{qwen35} with bitsandbytes 4-bit (NF4) quantisation \citep{dettmers2023qlora}; PyTorch \citep{paszke2019pytorch},
