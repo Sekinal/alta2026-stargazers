@@ -97,14 +97,14 @@ re-annotation by an LLM without access to the gold labels (Appendix~\ref{app:rea
 
 \paragraph{Related work.} Two findings on sarcasm interpretation bear on ours: \citet{oprea-magdy-2020-isarcasm} show that
 the sarcasm an author intends differs from the sarcasm readers perceive, and \citet{oprea-magdy-2020-sociocultural} relate
-sarcasm interpretation to readers' country, age and whether English is their native language. BESSTIE extends
+sarcasm interpretation to readers' age, gender and whether English is their native language. BESSTIE extends
 variety benchmarks such as DIALECTBENCH \citep{faisal-etal-2024-dialectbench} to sentiment and sarcasm in English
 varieties, and its authors reported lower sarcasm F-scores when models are trained on one variety and evaluated on another
-\citep{srirag-etal-2025-besstie}. \citet{singh2025nekminit} add explanations to BESSTIE's Australian and Indian English
-sarcasm data and evaluate a prompting method (pragmatic metacognitive prompting) for explainable sarcasm detection. Our analysis concerns label variation and
+\citep{srirag-etal-2025-besstie}. \citet{singh2025nekminit} add explanations to 150 sarcastic examples each from BESSTIE's
+Australian and Indian English data and evaluate a prompting method (pragmatic metacognitive prompting) for explainable sarcasm detection. Our analysis concerns label variation and
 annotator effects \citep{geva-etal-2019-modeling,basile-etal-2021-need,plank-2022-problem}. \citet{rottger-etal-2022-two}
 distinguish descriptive annotation, which elicits annotators' own judgements, from prescriptive annotation, which asks
-them to apply one specified interpretation. The EPIC study collected irony judgements from annotators in five
+them to apply one specified interpretation. The EPIC study collected irony judgements from annotators from five
 English-speaking countries, including the UK and Australia, and modelled the differences between these groups
 \citep{frenda-etal-2023-epic}. In pragmatics, jocular mockery and abuse (remarks that appear hostile but are used
 playfully, often to signal closeness) have been described in both Australian and British interaction
@@ -122,8 +122,8 @@ comments are labelled sarcastic, against 6.8\% of en-AU reviews and 1 of the 2,0
 
 BESSTIE selected Reddit comments from variety-specific subreddits and Google reviews of places in each country, so the
 variety tags are dataset assignments, not verified speaker identities; annotators discarded texts they judged to
-express no clear positive or negative sentiment. One annotator labelled each variety, and a second annotator labelled 50
-items per variety for an agreement study. The guideline reads: ``Annotate if the comment uses irony or mockery to express
+express no clear positive or negative sentiment. One annotator labelled each variety, and an independent second annotator per
+variety relabelled 50 randomly selected items for an agreement study. The guideline reads: ``Annotate if the comment uses irony or mockery to express
 contempt or ridicule,'' and asks annotators to ``consider the tone and context of the comment''
 \citep{srirag-etal-2025-besstie}. We see two possible readings: an inclusive one, in which literal mockery that expresses
 contempt or ridicule counts as sarcasm, and a narrower one, which requires non-literal (ironic) meaning.
@@ -224,7 +224,7 @@ strength is chosen by three-fold cross-validation within each training fold.
 \citep{dettmers2023qlora}, processes each text inside a prompt that asks whether the text is sarcastic (or positive) and
 contains no labelled examples. The sarcasm prompt's definition differs by variety (Appendix~\ref{app:repro}). We train a
 logistic regression, i.e.\ a linear probe \citep{alain2017probes}, on the layer-24 hidden-state vector at the last prompt
-token, concatenated with the answer margin (the pooled logits of ``Yes'' minus ``No'' for sarcasm, of ``Positive''
+token, with extra features appended: the answer margin (the pooled logits of ``Yes'' minus ``No'' for sarcasm, of ``Positive''
 minus ``Negative'' for sentiment) and indicators for en-UK, Reddit and their interaction. Each variety has its own
 sarcasm probe.
 
@@ -271,7 +271,7 @@ smaller than the bootstrap standard deviation of 0.013 (at development-file size
 
 \paragraph{Ranking.} Our submission ranked second, 0.0007 below the top submission. The organisers compared the top
 submissions with an approximate randomisation test with 10{,}000 replicates \citep{dror-etal-2018-hitchhikers}, found no
-significant differences among the top six at their chosen significance level, and declared all six joint winners \citep{alta2026task}. A non-significant
+significant differences among the top six at their chosen significance level, and declared all six joint winners (announcement to participants, 20 October 2026). A non-significant
 difference does not show that two submissions are equivalent, only that the test did not distinguish them. According to
 the organisers, our submission and the top submission differ on 33 of the 1,573 sentiment labels (2.1\%) and 74 of the
 1,573 sarcasm labels (4.7\%).
@@ -345,7 +345,7 @@ negative sentiment label, but the en-AU annotator labels 60\% of comments with t
 (44--64\%) than each of the four en-UK subreddits (12--33\%; Figure~\ref{fig:headline}a).
 
 \paragraph{Derision and playful cues.} We group our exploratory cues into two kinds, drawing on work that relates
-sarcasm to ridicule of a target \citep{lee1998ridicule}, that models one form of sarcasm as positive sentiment
+sarcasm to ridicule of a specific victim \citep{lee1998ridicule}, that models one form of sarcasm as positive sentiment
 contrasted with a negative situation \citep{riloff-etal-2013-sarcasm}, and that analyses mockery framed as non-serious
 \citep{haugh2010jocular}. We measure each component with automatic cues. \emph{Derision cues} score whether a comment
 ridicules or expresses hostility towards a target: mocking, contempt, anger and cynicism. \emph{Playful cues} score
@@ -376,7 +376,8 @@ en-AU associations are compatible with the inclusive reading, in which literal m
 sarcasm; the en-UK associations are compatible with the narrower reading, in which literal hostility alone does not.
 These associations do not establish either annotator's decision rule. Possible explanations include differences between
 the annotators' interpretations of the guideline; differences in how the communities use mockery, which can combine
-apparent hostility with closeness \citep{haugh2012mock}; and differences between the sampled texts, since each
+apparent hostility with closeness and which \citet{haugh2012mock} describe as shared by Australian and British speakers
+but differing in its typical targets; and differences between the sampled texts, since each
 annotator labelled different comments. The cue scores are classifier outputs whose errors may also differ between
 varieties. Because annotators and texts are not crossed between varieties, these explanations cannot be separated here;
 a design in which several annotators from each variety label the same comments would allow annotator and item effects
@@ -393,7 +394,8 @@ sarcasm outputs; this comparison does not isolate their separate effects.
 
 \subsection{Agreement and sarcasm discrimination in en-AU}
 \label{sec:ceiling}
-BESSTIE's second annotator labelled 50 items per variety \citep[\S2.3]{srirag-etal-2025-besstie}, giving Cohen's $\kappa$
+In BESSTIE, an independent second annotator per variety relabelled 50 randomly selected items
+\citep[\S2.3]{srirag-etal-2025-besstie}, giving Cohen's $\kappa$
 (agreement corrected for chance; \citealp{cohen1960kappa}) of 0.47 for en-AU sarcasm, against 0.61 (en-AU) and 0.79
 (en-UK) for sentiment; BESSTIE reports no confidence interval for these 50-item estimates. Our submitted ensemble's OOF predictions agree
 with the gold en-AU sarcasm labels at $\kappa=0.56$ (95\% bootstrap interval 0.52--0.59) over all 2,004 en-AU Reddit
@@ -524,9 +526,9 @@ ModernBERT \citep{warner2024modernbert}; continued in-domain pre-training \citep
 \citealp{kalajdzievski2023rslora}), explained variance adaptation (EVA; \citealp{paischer2024eva}), used to
 initialise the adapters, weight-decomposed
 LoRA (DoRA; \citealp{liu2024dora}) and Riemannian preconditioning \citep{zhang2024riemannian}, implemented with the parameter-efficient
-fine-tuning (PEFT) library \citep{peft} (the EVA initialisation was capped at 32 batches, with 115 and 127 of 248 layers not converged for seeds 0 and 1); pseudo-labelling
-\citep{lee2013pseudo}: a student model first trained on 400k unlabelled in-domain texts labelled by our fold models,
-then fine-tuned on the gold labels. For the alternative encoders, sarcasm pre-training, the LoRA variants and pseudo-labelling (0.95), $\pboot$ for the
+fine-tuning (PEFT) library \citep{peft} (the EVA initialisation was capped at 32 batches, with 115 and 127 of 248 layers not converged for seeds 0 and 1); a teacher--student variant of
+pseudo-labelling \citep[cf.][]{lee2013pseudo}: a student model first trained on 400k unlabelled in-domain texts with our
+fold models' predicted probabilities as soft targets, then fine-tuned on the gold labels. For the alternative encoders, sarcasm pre-training, the LoRA variants and pseudo-labelling (0.95), $\pboot$ for the
 baseline is at least 0.8; no intervention reaches $\pboot\geq0.8$ over its baseline.}
 \label{tab:negative}
 \end{table}

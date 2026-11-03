@@ -295,3 +295,12 @@ claim was dropped; the main text uses lead-vs-gold AU sarcasm kappa .56 [.53,.60
 - External data deduplicated against the train+dev pool (test deduplication not documented).
 - Known reproducibility gap: experiments/classical/thread_gap.py averages thread-arm DeBERTa seeds in log-odds space;
   the corrected numbers in thread_gap.csv were produced with probability averaging. Fix the script before reuse.
+
+## Citation verification against full texts (2026-11-03, four parallel agents)
+65 cited works: 61 checked against full text or official model card, 3 against abstract only (Lee & Katz 1998,
+Cohen 1960: paywalled; both abstracts support the use), 1 not yet public (ALTA 2026 overview). Fixes applied:
+Oprea & Magdy 2020 sociocultural variables are age, gender and English nativeness (country not significant in the
+controlled results); Haugh & Bousfield 2012 describe mockery as shared by AU and UK speakers with different targets;
+Nek Minit annotated 150 sarcastic examples per variety; BESSTIE used an independent second annotator per variety;
+EPIC annotators "from" five countries; our pseudo-labelling is a teacher-student, soft-label variant (cf. Lee 2013);
+joint-winner decision attributed to the organisers' 20 Oct 2026 announcement rather than the unpublished overview.
