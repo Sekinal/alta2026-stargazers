@@ -124,7 +124,7 @@ def cue_flip_figure() -> None:
     ax.set_xlim(lo_x, hi_x)
     ax.set_ylim(y + 0.3, -0.95)
     ax.set_xticks([0.3, 0.4, 0.5, 0.6, 0.7, 0.8])
-    ax.set_xlabel("AUC for the gold sarcasm label (model-negative comments)", color=INK2)
+    ax.set_xlabel("AUC for the gold sarcasm label (SiEBERT-negative comments)", color=INK2)
     # region captions and group headers (text in ink tokens, never series colour)
     ax.text(0.49, y - 0.05, "\u2190 predicts not sarcastic", ha="right", va="center", fontsize=7, color=INK2, style="italic")
     ax.text(0.51, y - 0.05, "predicts sarcastic \u2192", ha="left", va="center", fontsize=7, color=INK2, style="italic")
@@ -295,7 +295,7 @@ def gains_figure() -> None:
     b.set_xlim(0.5, 14.8)
     b.set_xticks([1, 2, 3, 5, 10])
     b.set_xlabel("number of DeBERTa seeds averaged", color=INK2)
-    b.set_title("(b) more seeds help little beyond three", fontsize=7.5, color=INK, loc="left")
+    b.set_title("(b) score vs. number of averaged DeBERTa runs", fontsize=7.5, color=INK, loc="left")
     _style(b, "y")
     fig.tight_layout(w_pad=1.5)
     out = ROOT / "paper" / "fig_gains.pdf"

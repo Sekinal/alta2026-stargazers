@@ -346,5 +346,13 @@
  "hunter2007matplotlib": {
   "bib": "@article{hunter2007matplotlib, title={Matplotlib: A 2D Graphics Environment}, volume={9}, ISSN={1521-9615}, url={http://dx.doi.org/10.1109/mcse.2007.55}, DOI={10.1109/mcse.2007.55}, number={3}, journal={Computing in Science &amp; Engineering}, publisher={Institute of Electrical and Electronics Engineers (IEEE)}, author={Hunter, John D.}, year={2007}, pages={90\u201395} }",
   "report": "OK  hunter2007matplotlib: doi 10.1109/mcse.2007.55 (title sim 1.00)"
+ },
+ "lee1998ridicule": {
+  "bib": "@article{lee1998ridicule, title={The Differential Role of Ridicule in Sarcasm and Irony}, volume={13}, ISSN={1532-7868}, url={http://dx.doi.org/10.1207/s15327868ms1301_1}, DOI={10.1207/s15327868ms1301_1}, number={1}, journal={Metaphor and Symbol}, publisher={Informa UK Limited}, author={Lee, Christopher J. and Katz, Albert N.}, year={1998}, month=mar, pages={1\u201315} }",
+  "report": "OK  lee1998ridicule: doi 10.1207/s15327868ms1301_1 (title sim 1.00)"
+ },
+ "haugh2010jocular": {
+  "bib": "@article{haugh2010jocular, title={Jocular mockery, (dis)affiliation, and face}, volume={42}, ISSN={0378-2166}, url={http://dx.doi.org/10.1016/j.pragma.2009.12.018}, DOI={10.1016/j.pragma.2009.12.018}, number={8}, journal={Journal of Pragmatics}, publisher={Elsevier BV}, author={Haugh, Michael}, year={2010}, month=aug, pages={2106\u20132119} }",
+  "report": "OK  haugh2010jocular: doi 10.1016/j.pragma.2009.12.018 (title sim 1.00)"
  }
 }

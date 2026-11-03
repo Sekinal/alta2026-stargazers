@@ -74,6 +74,8 @@ REFS = [
     ("mosbach2021stability", "On the Stability of Fine-tuning BERT: Misconceptions, Explanations, and Strong Baselines", "Mosbach", 2020, "arxiv", "ICLR 2021"),
     ("loshchilov2019adamw", "Decoupled Weight Decay Regularization", "Loshchilov", 2019, "arxiv", ""),
     ("hunter2007matplotlib", "Matplotlib: A 2D Graphics Environment", "Hunter", 2007, "doi", ""),
+    ("lee1998ridicule", "The Differential Role of Ridicule in Sarcasm and Irony", "Lee", 1998, "doi", ""),
+    ("haugh2010jocular", "Jocular mockery, (dis)affiliation, and face", "Haugh", 2010, "doi", ""),
     ("efron1979bootstrap", "Bootstrap Methods: Another Look at the Jackknife", "Efron", 1979, "doi", ""),
     ("nosek2018preregistration", "The preregistration revolution", "Nosek", 2018, "doi", ""),
     ("hartmann2023siebert", "More than a Feeling: Accuracy and Application of Sentiment Analysis", "Hartmann", 2023, "doi", ""),
@@ -174,11 +176,12 @@ MANUAL_BIB = {
   year         = {2022},
   howpublished = {\\url{https://github.com/huggingface/peft}}
 }""",
-    "alta2026task": """@misc{alta2026task,
-  title        = {{ALTA} 2026 Shared Task: Sentiment and Sarcasm Classification in {A}ustralian and {B}ritish {E}nglish},
-  author       = {{Moll\\'{a}-Aliod}, Diego and Joshi, Aditya and Srirag, Dipankar},
-  year         = {2026},
-  howpublished = {\\url{https://www.alta.asn.au/events/sharedtask2026/}}
+    "alta2026task": """@inproceedings{alta2026task,
+  title     = {Overview of the 2026 {ALTA} Shared Task: Sentiment and Sarcasm Classification for {Australian} and {British} {English}},
+  author    = {Moll{\\'a}, Diego and Srirag, Dipankar and Joshi, Aditya},
+  booktitle = {Proceedings of the 24th Annual Workshop of the Australasian Language Technology Association (ALTA 2026)},
+  address   = {Melbourne, Australia},
+  year      = {2026}
 }""",
     "alta2026baseline": """@misc{alta2026baseline,
   title        = {{ALTA} 2026 shared task baseline},
