@@ -144,7 +144,7 @@ MANUAL_BIB = {
   howpublished = {\\url{https://github.com/unslothai/unsloth}}
 }""",
     "arcticshift": """@misc{arcticshift,
-  title        = {{Arctic Shift}: Reddit data archive and API},
+  title        = {{Arctic Shift}: Reddit data archive and {API}},
   author       = {Heitmann, Arthur},
   year         = {2024},
   howpublished = {\\url{https://github.com/ArthurHeitmann/arctic_shift}}
@@ -155,7 +155,8 @@ MANUAL_BIB = {
   journal = {Journal of Machine Learning Research},
   volume  = {12},
   pages   = {2825--2830},
-  year    = {2011}
+  year    = {2011},
+  url     = {https://www.jmlr.org/papers/v12/pedregosa11a.html}
 }""",
     "go2009sentiment140": """@techreport{go2009sentiment140,
   title       = {Twitter Sentiment Classification using Distant Supervision},
@@ -349,7 +350,21 @@ VENUES = {"he2023debertav": ("International Conference on Learning Representatio
 
 PROTECT = ["DeBERTaV3", "DeBERTa", "ELECTRA", "QLoRA", "LLMs", "LoRA", "DoRA", "PyTorch", "DistilBERT", "BERT-NLI",
            "BERT", "E5", "API", "Australian", "British", "English", "Indian", "SemEval", "iSarcasm", "EPIC",
-           "TweetEval", "DIALECTBENCH", "ConvoKit", "Matplotlib", "Reddit", "Qwen3", "GPT", "SARC"]
+           "TweetEval", "DIALECTBENCH", "ConvoKit", "Matplotlib", "Reddit", "Qwen3", "GPT", "SARC", "2D"]
+
+
+# Publisher metadata missing from the retrieved records (checked against the proceedings / publisher pages)
+EXTRA = {
+    "dettmers2023qlora": {"pages": "10088--10115"},
+    "paszke2019pytorch": {"pages": "8026--8037"},
+    "liu2024dora": {"pages": "32100--32121", "volume": "235", "series": "Proceedings of Machine Learning Research",
+                    "publisher": "PMLR"},
+    "zhang2024riemannian": {"pages": "59641--59669", "volume": "235",
+                            "series": "Proceedings of Machine Learning Research", "publisher": "PMLR"},
+    "oprea-magdy-2020-sociocultural": {"pages": "29:1--29:22"},
+    "efron1979bootstrap": {"author": "Efron, Bradley"},
+    "pedregosa2011sklearn": {"url": "https://www.jmlr.org/papers/v12/pedregosa11a.html"},
+}
 
 
 def protect_caps(bib: str) -> str:
@@ -370,6 +385,7 @@ def protect_caps(bib: str) -> str:
                 break
         i += 1
     title = bib[start:i]
+    title = title.replace("ELECTRA-Style", "{ELECTRA}-Style").replace("API", "{API}").replace("? An ", "? {An} ")
     for tok in PROTECT:
         title = re.sub(r"(?<![{\w-])" + re.escape(tok) + r"(?![\w}-])", "{" + tok + "}", title)
     return bib[:start] + title + bib[i:]
@@ -391,6 +407,15 @@ def normalise(bib: str) -> str:
     if key == "efron1979bootstrap" and "pages" not in bib:
         bib = bib.rstrip().rstrip("}").rstrip().rstrip(",") + ", pages={1--26}\n}"
     bib = bib.replace("&amp;", "\\&")  # Crossref HTML entity
+    bib = re.sub(r'(pages\s*=\s*[{"][^}"]*?)\u2013', r'\1--', bib)  # BibTeX range dash, so the style prints "pages"
+    if key in EXTRA:
+        for field, val in EXTRA[key].items():
+            pat = r"\b" + field + r"\s*=\s*(\{(?:[^{}]|\{[^{}]*\})*\}|\"[^\"]*\")"
+            new = field + "={" + val + "}"
+            if re.search(pat, bib):
+                bib = re.sub(pat, lambda m: new, bib, count=1)
+            else:
+                bib = bib.rstrip().rstrip("}").rstrip().rstrip(",") + ",\n  " + new + "\n}"
     bib = protect_caps(bib)
     if key == "mohammad2013emolex":
         bib = re.sub(r"title=\{[^}]*\}", "title={Crowdsourcing a Word-Emotion Association Lexicon}", bib)

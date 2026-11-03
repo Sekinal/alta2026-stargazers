@@ -278,3 +278,20 @@ claim was dropped; the main text uses lead-vs-gold AU sarcasm kappa .56 [.53,.60
 - Pseudo-label confirmation: P(baseline better) = .95, now listed among negative results reaching P >= .8.
 - Cue bootstrap: 1,000 comment-level replicates; thread dependence not modelled (Limitations).
 - Synthetic BESSTIE kappa interval dropped from the main text.
+
+## Camera-ready audits (2026-11-03; four GPT-6 Astra audits: precision, uncited claims, venue, claims vs code)
+- Bootstrap size: alta/validation/report.py and compare use DEVELOPMENT-FILE-sized resamples (757 rows, stratified by
+  variety x source x sentiment x sarcasm), not test-sized; screens use fold-sized resamples. The 0.013 SD and the
+  heuristic interval are at development-file size. Earlier text saying "test-sized" was wrong; paper corrected.
+- The ten DeBERTa "seeds" are ten training runs: seeds 13-17 trained twice (enc_deb_l_s13..17 and the retrained
+  enc_deb_l_r13..17). Paper now says "training runs".
+- DeBERTa output heads use head_lr 1e-4 (encoder 1e-5). LLM probe features also include en-UK, Reddit and interaction
+  indicators; sentiment margin uses Positive/Negative tokens. Embedding probe: pooled sentiment LR with segment
+  indicators, per-segment sarcasm LR, prevalence fallback for en-UK reviews.
+- Joy cue is the emotion classifier's log-probability (AUC unchanged). Contrast is opposite-minus-sincere.
+- R4 (EVA+DoRA+rsLoRA+Riemannian) is a single seed; EVA non-convergence: 115 (seed 0) and 127 (seed 1) of 248 layers.
+- 18% calibration statistic: max of the two directional bootstrap superiority probabilities over same-config seed
+  pairs, MLP on BGE-large embeddings (redteam/calibration/03_seed_variance.py).
+- External data deduplicated against the train+dev pool (test deduplication not documented).
+- Known reproducibility gap: experiments/classical/thread_gap.py averages thread-arm DeBERTa seeds in log-odds space;
+  the corrected numbers in thread_gap.csv were produced with probability averaging. Fix the script before reuse.

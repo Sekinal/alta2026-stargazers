@@ -59,7 +59,7 @@ def main() -> None:
     series = [("DeBERTa (1 seed)", BLUE, "o", deb),
               ("9B LLM probe", ORANGE, "s", probes.filter(pl.col("member") == "llm")),
               ("e5+me5 probe", AQUA, "^", probes.filter(pl.col("member") == "e5"))]
-    plt.rcParams.update({"font.family": "serif", "font.size": 8})
+    plt.rcParams.update({"font.family": "serif", "font.serif": ["Nimbus Roman", "TeX Gyre Termes", "Times New Roman", "DejaVu Serif"], "font.size": 8})
     fig, ax = plt.subplots(figsize=(3.3, 2.4))
     for name, col, mk, d in series:
         if d.height == 0:
@@ -105,7 +105,7 @@ def cue_flip_figure() -> None:
             y += 0.9
         ypos[c] = y
         y += 1.0
-    plt.rcParams.update({"font.family": "serif", "font.size": 8.3})
+    plt.rcParams.update({"font.family": "serif", "font.serif": ["Nimbus Roman", "TeX Gyre Termes", "Times New Roman", "DejaVu Serif"], "font.size": 8.3})
     fig, ax = plt.subplots(figsize=(3.3, 2.9))
     lo_x, hi_x = 0.28, 0.86
     ax.axvspan(lo_x, 0.5, color="#f0efec", zorder=0, lw=0)
@@ -166,7 +166,7 @@ def headline_figure() -> None:
     """Figure 1, gold labels and label-free models only. (a) Share of Reddit comments labelled sarcastic, per subreddit,
     among comments a label-free sentiment model (SiEBERT) calls negative. (b) Mean AUC of four derision cues vs four
     playful cues for the gold sarcasm label in the same comments (results/paper/cue_flip*.csv)."""
-    plt.rcParams.update({"font.family": "serif", "font.size": 8.3})
+    plt.rcParams.update({"font.family": "serif", "font.serif": ["Nimbus Roman", "TeX Gyre Termes", "Times New Roman", "DejaVu Serif"], "font.size": 8.3})
     fig, (a1, a2) = plt.subplots(1, 2, figsize=(3.35, 2.15), gridspec_kw={"width_ratios": [1.25, 1]})
     sub = pl.read_csv(ROOT / "results" / "paper" / "cue_flip_subreddit.csv").sort(["variety", "sarc_rate"],
                                                                                     descending=[True, False])
@@ -222,7 +222,7 @@ def headline_figure() -> None:
 def system_figure() -> None:
     """System overview: input -> three members -> logit mean -> cross-fitted per-segment thresholds."""
     from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
-    plt.rcParams.update({"font.family": "serif", "font.size": 7.2})
+    plt.rcParams.update({"font.family": "serif", "font.serif": ["Nimbus Roman", "TeX Gyre Termes", "Times New Roman", "DejaVu Serif"], "font.size": 7.2})
     fig, ax = plt.subplots(figsize=(3.35, 1.5))
     ax.set_xlim(-0.15, 11.0)
     ax.set_ylim(0.05, 4.45)
@@ -265,7 +265,7 @@ def gains_figure() -> None:
     deb = pl.read_csv(ROOT / "results" / "paper" / "learning_curve_deberta.csv").filter(pl.col("seed").is_in([13, 14]))
     probes = pl.read_csv(ROOT / "results" / "paper" / "learning_curve_probes.csv")
     ens = pl.read_csv(ROOT / "results" / "paper" / "ensemble_curve.csv")
-    plt.rcParams.update({"font.family": "serif", "font.size": 7.5})
+    plt.rcParams.update({"font.family": "serif", "font.serif": ["Nimbus Roman", "TeX Gyre Termes", "Times New Roman", "DejaVu Serif"], "font.size": 7.5})
     fig, (a, b) = plt.subplots(1, 2, figsize=(6.6, 2.15))
     for name, col, mk, d in (("DeBERTa (seeds 13, 14)", BLUE, "o", deb),
                              ("9B LLM probe", ORANGE, "s", probes.filter(pl.col("member") == "llm")),
@@ -285,7 +285,7 @@ def gains_figure() -> None:
     n = g["n"].to_numpy()
     b.plot(n, g["deb"], color=BLUE, marker="o", ms=3.5, lw=1.5, zorder=3)
     b.plot(n, g["lead"], color=ORANGE, marker="s", ms=3.5, lw=1.5, zorder=3)
-    b.annotate("DeBERTa seeds only", (n[-1], g["deb"][-1]), xytext=(4, -1), textcoords="offset points", va="center",
+    b.annotate("DeBERTa runs only", (n[-1], g["deb"][-1]), xytext=(4, -1), textcoords="offset points", va="center",
                fontsize=6.5, color=INK)
     b.annotate("+ e5 probe + 9B probe", (n[-1], g["lead"][-1]), xytext=(4, 1), textcoords="offset points", va="center",
                fontsize=6.5, color=INK)
@@ -294,7 +294,7 @@ def gains_figure() -> None:
     b.text(5.75, (g["lead"][4] + g["deb"][4]) / 2, "+.007 from\nmodel diversity", fontsize=6.3, color=INK2, va="center")
     b.set_xlim(0.5, 14.8)
     b.set_xticks([1, 2, 3, 5, 10])
-    b.set_xlabel("number of DeBERTa seeds averaged", color=INK2)
+    b.set_xlabel("number of DeBERTa training runs averaged", color=INK2)
     b.set_title("(b) score vs. number of averaged DeBERTa runs", fontsize=7.5, color=INK, loc="left")
     _style(b, "y")
     fig.tight_layout(w_pad=1.5)
